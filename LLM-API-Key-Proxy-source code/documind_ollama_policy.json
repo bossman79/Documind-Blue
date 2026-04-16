@@ -1,0 +1,131 @@
+{
+  "avgSessionAtHit": null,
+  "sessionSampleCount": 0,
+  "avgWeeklyAtHit": 16.0,
+  "weeklySampleCount": 2,
+  "keys": {
+    "1": {
+      "session": 13,
+      "weekly": 334,
+      "sessionActivityAt": 1776348347872,
+      "weeklyActivityAt": 1776348347872
+    },
+    "4": {
+      "session": 1,
+      "weekly": 202,
+      "sessionActivityAt": 1776347914488,
+      "weeklyActivityAt": 1776347914488
+    },
+    "3": {
+      "session": 4,
+      "weekly": 259,
+      "sessionActivityAt": 1776348489944,
+      "weeklyActivityAt": 1776348489944
+    },
+    "0": {
+      "session": 16,
+      "weekly": 285,
+      "sessionActivityAt": 1776347917055,
+      "weeklyActivityAt": 1776347917055
+    },
+    "6": {
+      "session": 4,
+      "weekly": 352,
+      "sessionActivityAt": 1776347910251,
+      "weeklyActivityAt": 1776347910251
+    },
+    "5": {
+      "session": 9,
+      "weekly": 269,
+      "sessionActivityAt": 1776348339369,
+      "weeklyActivityAt": 1776348339369
+    },
+    "14": {
+      "session": 0,
+      "weekly": 212,
+      "sessionActivityAt": 1776343411504,
+      "weeklyActivityAt": 1776282734855
+    },
+    "13": {
+      "session": 14,
+      "weekly": 199,
+      "sessionActivityAt": 1776344378086,
+      "weeklyActivityAt": 1776344378086
+    },
+    "12": {
+      "session": 8,
+      "weekly": 286,
+      "sessionActivityAt": 1776344352798,
+      "weeklyActivityAt": 1776344352798
+    },
+    "15": {
+      "session": 8,
+      "weekly": 292,
+      "sessionActivityAt": 1776344413828,
+      "weeklyActivityAt": 1776344413828
+    },
+    "10": {
+      "session": 10,
+      "weekly": 253,
+      "sessionActivityAt": 1776344467022,
+      "weeklyActivityAt": 1776344467022
+    },
+    "9": {
+      "session": 18,
+      "weekly": 353,
+      "sessionActivityAt": 1776348346726,
+      "weeklyActivityAt": 1776348346726
+    },
+    "7": {
+      "session": 10,
+      "weekly": 246,
+      "sessionActivityAt": 1776348380047,
+      "weeklyActivityAt": 1776348380047
+    },
+    "8": {
+      "session": 5,
+      "weekly": 262,
+      "sessionActivityAt": 1776348695388,
+      "weeklyActivityAt": 1776348695388
+    },
+    "11": {
+      "session": 16,
+      "weekly": 282,
+      "sessionActivityAt": 1776348188043,
+      "weeklyActivityAt": 1776348188043
+    },
+    "2": {
+      "session": 15,
+      "weekly": 288,
+      "sessionActivityAt": 1776348376866,
+      "weeklyActivityAt": 1776348376866
+    },
+    "16": {
+      "session": 13,
+      "weekly": 314,
+      "sessionActivityAt": 1776348695132,
+      "weeklyActivityAt": 1776348695132
+    }
+  },
+  "trackedKeys": {
+    "0": true,
+    "1": true,
+    "2": true,
+    "3": true,
+    "4": true,
+    "5": true,
+    "6": true,
+    "7": true,
+    "8": true,
+    "9": true,
+    "10": true,
+    "11": true,
+    "12": true,
+    "13": true,
+    "14": true,
+    "15": true,
+    "16": true,
+    "17": true
+  },
+  "keyCache": {}
+}

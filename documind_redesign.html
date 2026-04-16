@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Documind — Extract</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f1f0f9;padding:20px}
+:root{
+  --font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --font-mono:'SF Mono','Fira Code',monospace;
+  --color-background-primary:#ffffff;
+  --color-background-secondary:#f5f5f7;
+  --color-background-tertiary:#f1f0f9;
+  --color-background-info:#eff6ff;
+  --color-background-warning:#fffbeb;
+  --color-text-primary:#1a1a1a;
+  --color-text-secondary:#6b7280;
+  --color-text-tertiary:#9ca3af;
+  --color-text-info:#1d4ed8;
+  --color-text-warning:#92400e;
+  --color-border-tertiary:rgba(0,0,0,0.1);
+  --color-border-secondary:rgba(0,0,0,0.18);
+  --color-border-primary:rgba(0,0,0,0.3);
+  --border-radius-md:6px;
+  --border-radius-lg:10px;
+}
+.shell{display:flex;flex-direction:column;background:var(--color-background-tertiary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);overflow:hidden;max-width:900px;margin:0 auto}
+.topbar{background:var(--color-background-primary);border-bottom:0.5px solid var(--color-border-tertiary);padding:0 20px;display:flex;align-items:center;height:44px}
+.logo{display:flex;align-items:center;gap:8px;margin-right:24px;flex-shrink:0}
+.logo-icon{width:24px;height:24px;background:#2563eb;border-radius:5px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:500;font-size:12px}
+.logo-name{font-weight:500;font-size:13px;color:var(--color-text-primary)}
+.nav{display:flex;align-items:stretch;flex:1}
+.nav-item{display:flex;align-items:center;gap:6px;padding:0 14px;font-size:12px;color:var(--color-text-secondary);cursor:pointer;border-bottom:2px solid transparent;height:44px;white-space:nowrap}
+.nav-item svg{width:13px;height:13px;flex-shrink:0}
+.nav-item.active{color:#1d4ed8;border-bottom-color:#2563eb;font-weight:500}
+.nav-item:hover:not(.active){color:var(--color-text-primary)}
+.topbar-end{margin-left:auto;font-size:11px;color:var(--color-text-tertiary)}
+.main{padding:16px 20px;display:flex;flex-direction:column;gap:12px}
+.page-header{display:flex;align-items:baseline;gap:10px}
+.page-title{font-size:15px;font-weight:500;color:var(--color-text-primary)}
+.page-sub{font-size:12px;color:var(--color-text-tertiary)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px}
+.card-label{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px}
+.dropzone{border:1.5px dashed rgba(0,0,0,0.18);border-radius:var(--border-radius-md);padding:14px;text-align:center;cursor:pointer}
+.dropzone:hover{border-color:rgba(0,0,0,0.3)}
+.drop-icon{width:24px;height:24px;margin:0 auto 6px;color:#9ca3af}
+.drop-main{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.drop-sub{font-size:11px;color:var(--color-text-tertiary);margin-top:2px}
+.file-badge{display:inline-flex;align-items:center;gap:5px;margin-top:6px;background:#eff6ff;color:#1d4ed8;font-size:12px;font-weight:500;padding:3px 9px;border-radius:var(--border-radius-md)}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.field{display:flex;flex-direction:column;gap:4px}
+.field-label{font-size:11px;color:var(--color-text-secondary)}
+input[type=text],select{width:100%;font-size:13px;padding:6px 9px;border:0.5px solid rgba(0,0,0,0.18);border-radius:var(--border-radius-md);background:#fff;color:var(--color-text-primary);outline:none;font-family:inherit}
+input[type=text]:focus,select:focus{border-color:rgba(0,0,0,0.3)}
+.check-row{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--color-text-primary);margin-bottom:8px}
+.slots{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.slot{border:0.5px solid rgba(0,0,0,0.1);border-radius:var(--border-radius-md);padding:7px;opacity:0.4}
+.slot.active{opacity:1}
+.slot-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
+.slot-label{font-size:11px;font-weight:500;color:var(--color-text-secondary)}
+.schema-tabs{display:flex;border:0.5px solid rgba(0,0,0,0.1);border-radius:var(--border-radius-md);overflow:hidden;margin-bottom:8px}
+.tab{flex:1;padding:5px;font-size:12px;text-align:center;cursor:pointer;color:var(--color-text-secondary);background:#fff}
+.tab.active{background:#eff6ff;color:#1d4ed8;font-weight:500}
+.model-row{display:flex;align-items:center;gap:8px}
+.model-badge{font-size:11px;padding:3px 8px;background:#fffbeb;color:#92400e;border-radius:var(--border-radius-md);flex-shrink:0}
+.code-preview{background:#f5f5f7;border-radius:var(--border-radius-md);padding:8px 10px;font-family:'SF Mono','Fira Code',monospace;font-size:11px;color:var(--color-text-secondary);line-height:1.5;max-height:90px;overflow:hidden}
+.bottom-bar{display:flex;align-items:center;gap:12px;padding:12px 14px;background:#fff;border-top:0.5px solid rgba(0,0,0,0.1)}
+.btn-extract{padding:8px 24px;background:#2563eb;color:#fff;border:none;border-radius:var(--border-radius-md);font-size:13px;font-weight:500;cursor:pointer}
+.btn-extract:hover{background:#1d4ed8}
+.async-hint{font-size:11px;color:var(--color-text-tertiary)}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="topbar">
+    <div class="logo">
+      <div class="logo-icon">D</div>
+      <span class="logo-name">Documind</span>
+    </div>
+    <nav class="nav">
+      <div class="nav-item active">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M5 6h6M5 9h4"/></svg>
+        Extract
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h12M2 8h8M2 12h5"/></svg>
+        Format
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 5v3l1.5 1"/></svg>
+        Settings
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v4M8 10v4M2 8h4M10 8h4"/></svg>
+        Dependencies
+      </div>
+    </nav>
+    <span class="topbar-end">v1.1.2</span>
+  </div>
+
+  <div class="main">
+    <div class="row">
+      <div class="card">
+        <div class="card-label">Documents</div>
+        <div class="dropzone">
+          <svg class="drop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M9 5V3a2 2 0 0 1 4 0v2"/><path d="M12 11v6M9.5 14l2.5-3 2.5 3"/></svg>
+          <div class="drop-main">Drag & drop or browse</div>
+          <div class="drop-sub">PDF, DOCX, PNG, JPG, TXT, HTML</div>
+          <div class="file-badge">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 8l4 4 8-8"/></svg>
+            30 files selected
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <div class="field-label">File path / URL (optional)</div>
+            <input type="text" placeholder="C:\path\to\file.pdf">
+          </div>
+          <div class="field">
+            <div class="field-label">Project (optional)</div>
+            <input type="text" placeholder="Project name or number">
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="card">
+          <div class="card-label">Model</div>
+          <div class="model-row">
+            <select style="flex:1"><option>qwen3.5 (Ollama)</option><option>deepseek-v3</option><option>gpt-4o</option></select>
+            <span class="model-badge">local</span>
+          </div>
+        </div>
+
+        <div class="card" style="flex:1">
+          <div class="card-label" style="display:flex;align-items:center;gap:6px;margin-bottom:8px"><input type="checkbox" id="async" checked style="width:11px;height:11px;margin:0"><label for="async" style="cursor:pointer">Async mode</label></div>
+          <div class="slots">
+            <div class="slot active">
+              <div class="slot-top"><span class="slot-label">Slot 1</span><input type="checkbox" checked style="width:11px;height:11px"></div>
+              <select style="font-size:11px;padding:4px 5px"><option>Key 2</option><option>Key 3</option></select>
+            </div>
+            <div class="slot active">
+              <div class="slot-top"><span class="slot-label">Slot 2</span><input type="checkbox" checked style="width:11px;height:11px"></div>
+              <select style="font-size:11px;padding:4px 5px"><option>Key 3</option><option>Key 2</option></select>
+            </div>
+            <div class="slot active">
+              <div class="slot-top"><span class="slot-label">Slot 3</span><input type="checkbox" checked style="width:11px;height:11px"></div>
+              <select style="font-size:11px;padding:4px 5px"><option>Key 4</option><option>Key 2</option></select>
+            </div>
+            <div class="slot">
+              <div class="slot-top"><span class="slot-label">Slot 4</span><input type="checkbox" style="width:11px;height:11px"></div>
+              <select style="font-size:11px;padding:4px 5px;opacity:0.5" disabled><option>Key 2</option></select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Schema mode</div>
+      <div class="schema-tabs">
+        <div class="tab active">Template</div>
+        <div class="tab">Custom schema</div>
+        <div class="tab">Auto schema</div>
+      </div>
+      <div style="display:grid;grid-template-columns:200px 1fr;gap:12px;align-items:start">
+        <div class="field">
+          <div class="field-label">Template</div>
+          <select><option>document_metadata</option><option>invoice</option><option>contract</option></select>
+        </div>
+        <div>
+          <div class="field-label" style="margin-bottom:4px">Preview</div>
+          <div class="code-preview">[
+  {
+    "name": "filename",
+    "type": "string",
+    "description": "Full filename including extension. Auto-populated from the uploaded file; not extracted by the LLM."
+  },
+  ...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <button class="btn-extract">Extract data</button>
+  </div>
+</div>
+</body>
+</html>

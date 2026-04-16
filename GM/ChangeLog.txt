@@ -1,0 +1,803 @@
+2025-10-29  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* NEWS.txt: Update the news.
+
+2025-10-28  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* doc/options.imdoc: Document the HEIF security limits settings,
+	as much as they already are by the libheif code.
+
+	* coders/heif.c (apply_security_limits): Support all of the
+	heif_security_limits options.
+
+	* coders/jpeg.c (WriteJPEGImage): Enforce that JPEG is written as
+	RGB unless a different colorspace was specified.
+
+	* coders/heif.c (apply_security_limits): Support setting some
+	security limits using 'heif' attributes 'max-number-of-tiles',
+	'max-bayer-pattern-pixels', 'max-items', 'max-components',
+	'max-iloc-extents-per-item', 'max-size-entity-group', and
+	'max-children-per-box'.  Patterned after what was already done in
+	ImageMagick, except using 'heif' rather than 'heic'.
+	(ReadHEIFImage): Use heif:preserve-colorspace=true or
+	heif:preserve-colorspace=1 to return the image in the original
+	colorspace. This allows an image to be returned in the original
+	YCbCr colorspace rather than RGB.
+
+	* magick/utility.c (MagickAtoULLChk): New private function to
+	decode string to an 'unsigned long long'.
+
+2025-10-27  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* coders/heif.c (ReadHEIFImage): Re-write the HEIF reader (AVIF,
+	HEIC, etc.) to be based on heif_image_get_plane_readonly2().
+	There is still more to do, such as to provide more user control
+	over the decoding.
+
+2025-10-20  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* coders/heif.c (apply_security_limits): Start using the
+	heif_context_get_security_limits() interface to update
+	limits. Still limited to a pixels limit for the moment.
+
+	* magick/resize.c (ThumbnailImage): Prevent a divide by zero crash
+	similar to ImageMagick's security advisory GHSA-fh55-q5pj-pxgw
+	"Divide-by-zero in ThumbnailImage via montage -geometry ":" leads
+	to crash".
+
+	* www/INSTALL-windows.rst: Document use of newer (v0.2.13+) libwmf
+	version. Jumping forward 24 years!
+
+	* VisualMagick/wmf: Support compilation of libwmf v0.2.13+ with
+	Visual Studio 2022.
+
+	* wmf: Import https://github.com/caolanm/libwmf files (v0.2.13+)
+	up to commit ec63c9b as of 1/14/25
+
+2025-10-18  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* README.txt, fuzzing/README.txt, www/INSTALL-windows.rst:
+	Documentation updates.
+
+2025-10-16  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* magick/command.c (MagickCommand): Avoid a crash if
+	command_vector is null. Resolves SourceForge issue #758 "gm
+	benchmark: NULL pointer dereference when "batch" subcommand is
+	passed".
+
+2025-10-15  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* Magick++/drawing-primitives.txt: Update some of the drawing
+	primitives summary.
+
+	* magick/render.c (DrawImage): Add support for "decorate none".
+
+2025-10-11  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* magick/paint.c (ColorFloodfillImage): Address oss-fuzz 450182424
+	"graphicsmagick:coder_WMF_fuzzer: Timeout in coder_WMF_fuzzer".
+	The problem is that the floodfill algorithm may not converge if a
+	clip-mask is present.
+	(MatteFloodfillImage): Use resource limited memory for segment
+	stack. Throw an error if a clip-mask is present.
+
+2025-10-08  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* magick/paint.c (ColorFloodfillImage): Disentangle loops and add
+	OpenMP to tile fill color or pattern onto floodplane.
+
+	* coders/wmf.c (lite_font_map): Fix memory leaks when type.mgk is
+	not found. Addresses oss-fuzz 450082723
+	"graphicsmagick:coder_WMF_fuzzer: Direct-leak in AcquireString".
+
+2025-10-05  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* Magick++/lib/Image.cpp: Translate text with TranslateText()
+	prior to setting an attribute with SetImageAttribute for the
+	"comment" and "label" attributes given that SetImageAttribute() no
+	longer implicitly does that.
+
+	* PerlMagick/Magick.xs: Translate text with TranslateText() prior
+	to setting an attribute with SetImageAttribute for the "comment"
+	and "label" attributes given that SetImageAttribute() no longer
+	implicitly does that.
+
+	* fuzzing/oss-fuzz-build.sh (enable_libwmf): Enable building
+	libwmf in the oss-fuzz build.
+
+2025-10-04  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* fuzzing/oss-fuzz-build.sh: Add build rules for libwmf. Leave
+	disabled until the oss-fuzz project picks up changes to the
+	Dockerfile.
+
+	* www/INSTALL-windows.rst: Document a new upstream source for
+	libwmf.
+
+2025-10-03  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* NEWS.txt: Update the news.
+
+	* www/: Update URLs in documentation to use https where possible,
+	update to re-directed locations, or remove URLs where no viable
+	substitute can be found.
+
+2025-09-29  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* coders/jp2.c (ReadJP2Image): Assume 3 samples per pixel.
+
+	* fuzzing/utils.cc (MagickState): Also set the PixelsResource
+	limit.
+
+	* coders/jp2.c (ReadJP2Image): Include width and height resource
+	limits, as well as image pixel memory requirements when estimating
+	the Jasper max_samples limit value.
+	(ReadJP2Image): Use PixelsResource rather than MemoryResource when
+	estimating the Jasper max_samples limit value.
+
+2025-09-28  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* NEWS.txt: Update the news.
+
+	* www/benchmarks.rst: Provide an example of how to use Hyperfine
+	to benchmark two commands under Linux.
+
+	* www/index.rst: Add/update Coverity and Clang 15 scan-build
+	metrics.
+
+	* coders/braille.c (WriteBRAILLEImage): Eliminate a Clang
+	scan-build gripe regarding access off the end of an array. In
+	practice, this would never happen given that the inputs are
+	already sanitized.
+
+	* coders/xpm.c (ParseColor): Eliminate a Clang scan-build gripe
+	about use of a "garbage value". It is not clear to me that the
+	implementation could actually provoke this issue given the huge
+	amount of successful fuzzer tests.
+
+2025-09-25  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* magick/attribute.c (GenerateEXIFAttribute): Provide a way to
+	accept somewhat incorrect field tags.  For the moment, accept
+	incorrect field tags, but provide a way to trace the "fishy" field
+	tags.
+
+	* fuzzing/oss-fuzz-build.sh (enable_de265): Remove libde265 from
+	the oss-fuzz build given that it obviously has never been fuzz
+	tested, does not appear to be maintained, and it is producing the
+	majority of the reports.
+
+2025-09-22  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* www/INSTALL-windows.rst: Provide a summary description of the
+	3rd party libraries included in the VisualMagick source tree.
+	Include when the source code was last updated by the original
+	authors, or last updated in the Mercurial repository if the code
+	is still being developed.
+
+2025-09-20  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* VisualMagick/installer/inc/files-dlls.isx: For modern Visual
+	Studio 2019 and later (which is all we support now), default to
+	not bundling any run-time at all.  Just assume that the computer
+	already has it!  Visual Studio 2015, 2017, 2019, and 2022 all use
+	the same runtime package, and it is a system component.
+
+	* VisualMagick/CMakeLists.txt: Increase WINVER to 0x501 so that
+	configure may be compiled using Visual Studio 2022.
+	* VisualMagick/configure/welcome_page.cpp: Update welcome page
+	text so that it fits the screen, and it says that Visual Studio
+	2019 (or later) is required.
+	* VisualMagick/configure/configure.exe: Update pre-compiled
+	configure binary, which is compiled using Visual Studio 2022.
+
+2025-09-19  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* magick/attribute.c (ValidateIfdTagFmt): Extract tag validation
+	code into a reusable function.  Improve tracing.
+
+	* coders/tiff.c (AddIFDExifFields): Trace the field type name.
+
+2025-09-14  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* NEWS.txt: Update the news.
+
+2025-09-13  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* www/authors.rst: Moved Jaroslav Fojtik and Tobias Mark to former
+	contributor status. Added missing contributions by Jaroslav
+	Fojtik.
+
+	* coders/topol.c (CheckFName): Mask a needless type conversion
+	warning. Whitespace-cleanup and indent according to project
+	conventions.
+
+	* magick/blob.c (BlobToFile): Mask a needless type conversion warning.
+
+	* magick/magic.c (ListMagicInfo): Avoid needless type conversion warnings.
+
+2025-09-12  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* magick/attribute.c (tag_table): Use bit-fields and OR logic to
+	handle the case where mutiple TIFF tag types are accepted.
+	(GenerateEXIFAttribute): Improve correctness of EXIF tables based
+	on specifications and testing with real-world files.  Filter out
+	GPS and EXIF tags which fail tests.  Enable use of bsearch().
+
+2025-09-08  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* fuzzing/oss-fuzz-build.sh: Pass -fno-sanitize=undefined when
+	building Jasper and libde265 because they are not prepared to pass
+	such testing.
+
+2025-08-26  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* configure.ac: Capture per-library dependency information from
+	pkg-config data and provide a per-library library dependency list
+	in the final configuration summary.  If pkg-config is executed
+	with the --static option, then much more information is revealed
+	by the configuration summary.
+
+2025-08-18  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* configure.ac: Remove quoting of PNG_LIBS which prevented
+	white-space splitting it into arguments.
+
+2025-08-17  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* configure.ac: Require Autoconf 2.71 (or later) since this
+	version is well supported by modern OS build environments.
+	Extract the library name (e.g. -lpng16) from PNG_LIBS.
+
+2025-08-16  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* configure.ac: When libpng information is provided by pkgconf
+	(pkg-config), use only the library name that pkgconf
+	provides. Addresses SourceForge Patch #85 "Fix detection of png
+	debug".
+
+2025-08-11  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* magick/utility.c (MagickCreateDirectoryPath): Microsoft Windows
+	mkdir() does not accept a directory mode argument.  Fix unused
+	variable warning related to that.
+
+2025-08-05  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* coders/bmp.c, coders/dib.c, magick/draw.c, wand/drawing_wand.c:
+	Quiet warnings noticed under Microsoft Windows with GCC 15.
+
+2025-08-04  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* coders/png.c (WriteOnePNGImage): Fix sign-compare warnings.
+
+	* coders/svg.c (ReadSVGImage): Defend against what appears to be a
+	failure of xmlStopParser() to cause a stop in development libxml2.
+	Should address oss-fuzz 436118547
+	"graphicsmagick:coder_SVGZ_fuzzer: Timeout in coder_SVGZ_fuzzer".
+
+	* magick/render.c (DrawImage): Do not dereference null memory
+	memory allocation for 'token' fails. Do not ignore
+	DrawPatternPath() failure. Addresses oss-fuzz 436131990
+	"graphicsmagick:coder_MVG_fuzzer: Null-dereference WRITE in
+	DrawImage".
+
+2025-08-01  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* coders/png.c (WriteOnePNGImage): Pass colormap index for Palette
+	image when writing bKGD chunk.
+	(WriteOnePNGImage): For Palette image, need to use colormap index
+	rather than a computed grayscale value.  This addresses oss-fuzz
+	435651831 "graphicsmagick:coder_PNG8_fuzzer: Heap-buffer-overflow
+	in WriteOnePNGImage", which became evident after the recent PNG8
+	work.
+	(WriteOnePNGImage): Replace semi-transparent colors which are very
+	close to the transparent background color, with the transparent
+	background color.
+
+2025-07-31  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* tests/rwfile.tap: Add tests for PNG24, PNG32, PNG48, and PNG8
+	PNG subformats.
+
+	* coders/png.c (WriteOnePNGImage): More work on writing PNG8
+	format. It is decided that PNG8 does indeed mean "Indexed-color
+	with 8-bit sample depth. Binary transparency is supported, but not
+	full-alpha tRNS-type.". As a value add for the user, if the image
+	background color is fully transparent, then its color index is
+	selected to be the transparent color, and transparency is removed
+	from any other non-opaque colors.  If no effective means is found
+	to reduce to just one transparent color, opacity is stripped from
+	the output.
+
+2025-07-24  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* NEWS.txt: Update the news.
+
+2025-07-22  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* magick/render.c (DrawImage): Primitive and token buffers are
+	based on resource-managed memory.
+
+	* coders/tiff.c (AddIFDExifFields): TIFFTAG_COLORMAP depends on
+	image specific tags, so do not transfer as an EXIF tag.  Addresses
+	oss-fuzz 433440617 "graphicsmagick:coder_TIFF_any_fuzzer:
+	Null-dereference READ in _TIFFmemcpy".
+
+2025-07-13  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* magick/command.c (MogrifyImage): Apply text translations for
+	-comment and -label before calling SetImageAttribute().
+
+	* magick/attribute.c (SetImageAttribute): No longer translate
+	format requests for special format characters (e.g. "%m:%f %wx%h")
+	in attribute text.  These translations were applied for the keys
+	"comment" and "label".  This is a change to existing API behavior
+	so code depending on this should use TranslateText() to perform
+	the translations prior to calling SetImageAttribute().  It is not
+	entirely known what impact this may have, but including this
+	functionality in SetImageAttribute() was evil given that it is
+	also used for text attributes read from file metadata.
+
+	* magick/analyze.c (GetImageBoundingBox): If image rows or columns
+	is zero, then return default bounds.  Addresses oss-fuzz 431500052
+	"graphicsmagick:coder_SVG_fuzzer: Integer-overflow in
+	GetImageBoundingBox".
+
+2025-07-05  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* NEWS.txt: Update the news.
+
+	* coders/tiff.c (AddIFDExifFields): TIFFTAG_TRANSFERFUNCTION
+	depends on image specific tags TIFFTAG_BITSPERSAMPLE and
+	TIFFTAG_SAMPLESPERPIXEL, which are already banned.  So also ban
+	TIFFTAG_TRANSFERFUNCTION. Addresses oss-fuzz 402570327
+	"graphicsmagick:coder_TIFF_any_fuzzer: Null-dereference READ in
+	_TIFFmemcpy".
+	(EXPERIMENTAL_EXIF_TAGS): Enable transfer of EXIF tags by default
+	again.
+
+2025-06-28  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* fuzzing/README.txt: Document how to build de265 using cmake.
+
+	* fuzzing/oss-fuzz-build.sh: Use cmake to build libde265.
+
+2025-06-27  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* coders/tiff.c (AddExifFields): Only handle EXIF and GPS IFDs
+	once.  Avoid infinite recursion.  Addresses oss-fuzz 405456339
+	"graphicsmagick:coder_TIFF_any_fuzzer: Stack-overflow in
+	AddIFDExifFields".
+
+2025-06-26  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* coders/png.c (ReadMNGImage): Validate that MNG width or height
+	is non-zero. Addresses oss-fuzz 426843901
+	"graphicsmagick:coder_MNG_fuzzer: Use-of-uninitialized-value in
+	SetImageEx".
+
+2025-06-24  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* fuzzing/oss-fuzz-build.sh (enable_de265): Re-enable compilation
+	of libde265 since I am informed that the build issue is fixed now.
+
+	* magick/attribute.c: Update EXIF tag definitions for Exif Version
+	3.0. Add more information about the tags. Explore use of bsearch()
+	for tag look-up.
+
+2025-06-19  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* magick/attribute.c (tag_table): Capture more EXIF tags, and try
+	to add tag type information for each tag.
+
+	* coders/png.c (WriteOnePNGImage): Cache the output filename
+	before invoking setjmp() and use it when setjmp() returns
+	failure. Hopefully will eliminate oss-fuzz 423668251
+	"graphicsmagick:coder_PNG24_fuzzer: Null-dereference in
+	WriteOnePNGImage", which I have been unable to reproduce, and for
+	which the stack trace does not resemble recent code.
+
+2025-06-18  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* m4/acx_pthread.m4: Update to modern syntax.
+
+	* configure.ac: Check and report the ANSI C compiler language
+	standard version and add specific checks for inttypes.h and
+	stdint.h.
+
+	* www/INSTALL-unix.rst: Add notes about a C'99 compiler now being
+	required.
+
+	* www/INSTALL-windows.rst: Add a note that a Microsoft Visual C++
+	Redistributable package is required.
+
+2025-06-17  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* NEWS.txt: Update the news.
+
+	* magick/magick_types.h.in, VisualMagick/magick/magick_types.h.in:
+	Reduce to pure C'99 definitions from standard header files.  Note
+	that for Visual Studio, Visual Studio 2015 or later is needed in
+	order to support C'99.
+
+	* magick/common.h: Use function attribute __gnu_printf__ rather
+	than __printf__ in function attribute declarations in order to
+	allow C'99 formatters with MINGW64 GCC.  New macro
+	MAGICK_FUNC_PRINTF_FORMAT is used for all printf format
+	declarations.
+
+	* configure.ac, magick/magick_types.h.in, etc.: First pass at
+	depending on a C'99 compliant build environment. Not yet tested
+	for Microsoft Windows builds.
+
+2025-06-13  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* magick/colorspace.c (TransformRGBImage): Validate that CineonLog
+	parameters are in legal ranges.  Addresses Coverity 470177
+	"Division or modulo by float zero".
+
+	* coders/logo.c (EmbeddedImageList): Provide space for
+	"VERTICALRIGHTSHINGLE" string termination.
+
+2025-06-12  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* magick/utility.c (GetMagickGeometry): Skip resize computions
+	given an area ('@') value of zero. Coverity 470174 "Division or
+	modulo by float zero ".
+
+	* magick/colorspace.c (RGBTransformImage): Validate that CineonLog
+	parameters are in legal ranges.  Addresses Coverity 470177,
+	470183, and 470184 "Division or modulo by float zero".
+
+	* magick/describe.c (DescribeImage): Fix Coverity 470181 "Division
+	or modulo by float zero".  This is not likely to happen, but
+	Coverity has no way to know that.
+
+	* magick/render.c (DrawPolygonPrimitive): Coverity 470185
+	"Logically dead code". There is no actual issue of any
+	consequence.
+
+	* magick/pixel_cache.c (CheckImagePixelLimits): Change limit range
+	check to avoid useless warning about "dead code". Coverity issue
+	470175 "Logically dead code" and 376900 "Operands don't affect
+	result".
+
+	* coders/rle.c (ReadRLEImage): Verify that integer returned by
+	ReadBlobByte() is not EOF, and is in range of unsigned char before
+	assigning value. Coverity issue 10235 "Negative loop bound".
+
+	* coders/ps3.c (ZLIBEncode2Image): Assure that z_stream is ended in
+	error case.  Coverity issue 470178 "Resource leak".
+
+	* coders/pdf.c (ZLIBEncodeImage): Assure that z_stream is ended in
+	error case.  Coverity issue 470180 "Resource leak".
+
+	* coders/caption.c (ReadCAPTIONImage): NULL pointers which are no
+	longer needed. Coverity issue 470182 about a memory leak via 'q'
+	appears to be bogus.
+
+	* magick/montage.c (CloneMontageInfo): Assure that memory
+	allocated by GetMontageInfo() is freed, before overwriting the
+	pointer to it with a new allocation.  Coverity issues 470173,
+	470176, and 40179.
+
+	* Makefile.am (coverity-build): Add a 'coverity-build' target,
+	which only does the Coverity build, without submitting it for
+	Coverity analysis.
+
+	* coders/meta.c (ReadMETAImage): WriteBlob() does not perform
+	partial writes so remove that apparent assumption.
+
+2025-06-11  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* coders/meta.c (formatIPTC): Return immediately upon blob I/O
+	error.
+	(parse8BIM): Return immediately upon blob I/O error.
+	(parse8BIMW): Return immediately upon blob I/O error.
+
+2025-06-10  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* doc/options.imdoc (characters): Document that adding '!' to the
+	geometry specification does change the image aspect ratio if
+	necessary.  Addresses GraphicsMagick feature request #48
+	"-geometry !".
+
+2025-06-09  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* coders/png.c (WriteOnePNGImage): In error handler, check if
+	image is null prior to attempting to dereference it.  This issue
+	is recently introduced.  Should resolve oss-fuzz 423668251
+	"graphicsmagick:coder_PNG24_fuzzer: Null-dereference in
+	WriteOnePNGImage".
+	(WriteOnePNGImage): Fix recently-introduced typo which causes heap
+	buffer overflow. Should resolve oss-fuzz 423417425
+	"graphicsmagick:coder_PNG8_fuzzer: Heap-buffer-overflow in
+	WriteOnePNGImage".
+
+	* NEWS.txt: Update the news.
+
+	* magick/transform.c (TransformImage): If crop_geometry contains
+	'%', that should not block a full list of image tiles from being
+	generated.  Resolves SourceForge issue #717 "-crop does not
+	generate tiles when used with a percentage".
+
+2025-06-08  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* NEWS.txt: Update the news.
+
+	* coders/png.c (WriteOnePNGImage): Fix broken tRNS table when
+	writing via "PNG8". Warn if pixel transparencies are independent
+	of color palette, since this results in a loss of image
+	quality. Remove output file if an error occurs.  Addresses
+	SourceForge issue #755 "Converting to indexed PNG produces invalid
+	file".
+
+2025-06-04  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* coders/wpg.c (ReadWPGImage): Fix improper usage of
+	MagickReallocateResourceLimitedMemory().  Addresses oss-fuzz
+	422512441 "graphicsmagick:coder_WPG_fuzzer: Direct-leak in
+	_MagickReallocateResourceLimitedMemory ()".
+
+	* magick/resource.c (DestroyMagickResources): If
+	DEBUG_MAGICK_RESOURCES is enabled, do not assert unless
+	DEBUG_MAGICK_RESOURCES_ASSERT is also enabled. An assertion
+	prevents valgrind from showing us where the leaks are.
+
+	* magick/memory.c: Document that
+	_MagickReallocateResourceLimitedMemory() returns a discrete
+	pointer, similar to realloc().  This means it does not work the
+	same as MagickReallocateMemory().
+
+	* magick/tsd.c (MagickTsdKeyCreate2): Fix GCC
+	-Wcalloc-transposed-args related warning.
+
+2025-06-01  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* coders/svg.c: GetStyleTokens, GetTransformTokens, and
+	SVGProcessTransformString should have a 'const SVGInfo *svg_info'
+	argument rather than a wrong and misleading 'void *context'
+	argument. Fixes a crash which was recently introduced.
+	(ReadSVGImage): Fix some leaked memory resources, which were not
+	leaked while using SVGEndDocument().
+
+	* coders/msl.c (ReadMSLImage): Use libxml2's SAX handlers for the
+	MVG XML-based scripting implementation.  These changes are
+	informed by Nick Wellnhofer's changes to ImageMagick's SVG
+	renderer as provided in ImageMagick pull request 7784 at
+	"https://github.com/ImageMagick/ImageMagick/pull/7784/commits/c0405a520b6e0e445dd8f70c1883125d2015c298".
+	This should resolve the MVG portion of SourceForge issue #749 "Use
+	libxml2's SAX handlers".
+	(MSLInfo): Add signature to MSLInfo.
+
+	* coders/svg.c (SVGInfo): Add signature to SVGInfo.
+
+2025-05-28  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* coders/svg.c (ReadSVGImage): Use libxml2's SAX handlers for the
+	SVG renderer.  These changes are informed by Nick Wellnhofer's
+	changes to ImageMagick's SVG renderer as provided in ImageMagick
+	pull request 7784 at
+	"https://github.com/ImageMagick/ImageMagick/pull/7784/commits/c0405a520b6e0e445dd8f70c1883125d2015c298".
+	This should resolve the SVG portion of SourceForge issue #749 "Use
+	libxml2's SAX handlers".
+
+2025-05-27  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* fuzzing/oss-fuzz-build.sh: Now that libpng configure.ac has been
+	fixed upstream, restore 'autoreconf -fiv' step when building
+	libpng.
+
+2025-05-23  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* coders/tiff.c: Add support for libtiff 4.5 TIFFWarningExtR() and
+	TIFFErrorExtR() in order to provide an error handling context per
+	TIFF handle.  This improves concurrency and thread safety when
+	multiple libraries are using libtiff within the same process.
+	Resolves SourceForge issue #753 "Support TIFFErrorExtR() in TIFF
+	coder".
+
+2025-05-19  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* scripts/format_c_api_doc.py (proto_pretty): Fix regular
+	expression encoding.
+
+2025-05-18  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* coders/xpm.c (ParseColor): Avoid truncation of nul character
+	from "g4 ".
+
+	* coders/logo.c (EmbeddedImageList): Avoid truncation of nul
+	character from "VERTICALRIGHTSHINGLE".
+
+	* magick/utility.c (GetPageGeometry): Avoid truncation of nul
+	character from "LETTERSMALL".
+
+	* magick/attribute.c: Avoid truncation of nul character from
+	"ThumbnailPrimaryChromaticities".
+
+	* fuzzing/README.txt: Add notes regarding how to build libjxl for
+	testing.
+
+2025-05-17  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* coders/jxl.c (ReadJXLImage): More effort to free profile memory
+	if JxlDecoderSetBoxBuffer() fails. Addresses oss-fuzz issue
+	"graphicsmagick:coder_TIFF_any_fuzzer: Direct-leak in
+	_MagickReallocateResourceLimitedMemory".  Maybe this will fix it.
+
+2025-05-13  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* magick/magick_types.h.in: Retreat from use of C'99 printf
+	macros.  The approach used was not working out, and especially
+	under Microsoft Windows.  This means that most changes made
+	yesterday are reverted.
+
+2025-05-12  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* www/INSTALL-windows.rst: Suggest that GraphicsMagick now
+	requires (or will soon require) at least a working C'99 compiler
+	and headers in order to compile under Microsoft Visual
+	Studio. Visual Studio support will re-start from Visual Studio
+	2019 rather than the 2008 edition.
+
+	* magick/magick_types.h.in: Use types and declarations from
+	inttypes.h and stddef.h rather than values from the configure
+	script.  It seems long enough since 1999 that we can rely on these
+	headers now. ;-)
+
+	* configure.ac: Remove code to compute sized types for current CPU
+	and compiler options.
+
+2025-05-01  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* coders/jxl.c (ReadJXLImage): Free profile memory if
+	JxlDecoderSetBoxBuffer() fails. Addresses oss-fuzz issue
+	"graphicsmagick:coder_TIFF_any_fuzzer: Direct-leak in
+	_MagickReallocateResourceLimitedMemory".
+
+	* fuzzing/oss-fuzz-build.sh: Disable 'harfbuzz' in freetype build
+	in order to avoid compilation error due to use of RTLD_DEFAULT.
+
+2025-03-31  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* NEWS.txt: Update the news.
+
+2025-03-26  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* coders/jxl.c (ReadJXLImage): pixel_format.num_channels needs to
+	be 2 for grayscale matte.  Addresses oss-fuzz 406320404
+	"graphicsmagick:coder_JXL_fuzzer: Heap-buffer-overflow in
+	ImportViewPixelArea".
+
+2025-03-17  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* coders/tiff.c (AddIFDExifFields): Check for overflow of computed
+	unsigned value. Code is only active if EXPERIMENTAL_EXIF_TAGS is
+	true.  Addresses oss-fuzz 403696329
+	"graphicsmagick:coder_TIFF_any_fuzzer: Crash in LD_UINT16_HI".
+
+	Reflow code to match the conventions used by the rest of the
+	project.
+
+2025-03-16  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* NEWS.txt: Updated the news.
+
+	* fuzzing/oss-fuzz-build.sh (CPPFLAGS): Continue to enable
+	EXPERIMENTAL_EXIF_TAGS in oss-fuzz build in order to continue
+	testing writing EXIF in TIFF format.
+
+	* coders/tiff.c (EXPERIMENTAL_EXIF_TAGS): Disable
+	EXPERIMENTAL_EXIF_TAGS by default until libtiff API weaknesses are
+	resolved.
+
+2025-03-02  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* coders/jp2.c (ReadJP2Image): Add casts in order to avoid
+	compilation warnings with old Jasper.
+
+2025-03-01  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* README.txt: Refresh README text.
+
+2025-02-14  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* wand/magick_wand.c: Fix comment indentation issue which was
+	causing some functions to not appear in the formatted
+	documentation.  Thanks to Robert C. <robgcs@users.sourceforge.net>
+	for reporting that documentation for some functions were missing.
+
+2025-02-11  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* magick/nt_base.h: Update notes regarding `_MSC_VER` values and
+	Visual C++ versions.
+
+	* www/index.rst: Promote the Mercurial repository at
+	https://foss.heptapod.net/graphicsmagick/graphicsmagick since it
+	seems to work better.
+
+2025-02-08  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* magick/magic.c: Make the magic-based format descriptions more
+	detailed and helpful.
+
+2025-02-07  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* magick/magic.c (ListMagicInfo): Include a format description in
+	the output of 'gm convert -list magic'.
+
+2025-02-03  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* magick/magic.c: Add a Magic description field in order to help
+	identify and document format variants based on header magic.
+	(GetMagickFileFormat): Trace the format description at Coder
+	level.
+
+2025-01-29  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* coders/png.c (WriteOnePNGImage): Ignore exessively short ICM
+	profiles.  Should address oss-fuzz 392927700
+	"graphicsmagick:coder_PNG64_fuzzer: Heap-buffer-overflow in
+	png_write_iCCP".
+
+	* magick/magic.c (StaticMagic): Identify some more HEIF
+	sub-formats.
+
+	* coders/heif.c (ReadHEIFImage): Request the primary image handle
+	from libheif. Do not throw an error if there is more than one
+	image in the heif.  Patch by Kevin Clauson and submitted via
+	SourceForge patch #84 "Patch: use primary image for heic even when
+	have multiple image".
+
+2025-01-25  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* coders/heif.c (ReadMetadata): Only apply Exif orientation if
+	ignore-transformations is true since HEIF native transformations
+	will handle orientation otherwise.  Patch by Kevin Clauson via
+	GraphicsMagick SourceForge patch #83 "Patch: Fix HEIC Orientation
+	Issue".
+
+2025-01-24  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* wand/magick_wand.c (MagickSetImagePixels): If update image has
+	matte, then promote canvas image to have matte.  Support composing
+	individual channels 'R', 'G', 'B', 'A', 'O', 'T', 'C', 'M', 'Y',
+	'K'. Intended to address SourceForge issue #752
+	"MagickResizeImage() discarding alpha values".
+
+2025-01-17  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* tests/rwfile.c: Fix another GCC warning.
+
+2025-01-15  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* NEWS.txt: Update the news.
+
+	* coders/jpeg.c (WriteJPEGImage): Properly invert CMYK components
+	when writing.  Addresses SourceForge bug #751 "all CMYK colorspace
+	image become black-white inverted".  This bug was introduced in
+	GraphicsMagick 1.3.43. Existing files which appear "corrupt" due
+	to this issue may be salvaged by using the -negate command like
+	"gm convert bad-cmyk.jpg -negate good-cmyk.jpg".
+
+	* www/INSTALL-unix.rst: Document the Docutils version necessary to
+	format reStructuredText files to HTML format.
+
+2025-01-06  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* www/wand/Makefile.am ($(WWWWANDAPIDIR)/%.apirst): Pass an
+	absolute path to format_c_api_doc.py --include-rst argument.
+
+	* magick/magick_endian.c (MagickReverseBits): Function has never
+	been used for anything.  Mark it as deprecated.
+	MagickGetBitRevTable(): Function has never been used for anything.
+	Mark it as deprecated.
+
+2025-01-04  Bob Friesenhahn  <bfriesen@simple.dallas.tx.us>
+
+	* NEWS.txt: Update the news.
+
+	* Update copyright year and rotate ChangeLog.

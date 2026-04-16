@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Documind — Settings</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f1f0f9;padding:20px}
+.shell{display:flex;flex-direction:column;background:#f1f0f9;border-radius:10px;border:0.5px solid rgba(0,0,0,0.1);overflow:hidden;max-width:900px;margin:0 auto}
+.topbar{background:#fff;border-bottom:0.5px solid rgba(0,0,0,0.1);padding:0 20px;display:flex;align-items:center;height:44px}
+.logo{display:flex;align-items:center;gap:8px;margin-right:24px;flex-shrink:0}
+.logo-icon{width:24px;height:24px;background:#2563eb;border-radius:5px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:500;font-size:12px}
+.logo-name{font-weight:500;font-size:13px;color:#1a1a1a}
+.nav{display:flex;align-items:stretch;flex:1}
+.nav-item{display:flex;align-items:center;gap:6px;padding:0 14px;font-size:12px;color:#6b7280;cursor:pointer;border-bottom:2px solid transparent;height:44px;white-space:nowrap;text-decoration:none}
+.nav-item svg{width:13px;height:13px;flex-shrink:0}
+.nav-item.active{color:#1d4ed8;border-bottom-color:#2563eb;font-weight:500}
+.nav-item:hover:not(.active){color:#1a1a1a}
+.topbar-end{margin-left:auto;font-size:11px;color:#9ca3af}
+.main{padding:16px 20px;display:flex;flex-direction:column;gap:12px}
+.page-header{display:flex;align-items:baseline;gap:10px}
+.page-title{font-size:15px;font-weight:500;color:#1a1a1a}
+.page-sub{font-size:12px;color:#9ca3af}
+.providers-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:12px 14px}
+.card-full{background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:12px 14px}
+.provider-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.provider-name{font-size:13px;font-weight:500;color:#1a1a1a}
+.provider-badge{font-size:10px;font-weight:500;padding:2px 7px;border-radius:4px;text-transform:uppercase;letter-spacing:0.03em}
+.badge-cloud{background:#eff6ff;color:#1d4ed8}
+.badge-local{background:#f0fdf4;color:#166534}
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:8px}
+.field:last-child{margin-bottom:0}
+.field-label{font-size:11px;color:#6b7280}
+.field-hint{font-size:11px;color:#9ca3af;margin-top:3px;line-height:1.4}
+.field-hint a{color:#2563eb;text-decoration:none}
+input[type=text],input[type=password],select{width:100%;font-size:12px;padding:6px 9px;border:0.5px solid rgba(0,0,0,0.15);border-radius:6px;background:#fff;color:#1a1a1a;outline:none;font-family:inherit}
+input[type=text]:focus,input[type=password]:focus,select:focus{border-color:rgba(0,0,0,0.3)}
+input::placeholder{color:#9ca3af}
+.keys-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:2px}
+.section-label{font-size:11px;font-weight:500;color:#6b7280;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:6px}
+.divider{height:0.5px;background:rgba(0,0,0,0.08);margin:10px 0}
+code{font-family:'SF Mono','Fira Code',monospace;font-size:10.5px;background:#f3f4f6;padding:1px 5px;border-radius:3px;color:#374151}
+.bottom-bar{display:flex;align-items:center;gap:12px;padding:12px 14px;background:#fff;border-top:0.5px solid rgba(0,0,0,0.1)}
+.btn-save{padding:8px 24px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer}
+.btn-save:hover{background:#1d4ed8}
+.saved-hint{font-size:11px;color:#9ca3af}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="topbar">
+    <div class="logo">
+      <div class="logo-icon">D</div>
+      <span class="logo-name">Documind</span>
+    </div>
+    <nav class="nav">
+      <div class="nav-item">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M5 6h6M5 9h4"/></svg>
+        Extract
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h12M2 8h8M2 12h5"/></svg>
+        Format
+      </div>
+      <div class="nav-item active">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 5v3l1.5 1"/></svg>
+        Settings
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v4M8 10v4M2 8h4M10 8h4"/></svg>
+        Dependencies
+      </div>
+    </nav>
+    <span class="topbar-end">v1.1.2</span>
+  </div>
+
+  <div class="main">
+    <div class="page-header">
+      <div class="page-title">Settings</div>
+      <div class="page-sub">Configure API keys and connection settings</div>
+    </div>
+
+    <!-- Cloud providers: two per row -->
+    <div class="providers-grid">
+
+      <!-- OpenAI -->
+      <div class="card">
+        <div class="provider-header">
+          <span class="provider-name">OpenAI</span>
+          <span class="provider-badge badge-cloud">Cloud</span>
+        </div>
+        <div class="field">
+          <div class="field-label">API Key</div>
+          <input type="password" placeholder="sk-…" value="sk-••••••••••••••••••••••••••••••••">
+        </div>
+      </div>
+
+      <!-- Google Gemini -->
+      <div class="card">
+        <div class="provider-header">
+          <span class="provider-name">Google Gemini</span>
+          <span class="provider-badge badge-cloud">Cloud</span>
+        </div>
+        <div class="field">
+          <div class="field-label">API Key</div>
+          <input type="password" placeholder="AIza…" value="AIza••••••••••••••••••••••••••••••">
+        </div>
+      </div>
+
+      <!-- Anthropic -->
+      <div class="card">
+        <div class="provider-header">
+          <span class="provider-name">Anthropic</span>
+          <span class="provider-badge badge-cloud">Cloud</span>
+        </div>
+        <div class="field">
+          <div class="field-label">API Key</div>
+          <input type="password" placeholder="sk-ant-…">
+        </div>
+      </div>
+
+      <!-- DeepSeek -->
+      <div class="card">
+        <div class="provider-header">
+          <span class="provider-name">DeepSeek</span>
+          <span class="provider-badge badge-cloud">Cloud</span>
+        </div>
+        <div class="field">
+          <div class="field-label">API Key</div>
+          <input type="password" placeholder="sk-…">
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Ollama: full width, denser layout -->
+    <div class="card-full">
+      <div class="provider-header">
+        <span class="provider-name">Ollama</span>
+        <span class="provider-badge badge-local">Local</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start">
+
+        <!-- Left: base URL + single key -->
+        <div>
+          <div class="field">
+            <div class="field-label">Base URL</div>
+            <input type="text" value="https://ollama.com/v1">
+            <div class="field-hint">Leave empty for <code>localhost:11434/v1</code>. For <a href="#">Ollama Cloud</a> use <code>https://ollama.com/v1</code></div>
+          </div>
+          <div class="field" style="margin-top:8px">
+            <div class="field-label">API Key (optional)</div>
+            <input type="password" value="••••••••••••••••••••••••••••••••••••••••">
+            <div class="field-hint">Local Ollama needs no key. <a href="#">Download Ollama</a>, run it, then <code>ollama pull qwen3.5</code></div>
+          </div>
+        </div>
+
+        <!-- Right: multi-key failover -->
+        <div>
+          <div class="section-label">Multiple API Keys <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;color:#9ca3af">— 429 failover, up to 10</span></div>
+          <div style="display:flex;flex-direction:column;gap:5px">
+            <input type="password" value="••••••••••••••••••••••••••••••••••••••••">
+            <input type="password" value="••••••••••••••••••••••••••••••••••••••••">
+            <input type="password" value="••••••••••••••••••••••••••••••••••••••••">
+            <input type="password" placeholder="Key 4">
+            <input type="password" placeholder="Key 5">
+            <input type="password" placeholder="Key 6">
+            <input type="password" placeholder="Key 7">
+            <input type="password" placeholder="Key 8">
+            <input type="password" placeholder="Key 9">
+            <input type="password" placeholder="Key 10">
+          </div>
+          <div class="field-hint" style="margin-top:5px">On 429 rate limit, the job continues with the next key. Overrides single API Key when set.</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="bottom-bar">
+    <button class="btn-save">Save settings</button>
+    <span class="saved-hint">Changes apply to the next extraction run</span>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,128 @@
+[
+  {
+    "name": "filename",
+    "type": "string",
+    "description": "Full filename including extension. Auto-populated from the uploaded file; not extracted by the LLM."
+  },
+  {
+    "name": "issue_status",
+    "type": "enum",
+    "description": "Document issue status. In the title block, find the top-most value ABOVE 'Description of Revision'—that is the latest status. If there is no title block, use null. Map to abbreviation: AB=As-Built/As Built, APR=Approved, BID=For Bid Use only, CRT=Certified, FYU=For Your Use, IFA=Issued For Approval, IFC=Issued For Construction, IFR=Issued For Review and Comment/Coordination, PRE=Preliminary, REC=For Records, RFE=Released for Engineering, RWC=Returned with Comments.",
+    "values": ["AB", "APR", "BID", "CRT", "FYU", "IFA", "IFC", "IFR", "PRE", "REC", "RFE", "RWC"],
+    "aliases": ["status", "issue code", "document status", "rev status", "revision status", "drawing status", "As-Built", "As Built", "AsBuilt", "Approved", "Approval", "For Bid Use only", "For Bid Use", "For Bid", "Bid Use", "Certified", "Certification", "For Your Use", "For Your Information", "FYI", "Issued For Approval", "Issued for Approval", "Issued For Construction", "Issued for Construction", "For Construction", "Issued For Review and Comment", "Issued For Review and Comments", "Issued For Review and Coordination", "For Review", "Review and Comment", "Preliminary", "Prelim", "For Records", "Records", "Released for Engineering", "Released for Engr", "Returned with Comments", "Returned with Comment", "With Comments"]
+  },
+  {
+    "name": "revision",
+    "type": "string",
+    "description": "Revision identifier, typically a number (0, 1, 2) or letter (A, B, C).",
+    "aliases": ["rev", "rev no", "rev number", "revision number", "version", "ver"]
+  },
+  {
+    "name": "revision_date",
+    "type": "string",
+    "description": "Date of the revision or issue. Standardize to MM/DD/YY regardless of how it appears on the sheet. Recognize common formats (e.g., DD-MMM-YYYY, DD/MM/YYYY, MM-DD-YYYY, YYYY-MM-DD, M/D/YY, 7/09, Jul 9 2024) and convert to MM/DD/YY. Use 2-digit year (YY). If the date cannot be determined, use null.",
+    "aliases": ["rev date", "date", "issue date", "document date", "date of issue", "dated"]
+  },
+  {
+    "name": "description_title",
+    "type": "string",
+    "description": "Primary title or description of the document.",
+    "aliases": ["title", "description", "document title", "drawing title", "subject", "doc title", "document description"]
+  },
+  {
+    "name": "discipline",
+    "type": "enum",
+    "description": "Engineering or technical discipline. Extract if stated in the document or infer from content, but the value MUST be one of the allowed choices. If it doesn't clearly show one or doesn't match any of the choices, use null.",
+    "values": ["Architectural", "Civil", "Electrical", "Geotechnical", "Mechanical", "Process", "Quarry", "Structural"],
+    "aliases": ["discipline code", "engineering discipline", "trade", "field", "dept discipline"]
+  },
+  {
+    "name": "category",
+    "type": "enum",
+    "description": "Document category code (single letter A-Z) based on the discipline. Extract from the drawing or infer from content and discipline. ARCHITECTURAL: A=Arrangements for Building with Building & Floor Plans, Elevations, Sections & Details; C=Codes Life Safety Plans; D=Misc Details and Sections; G=General Standards and Specifications; L=Laboratory with Plans, Elevations & Sections; P=Partitions Types and Details; R=Restrooms with Plans & Elevations; S=Stairways with Plans & Sections; V=Vendor Supplier Docs incl O&M Manuals; W=Walls Sections & Details including pre-cast; X=Demolition Arrangements Plans and Details; Y=Miscellaneous Schedules & Finishes for Doors Windows Walls; Z=Fire Protection Systems. CIVIL: B=Boundary Data Property Lines Permit Boundaries Site Plans Easement Data; D=Details & Sections Misc; E=Environmental Water Discharge Limits Wetland Data & Surveys E&S Erosion & Sediment Control Plans; G=General Standards and Specifications with Design Details; H=Hydraulics and Storm Water Drainage; L=Layouts & Sections; R=Roadways & Rail Systems with Sections/Details; S=Surveys & Studies & Geological Data Drill Data Logs Geophysics Chemistry Testing Hydro-Geologic; T=Topology and Site Plans & Data Site Preparation for Excavation works Overhead Topos & Photos Quarry Updates from GPS data; U=Underground Utilities with Sections/Details; V=Vendor Supplier Docs incl O&M Manuals; X=Demolition Arrangements Plans and Details for any existing foundations; Y=Miscellaneous. ELECTRICAL: A=Automation Device & Instr Listings I/O and Alarm Listings Network and Fiber Configurations Logic and SAMA Diagrams Functional Specs Programming and Graphics; B=Branch Systems Low Voltage Panelboard Directories for Control & Power loads normal & standby; C=Control Elementary or I/O Schematics for Discrete Devices Motors Equipment Assemblies incl IO Cabs; D=Details Equipment Mounting & Installation Devices and Equipment Control & Instrument Raceway; E=Earthing & Grounding with Details Underground Earthing & Exposed Grounding Arrangements Lightning Protection; F=Flow Diagrams Electrical Flows Diagrams P&IDs; G=General Arrangements & Listings Electrical Equipment Location Arrangements and El Room Arrangements Equip Listings; I=Instrumentation Elementary or I/O Schematics or One-Lines for Analog Devices and Equipment Assemblies; K=Control Cabinet Arrangements Panel Layouts with Bills of Materials Term Block Layouts Internal Wiring Point-to-Point diagrams; L=Lighting and Receptacle Systems with Details Arrangements for Aviation Process Areas Emergency systems Maintenance/Operations Bldgs and Roadways Includes Panelboard directories Lighting control schematics and contactor panels; M=Motor Control Templates Motor Control & Swgr Typical Control Schematics; P=Power Systems Load/Motor Lists Single & Three Lines Power Studies Power Management Systems Standby Power Systems Special Power Calculations; Q=Quality & Analytical Systems CEMS Gas Analysis Cross-Belt Scanners Particle Size Analyzers Scanners Lab Automation Process Cameras; R=Raceway Systems Exposed with Details Raceway and Tray Arrangements Conduit Riser Diagrams; S=Schedules for Cable and Raceway Cable/Wire & Conduit/Tray Raceway Listings for Electrical Installations; T=Technical Specifications & Listings Engr Design Equipment Procurement El Construction Checkout Testing; U=Underground Raceway Systems with Details Duct Bank and Manhole Layouts and Details Raceway Stub-Ups; V=Vendor Supplier Docs incl O&M Manuals; W=Wiring Diagrams & Interconnections Field Installation Wiring Diagrams and Interconnections Point-to-Point Legends; X=Demolition Arrangements Plans and Details; Y=Miscellaneous; Z=Supplemental Systems with Details CCTV Security Fire Alarm & Protection Heat Tracing Telephone & Paging. MECHANICAL: C=Chutes with Design Details; D=Ducting with Design Details; E=Environmental Special Equip Dust Collection; F=Flowsheets & Equipment Lists; G=General Standards and Specifications; H=Hoppers/Bins with Design Details; L=Layouts Conceptual; M=Mechanical Arrangements with Sections; P=Piping Arrangements & Flow Diagrams with Details Air Chemicals Gas and Water; U=Utility Systems HVAC; V=Vendor Supplier Docs incl O&M Manuals; X=Demolition Arrangements Plans and Details; Y=Miscellaneous; Z=Fire Protection Systems. PROCESS: C=Calculations Initial or Guaranteed values; E=Environmental; F=Flow Diagrams with operational ratings & limits; G=General Standards and Specifications; R=Refractory with Details & Sections; S=Studies Preliminary or Final; V=Vendor Supplier Docs incl O&M Manuals; X=Demolition Arrangements Plans and Details; Y=Miscellaneous. QUARRY: G=General Standards and Specifications; M=Mine Plans Overburden Removals Reclamation Long & Short Term Plans Reserve Data; P=Permitting Conditions Modifications Regulatory Corresp Bonding Data Archaeological Studies Permit Renewals Blasting Data; Q=Quarry Equipment Mobile Equip Info Equipment Time Studies Maint Records Crusher Designs Plant Designs Plant Flow Charts; V=Vendor Supplier Docs incl O&M Manuals; X=Demolition Arrangements Plans and Details; Y=Miscellaneous. STRUCTURAL: A=Arrangements Plans & Sections & Elevations; C=Concrete & Reinforcement with Design Details including Concrete Silos &/or Structures; D=Misc Details & Sections; G=General Standards and Specifications; L=Layouts Conceptual; M=Masonry Buildings & Structures Construction & Details; R=Roofing & Siding with Details; S=Steel Silos &/or Structures with Design Details; V=Vendor Supplier Docs incl O&M Manuals; X=Demolition Arrangements Plans and Details; Y=Miscellaneous. If discipline is null or category cannot be determined, use null.",
+    "values": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"],
+    "aliases": ["doc category", "document category", "classification", "class", "type category", "category code", "discipline category"]
+  },
+  {
+    "name": "asset_id_number",
+    "type": "string",
+    "description": "Unique identifier for the associated asset or equipment.",
+    "aliases": ["asset number", "asset ID", "equipment number", "equipment ID", "tag number", "tag no", "ID number", "asset tag", "unit number", "item number"]
+  },
+  {
+    "name": "project",
+    "type": "string",
+    "description": "Project name or number. Auto-populated from user input before extraction; not extracted by the LLM."
+  },
+  {
+    "name": "plant",
+    "type": "enum",
+    "description": "Plant or facility. Must be one of the listed choices. If the document has no exact match, pick the closest match from this list. Use null only if no plant/facility is mentioned.",
+    "values": [
+      "Alamo Cement",
+      "Amarillo Terminal",
+      "Bonner Springs Terminal",
+      "Brandon Terminal",
+      "Burnside Terminal",
+      "Cape Girardeau Cement",
+      "Cincinnati Terminal",
+      "College Park Terminal",
+      "Dallas Terminal",
+      "Dawsonville Terminal",
+      "Elkhart Terminal",
+      "Elmira Terminal",
+      "Fort Wayne Terminal",
+      "Gainesville Terminal",
+      "Grandville Terminal",
+      "Greencastle Cement",
+      "Hercules Cement",
+      "Independence Terminal",
+      "Indianapolis Terminal",
+      "Jeffersonville Terminal",
+      "Joliet Terminal",
+      "Knoxville Terminal",
+      "Little Rock Terminal",
+      "Maryneal Cement",
+      "Memphis LSI Terminal",
+      "Memphis RC Terminal",
+      "Milwaukee Terminal",
+      "Mina Terminal",
+      "Nashville (LSI) Terminal",
+      "Nashville (RC) Terminal",
+      "Natchez Terminal",
+      "New Orleans Terminal",
+      "Oglesby Cement",
+      "Oklahoma City Terminal",
+      "Orange Terminal",
+      "Paducah Terminal",
+      "Pensacola Terminal",
+      "Pryor Cement",
+      "River Cement",
+      "Signal Mountain Cement",
+      "St Louis S Terminal",
+      "St. Louis N Terminal",
+      "Temple Terminal",
+      "Wichita Terminal"
+    ],
+    "aliases": ["plant name", "facility", "facility name", "site", "site name", "installation", "complex", "Alamo", "Amarillo", "Bonner Springs", "Brandon", "Burnside", "Cape Girardeau", "Cincinnati", "College Park", "Dallas", "Dawsonville", "Elkhart", "Elmira", "Fort Wayne", "Gainesville", "Grandville", "Greencastle", "Hercules", "Independence", "Indianapolis", "Jeffersonville", "Joliet", "Knoxville", "Little Rock", "Maryneal", "Memphis LSI", "Memphis RC", "Milwaukee", "Mina", "Nashville LSI", "Nashville RC", "Natchez", "New Orleans", "Oglesby", "Oklahoma City", "Orange", "Paducah", "Pensacola", "Pryor", "River", "Signal Mountain", "St Louis S", "St Louis N", "St. Louis S", "St. Louis N", "Temple", "Wichita"]
+  },
+  {
+    "name": "department_code",
+    "type": "enum",
+    "description": "Department code. Must be one of the listed values. If the document has no match to any of these, use null.",
+    "values": ["100", "110", "200", "201", "202", "203", "205", "210", "211", "212", "213", "214", "220", "221", "222", "230", "231", "232", "233", "234", "241", "300", "301", "302", "303", "304", "305", "330", "351", "352", "353", "354", "355", "460", "461", "462", "464", "470", "471", "480", "481", "482", "483", "484", "485", "486", "500", "501", "502", "503", "504", "505", "506", "507", "508", "509", "510", "511", "530", "550", "551", "555", "560", "561", "562", "563", "600", "601", "602", "620", "631", "650", "651", "652", "653", "655", "670", "680", "700", "701", "702", "703", "704", "800", "801", "850"],
+    "aliases": ["dept code", "department no", "dept no", "org code", "cost center", "division code"]
+  },
+  {
+    "name": "document_type",
+    "type": "string",
+    "description": "Type of document. Must be one of: Conceptual Docs, Correspondences, Cut Sheets, Drawings, Listings, Manuals, Misc. Vendor Docs, Reports, Specifications, Studies, Submittals, Transmittals.",
+    "aliases": ["doc type", "type", "document kind", "drawing type", "file type", "record type"]
+  },
+  {
+    "name": "vendor_name",
+    "type": "string",
+    "description": "Vendor or company that produced the document. If the document has a title block: find the field labeled 'Vendor', 'Supplier', or 'Manufacturer' and extract the value next to it (NOT the title block company that created the drawing). If the document has NO title block (e.g. a manual, cut sheet, or brochure): look around for a company name, vendor name, or manufacturer—often in headers, footers, cover pages, or copyright notices. The vendor is who supplied or authored the content.",
+    "aliases": ["vendor", "supplier", "manufacturer", "vendor name", "supplier name", "manufacturer name", "supplied by", "equipment supplier", "company", "company name", "prepared by", "published by"]
+  }
+]

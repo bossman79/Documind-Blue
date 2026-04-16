@@ -1,0 +1,88 @@
+{
+  "avgSessionAtHit": 119.25,
+  "sessionSampleCount": 4,
+  "avgWeeklyAtHit": 126.75,
+  "weeklySampleCount": 4,
+  "keys": {
+    "0": {
+      "session": 0,
+      "weekly": 3,
+      "sessionActivityAt": 1774455016347,
+      "weeklyActivityAt": 1774375623451
+    },
+    "1": {
+      "session": 0,
+      "weekly": 10,
+      "sessionActivityAt": 1774455016347,
+      "weeklyActivityAt": 1774375636119
+    },
+    "2": {
+      "session": 0,
+      "weekly": 3,
+      "sessionActivityAt": 1774455016347,
+      "weeklyActivityAt": 1774375675583
+    },
+    "3": {
+      "session": 0,
+      "weekly": 1,
+      "sessionActivityAt": 1774455016347,
+      "weeklyActivityAt": 1774375510809
+    },
+    "4": {
+      "session": 28,
+      "weekly": 90,
+      "sessionActivityAt": 1774456704462,
+      "weeklyActivityAt": 1774456704462
+    },
+    "5": {
+      "session": 0,
+      "weekly": 121,
+      "sessionActivityAt": 1774455016347,
+      "weeklyActivityAt": 1774375372155
+    },
+    "6": {
+      "session": 0,
+      "weekly": 121,
+      "sessionActivityAt": 1774455016347,
+      "weeklyActivityAt": 1774375388867
+    },
+    "7": {
+      "session": 0,
+      "weekly": 119,
+      "sessionActivityAt": 1774455016347,
+      "weeklyActivityAt": 1774375504134
+    },
+    "8": {
+      "session": 0,
+      "weekly": 123,
+      "sessionActivityAt": 1774455016347,
+      "weeklyActivityAt": 1774375856093
+    },
+    "9": {
+      "session": 29,
+      "weekly": 49,
+      "sessionActivityAt": 1774456824273,
+      "weeklyActivityAt": 1774456824273
+    }
+  },
+  "trackedKeys": {
+    "0": true,
+    "1": true,
+    "2": true,
+    "3": true,
+    "4": true,
+    "5": true,
+    "6": true,
+    "7": true,
+    "8": true,
+    "9": true,
+    "10": true,
+    "11": true,
+    "12": true,
+    "13": true,
+    "14": true,
+    "15": true,
+    "16": true,
+    "17": true
+  }
+}
