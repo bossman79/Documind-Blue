@@ -334,10 +334,13 @@ const convertPdfToImages = async ({ localPath, pagesToConvertAsImages, tempDir, 
             if (index !== 0 && index !== convertResults.length - 1)
                 return;
             if (!result || !result.buffer) {
-                throw new Error("Could not convert page to image buffer");
+                console.warn(`Skipping page ${index + 1}: no buffer available`);
+                return;
             }
-            if (!result.page)
-                throw new Error("Could not identify page data");
+            if (!result.page) {
+                console.warn(`Skipping page ${index + 1}: no page data`);
+                return;
+            }
             const paddedPageNumber = result.page.toString().padStart(5, "0");
             // Correct the image orientation
             const correctedBuffer = await (0, exports.correctImageOrientation)(result.buffer);

@@ -43,8 +43,8 @@ function shouldRecordOllamaCloudQuota() {
     }
     return true;
 }
-/** Max Ollama API key slots (0-based indices 0..31). */
-exports.OLLAMA_QUOTA_KEY_COUNT = 32;
+/** Max Ollama API key slots (0-based indices 0..39). */
+exports.OLLAMA_QUOTA_KEY_COUNT = 40;
 /**
  * Ollama Cloud free tier (reference observation): ~106 completed document extractions in the
  * current session window lined up with ~100% session usage; the same ~106 docs in the weekly

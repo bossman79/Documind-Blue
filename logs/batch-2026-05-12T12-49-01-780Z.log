@@ -1,0 +1,463 @@
+{"timestamp":"2026-05-12T12:49:01.780Z","level":"INFO","message":"Crash logger initialized","data":{"logFile":"C:\\Users\\vgiordano\\Downloads\\documind-1.1.2\\logs\\batch-2026-05-12T12-49-01-780Z.log"}}
+{"timestamp":"2026-05-12T12:49:24.377Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":3,"keysInUse":[3],"markdownLength":3623}}
+{"timestamp":"2026-05-12T12:49:24.397Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:49:24.501Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:49:24.556Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:49:24.610Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:49:28.970Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":4414}}
+{"timestamp":"2026-05-12T12:49:29.026Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":4649,"preferredKeyIndex":3}}
+{"timestamp":"2026-05-12T12:49:47.519Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":4,"keysInUse":[4],"markdownLength":3525}}
+{"timestamp":"2026-05-12T12:49:47.574Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:49:47.631Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:49:47.662Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:49:47.695Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:49:47.794Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":1,"keysInUse":[4,1],"markdownLength":4265}}
+{"timestamp":"2026-05-12T12:49:47.894Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:49:47.957Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:49:48.028Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:49:48.093Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:49:48.165Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":5,"keysInUse":[4,1,5],"markdownLength":7928}}
+{"timestamp":"2026-05-12T12:49:48.229Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:49:48.245Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:49:48.261Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:49:48.284Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:49:48.330Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":7,"keysInUse":[4,1,5,7],"markdownLength":7222}}
+{"timestamp":"2026-05-12T12:50:01.340Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:50:01.688Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:50:01.693Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:50:01.713Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:50:02.531Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":14869}}
+{"timestamp":"2026-05-12T12:50:02.535Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":15016,"preferredKeyIndex":4}}
+{"timestamp":"2026-05-12T12:50:04.354Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":6,"keysInUse":[1,5,7,24,30,34,18,38,35,27,3,13,17,31,37,20,29,15,25,16,6],"markdownLength":17044}}
+{"timestamp":"2026-05-12T12:50:04.867Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:50:04.879Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:50:04.922Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:50:04.963Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:50:05.620Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":17592}}
+{"timestamp":"2026-05-12T12:50:05.641Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":17847,"preferredKeyIndex":1}}
+{"timestamp":"2026-05-12T12:50:05.809Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":4116}}
+{"timestamp":"2026-05-12T12:50:05.828Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":17498,"preferredKeyIndex":7}}
+{"timestamp":"2026-05-12T12:50:11.590Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":23329}}
+{"timestamp":"2026-05-12T12:50:11.684Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":23519,"preferredKeyIndex":5}}
+{"timestamp":"2026-05-12T12:50:12.169Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":28,"keysInUse":[24,30,34,18,38,35,27,3,13,17,31,37,20,29,15,25,16,6,14,36,32,28],"markdownLength":1263}}
+{"timestamp":"2026-05-12T12:50:12.199Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:50:12.218Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:50:12.237Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:50:12.282Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:50:13.578Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":2,"keysInUse":[24,30,34,18,38,35,27,3,13,17,31,37,20,29,15,25,16,6,14,36,32,28,2],"markdownLength":1704}}
+{"timestamp":"2026-05-12T12:50:13.582Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:50:13.584Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:50:13.586Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:50:13.588Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:50:14.174Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":1937}}
+{"timestamp":"2026-05-12T12:50:14.178Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":2009,"preferredKeyIndex":28}}
+{"timestamp":"2026-05-12T12:50:15.496Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":1910}}
+{"timestamp":"2026-05-12T12:50:15.498Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":1920,"preferredKeyIndex":2}}
+{"timestamp":"2026-05-12T12:50:16.182Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":26,"keysInUse":[24,30,34,18,38,35,27,3,13,17,31,37,20,29,15,25,16,6,14,36,32,28,39,33,2,26],"markdownLength":916}}
+{"timestamp":"2026-05-12T12:50:16.183Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:50:16.184Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:50:16.185Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:50:16.188Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:50:17.443Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":1258}}
+{"timestamp":"2026-05-12T12:50:17.445Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":1263,"preferredKeyIndex":26}}
+{"timestamp":"2026-05-12T12:50:18.033Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":23,"keysInUse":[24,30,34,18,38,35,27,3,13,17,31,37,20,29,15,25,16,6,14,36,32,28,39,33,2,26,23],"markdownLength":1872}}
+{"timestamp":"2026-05-12T12:50:18.034Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:50:18.035Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:50:18.035Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:50:18.036Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:50:20.109Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":1,"keysInUse":[24,30,34,18,38,35,27,3,13,17,31,37,20,29,15,25,16,6,14,36,32,28,39,33,2,26,23,1],"markdownLength":1772}}
+{"timestamp":"2026-05-12T12:50:20.111Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:50:20.112Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:50:20.112Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:50:20.112Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:50:20.518Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":19,"keysInUse":[24,30,34,18,38,35,27,3,13,17,31,37,20,29,15,25,16,6,14,36,32,28,39,33,2,26,23,1,19],"markdownLength":774}}
+{"timestamp":"2026-05-12T12:50:20.519Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:50:20.520Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:50:20.521Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:50:20.521Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:50:21.719Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":1198}}
+{"timestamp":"2026-05-12T12:50:21.723Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":1204,"preferredKeyIndex":19}}
+{"timestamp":"2026-05-12T12:50:21.950Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":1838}}
+{"timestamp":"2026-05-12T12:50:21.952Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":1843,"preferredKeyIndex":1}}
+{"timestamp":"2026-05-12T12:50:23.134Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":12,"keysInUse":[24,30,34,18,38,35,27,3,13,17,31,37,20,29,15,25,16,6,14,36,32,28,39,33,2,26,23,19,1,12],"markdownLength":2390}}
+{"timestamp":"2026-05-12T12:50:23.137Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:50:23.138Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:50:23.138Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:50:23.139Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:50:23.950Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":21,"keysInUse":[24,30,34,18,38,35,27,3,13,17,31,37,20,29,15,25,16,6,14,36,32,28,39,33,2,26,23,19,1,12,21],"markdownLength":2915}}
+{"timestamp":"2026-05-12T12:50:23.952Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:50:23.952Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:50:23.953Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:50:23.953Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:50:25.738Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":1785}}
+{"timestamp":"2026-05-12T12:50:25.740Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":1790,"preferredKeyIndex":21}}
+{"timestamp":"2026-05-12T12:50:26.312Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":10,"keysInUse":[24,30,34,18,38,35,27,3,13,17,31,37,20,29,15,25,16,6,14,36,32,28,39,33,2,26,23,19,1,12,21,10],"markdownLength":3239}}
+{"timestamp":"2026-05-12T12:50:26.314Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:50:26.315Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:50:26.316Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:50:26.316Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:50:28.272Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":1956}}
+{"timestamp":"2026-05-12T12:50:28.276Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":1964,"preferredKeyIndex":10}}
+{"timestamp":"2026-05-12T12:50:29.286Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":24,"keysInUse":[24,30,34,18,38,35,27,3,13,17,31,37,20,29,15,25,16,6,14,36,32,28,39,33,2,26,23,19,1,12,21],"markdownLength":313}}
+{"timestamp":"2026-05-12T12:50:29.288Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:50:29.289Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:50:29.290Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:50:29.290Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:50:30.182Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":25260}}
+{"timestamp":"2026-05-12T12:50:30.184Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":25830,"preferredKeyIndex":6}}
+{"timestamp":"2026-05-12T12:50:30.190Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":900}}
+{"timestamp":"2026-05-12T12:50:30.192Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":906,"preferredKeyIndex":24}}
+{"timestamp":"2026-05-12T12:50:31.025Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":0,"keysInUse":[30,34,18,38,35,27,3,13,17,31,37,20,29,15,25,16,14,36,32,28,39,33,2,26,23,19,1,12,21,0],"markdownLength":1932}}
+{"timestamp":"2026-05-12T12:50:31.029Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:50:31.029Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:50:31.030Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:50:31.030Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:50:31.443Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":13408}}
+{"timestamp":"2026-05-12T12:50:31.449Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":13416,"preferredKeyIndex":23}}
+{"timestamp":"2026-05-12T12:50:32.546Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":22,"keysInUse":[30,34,18,38,35,27,3,13,17,31,37,20,29,15,25,16,14,36,32,28,39,33,2,26,19,1,12,21,0,23,22],"markdownLength":7989}}
+{"timestamp":"2026-05-12T12:50:32.548Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:50:32.549Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:50:32.549Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:50:32.550Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:50:35.339Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":2790}}
+{"timestamp":"2026-05-12T12:50:35.341Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":2795,"preferredKeyIndex":22}}
+{"timestamp":"2026-05-12T12:50:36.573Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":7,"keysInUse":[30,34,18,38,35,27,3,13,17,31,37,20,29,15,25,16,14,36,32,28,39,33,2,26,19,1,12,21,0,23,22,7],"markdownLength":2290}}
+{"timestamp":"2026-05-12T12:50:36.578Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:50:36.579Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:50:36.580Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:50:36.581Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:50:37.643Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":14505}}
+{"timestamp":"2026-05-12T12:50:37.647Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":14513,"preferredKeyIndex":12}}
+{"timestamp":"2026-05-12T12:50:38.186Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":7156}}
+{"timestamp":"2026-05-12T12:50:38.191Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":7166,"preferredKeyIndex":0}}
+{"timestamp":"2026-05-12T12:50:38.893Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":2313}}
+{"timestamp":"2026-05-12T12:50:38.895Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":2322,"preferredKeyIndex":7}}
+{"timestamp":"2026-05-12T12:50:44.567Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":18,"keysInUse":[30,34,18,38,35,27,3,13,17,31,37,20,29,15,25,16,14,36,32,28,39,33,2,26,19,1,21,23,22],"markdownLength":353}}
+{"timestamp":"2026-05-12T12:50:44.569Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:50:44.569Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:50:44.570Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:50:44.570Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:50:45.182Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":4,"keysInUse":[30,34,18,38,35,27,3,13,17,31,37,20,29,15,25,16,14,36,32,28,39,33,2,26,19,1,21,23,22,4],"markdownLength":9686}}
+{"timestamp":"2026-05-12T12:50:45.184Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:50:45.185Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:50:45.186Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:50:45.186Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:50:47.468Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":10,"keysInUse":[30,34,18,38,35,27,3,13,17,31,37,20,29,15,25,16,14,36,32,28,39,33,2,26,19,1,21,23,22,4,10],"markdownLength":4376}}
+{"timestamp":"2026-05-12T12:50:47.470Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:50:47.471Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:50:47.471Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:50:47.471Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:50:47.886Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":3316}}
+{"timestamp":"2026-05-12T12:50:47.889Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":3322,"preferredKeyIndex":18}}
+{"timestamp":"2026-05-12T12:50:47.971Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":6,"keysInUse":[30,34,38,35,27,3,13,17,31,37,20,29,15,25,16,14,36,32,28,39,33,2,26,19,1,21,23,22,4,10,6],"markdownLength":1782}}
+{"timestamp":"2026-05-12T12:50:47.974Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:50:47.976Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:50:47.976Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:50:47.977Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:50:49.464Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":1993}}
+{"timestamp":"2026-05-12T12:50:49.467Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":1999,"preferredKeyIndex":10}}
+{"timestamp":"2026-05-12T12:50:51.999Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":27,"keysInUse":[30,34,38,35,27,3,13,17,31,37,20,29,15,25,16,14,36,32,28,39,33,2,26,19,1,21,23,22,4,6],"markdownLength":352}}
+{"timestamp":"2026-05-12T12:50:52.001Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:50:52.001Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:50:52.002Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:50:52.002Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:50:52.866Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":864}}
+{"timestamp":"2026-05-12T12:50:52.869Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":870,"preferredKeyIndex":27}}
+{"timestamp":"2026-05-12T12:50:54.404Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":6428}}
+{"timestamp":"2026-05-12T12:50:54.407Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":6436,"preferredKeyIndex":6}}
+{"timestamp":"2026-05-12T12:50:55.271Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":38,"keysInUse":[30,34,38,35,3,13,17,31,37,20,29,15,25,16,14,36,32,28,39,33,2,26,19,1,21,23,22,4],"markdownLength":157}}
+{"timestamp":"2026-05-12T12:50:55.272Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:50:55.274Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:50:55.274Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:50:55.275Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:51:00.035Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":4761}}
+{"timestamp":"2026-05-12T12:51:00.042Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":4770,"preferredKeyIndex":38}}
+{"timestamp":"2026-05-12T12:51:02.138Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":35,"keysInUse":[30,34,35,3,13,17,31,37,20,29,15,25,16,14,36,32,28,39,33,2,26,19,1,21,23,22,4],"markdownLength":189}}
+{"timestamp":"2026-05-12T12:51:02.140Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:51:02.141Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:51:02.142Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:51:02.142Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:51:03.702Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":1560}}
+{"timestamp":"2026-05-12T12:51:03.705Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":1567,"preferredKeyIndex":35}}
+{"timestamp":"2026-05-12T12:51:04.598Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":30,"keysInUse":[30,34,3,13,17,31,37,20,29,15,25,16,14,36,32,28,39,33,2,26,19,1,21,23,22,4],"markdownLength":304}}
+{"timestamp":"2026-05-12T12:51:04.601Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:51:04.602Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:51:04.602Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:51:04.603Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:51:07.025Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":6,"keysInUse":[30,34,3,13,17,31,37,20,29,15,25,16,14,36,32,28,39,33,2,26,19,1,21,23,22,4,6],"markdownLength":1664}}
+{"timestamp":"2026-05-12T12:51:07.027Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:51:07.028Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:51:07.028Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:51:07.029Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:51:07.409Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":17,"keysInUse":[30,34,3,13,17,31,37,20,29,15,25,16,14,36,32,28,39,33,2,26,19,1,21,23,22,4,6],"markdownLength":121}}
+{"timestamp":"2026-05-12T12:51:07.411Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:51:07.412Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:51:07.412Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:51:07.413Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:51:07.870Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":3268}}
+{"timestamp":"2026-05-12T12:51:07.872Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":3274,"preferredKeyIndex":30}}
+{"timestamp":"2026-05-12T12:51:08.438Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":1026}}
+{"timestamp":"2026-05-12T12:51:08.440Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":1031,"preferredKeyIndex":17}}
+{"timestamp":"2026-05-12T12:51:08.531Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":0,"keysInUse":[34,3,13,31,37,20,29,15,25,16,14,36,32,28,39,33,2,26,19,1,21,23,22,4,6,0],"markdownLength":4065}}
+{"timestamp":"2026-05-12T12:51:08.533Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:51:08.534Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:51:08.535Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:51:08.535Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:51:12.016Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":3,"keysInUse":[34,3,13,31,37,20,29,15,25,16,14,36,32,28,39,33,2,26,19,1,21,23,22,4,6,0],"markdownLength":237}}
+{"timestamp":"2026-05-12T12:51:12.018Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:51:12.019Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:51:12.020Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:51:12.020Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:51:13.464Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":1445}}
+{"timestamp":"2026-05-12T12:51:13.466Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":1450,"preferredKeyIndex":3}}
+{"timestamp":"2026-05-12T12:51:14.076Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":5541}}
+{"timestamp":"2026-05-12T12:51:14.078Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":5547,"preferredKeyIndex":0}}
+{"timestamp":"2026-05-12T12:51:20.422Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":12,"keysInUse":[34,13,31,37,20,29,15,25,16,14,36,32,28,39,33,2,26,19,1,21,23,22,4,6,0,12],"markdownLength":6597}}
+{"timestamp":"2026-05-12T12:51:20.424Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:51:20.425Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:51:20.425Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:51:20.425Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:51:20.845Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":13,"keysInUse":[34,13,31,37,20,29,15,25,16,14,36,32,28,39,33,2,26,19,1,21,23,22,4,6,0,12],"markdownLength":248}}
+{"timestamp":"2026-05-12T12:51:20.848Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:51:20.849Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:51:20.849Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:51:20.850Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:51:22.499Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":1650}}
+{"timestamp":"2026-05-12T12:51:22.501Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":1656,"preferredKeyIndex":13}}
+{"timestamp":"2026-05-12T12:51:22.961Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":2536}}
+{"timestamp":"2026-05-12T12:51:22.963Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":2541,"preferredKeyIndex":12}}
+{"timestamp":"2026-05-12T12:51:24.711Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":17683}}
+{"timestamp":"2026-05-12T12:51:24.712Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":17687,"preferredKeyIndex":6}}
+{"timestamp":"2026-05-12T12:51:25.104Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":39918}}
+{"timestamp":"2026-05-12T12:51:25.107Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":39925,"preferredKeyIndex":4}}
+{"timestamp":"2026-05-12T12:51:25.470Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":31,"keysInUse":[34,31,37,20,29,15,25,16,14,36,32,28,39,33,2,26,19,1,21,23,22,0,4],"markdownLength":303}}
+{"timestamp":"2026-05-12T12:51:25.472Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:51:25.474Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:51:25.474Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:51:25.475Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:51:27.804Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":2330}}
+{"timestamp":"2026-05-12T12:51:27.807Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":2337,"preferredKeyIndex":31}}
+{"timestamp":"2026-05-12T12:51:37.935Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":29,"keysInUse":[34,37,20,29,15,25,16,14,36,32,28,39,33,2,26,19,1,21,23,22,0,4],"markdownLength":866}}
+{"timestamp":"2026-05-12T12:51:37.937Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:51:37.938Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:51:37.938Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:51:37.938Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:51:39.421Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":1483}}
+{"timestamp":"2026-05-12T12:51:39.423Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":1488,"preferredKeyIndex":29}}
+{"timestamp":"2026-05-12T12:51:42.772Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":20,"keysInUse":[34,37,20,15,25,16,14,36,32,28,39,33,2,26,19,1,21,23,22,0,4],"markdownLength":1624}}
+{"timestamp":"2026-05-12T12:51:42.774Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:51:42.776Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:51:42.776Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:51:42.776Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:51:44.286Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":1510}}
+{"timestamp":"2026-05-12T12:51:44.288Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":1516,"preferredKeyIndex":20}}
+{"timestamp":"2026-05-12T12:51:48.979Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":11,"keysInUse":[34,37,15,25,16,14,36,32,28,39,33,2,26,19,1,21,23,22,0,4,11],"markdownLength":2361}}
+{"timestamp":"2026-05-12T12:51:48.981Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:51:48.982Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:51:48.983Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:51:48.983Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:51:50.460Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":25,"keysInUse":[34,37,15,25,16,14,36,32,28,39,33,2,26,19,1,21,23,22,0,4,11],"markdownLength":875}}
+{"timestamp":"2026-05-12T12:51:50.462Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:51:50.463Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:51:50.463Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:51:50.464Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:51:51.591Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":1128}}
+{"timestamp":"2026-05-12T12:51:51.594Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":1134,"preferredKeyIndex":25}}
+{"timestamp":"2026-05-12T12:51:54.414Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":16,"keysInUse":[34,37,15,16,14,36,32,28,39,33,2,26,19,1,21,23,22,0,4,11],"markdownLength":26}}
+{"timestamp":"2026-05-12T12:51:54.416Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:51:54.417Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:51:54.417Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:51:54.417Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:51:55.356Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":15,"keysInUse":[34,37,15,16,14,36,32,28,39,33,2,26,19,1,21,23,22,0,4,11],"markdownLength":26}}
+{"timestamp":"2026-05-12T12:51:55.358Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:51:55.359Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:51:55.359Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:51:55.360Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:51:55.999Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":1582}}
+{"timestamp":"2026-05-12T12:51:56.002Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":1588,"preferredKeyIndex":16}}
+{"timestamp":"2026-05-12T12:51:58.701Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":3342}}
+{"timestamp":"2026-05-12T12:51:58.703Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":3347,"preferredKeyIndex":15}}
+{"timestamp":"2026-05-12T12:52:10.036Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":14,"keysInUse":[34,37,14,36,32,28,39,33,2,26,19,1,21,23,22,0,4,11],"markdownLength":553}}
+{"timestamp":"2026-05-12T12:52:10.038Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:52:10.039Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:52:10.039Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:52:10.040Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:52:10.914Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":875}}
+{"timestamp":"2026-05-12T12:52:10.918Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":882,"preferredKeyIndex":14}}
+{"timestamp":"2026-05-12T12:52:24.842Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":39,"keysInUse":[34,37,36,32,28,39,33,2,26,19,1,21,23,22,0,4,11],"markdownLength":298}}
+{"timestamp":"2026-05-12T12:52:24.844Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:52:24.845Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:52:24.845Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:52:24.845Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:52:28.548Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":33,"keysInUse":[34,37,36,32,28,39,33,2,26,19,1,21,23,22,0,4,11],"markdownLength":256}}
+{"timestamp":"2026-05-12T12:52:28.550Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:52:28.552Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:52:28.552Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:52:28.552Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:52:28.902Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":39919}}
+{"timestamp":"2026-05-12T12:52:28.903Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":39924,"preferredKeyIndex":11}}
+{"timestamp":"2026-05-12T12:52:33.163Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":2,"keysInUse":[34,37,36,32,28,39,33,2,26,19,1,21,23,22,0,4],"markdownLength":113}}
+{"timestamp":"2026-05-12T12:52:33.167Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:52:33.174Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:52:33.175Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:52:33.181Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:52:36.566Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":28,"keysInUse":[34,37,36,32,28,39,33,2,26,19,1,21,23,22,0,4],"markdownLength":414}}
+{"timestamp":"2026-05-12T12:52:36.568Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:52:36.569Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:52:36.570Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:52:36.570Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:52:37.453Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":883}}
+{"timestamp":"2026-05-12T12:52:37.455Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":889,"preferredKeyIndex":28}}
+{"timestamp":"2026-05-12T12:52:40.585Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":26,"keysInUse":[34,37,36,32,39,33,2,26,19,1,21,23,22,0,4],"markdownLength":1380}}
+{"timestamp":"2026-05-12T12:52:40.587Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:52:40.588Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:52:40.588Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:52:40.588Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:52:41.895Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":1307}}
+{"timestamp":"2026-05-12T12:52:41.897Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":1312,"preferredKeyIndex":26}}
+{"timestamp":"2026-05-12T12:52:43.785Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":19,"keysInUse":[34,37,36,32,39,33,2,19,1,21,23,22,0,4],"markdownLength":349}}
+{"timestamp":"2026-05-12T12:52:43.787Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:52:43.788Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:52:43.788Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:52:43.788Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:52:45.092Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":1304}}
+{"timestamp":"2026-05-12T12:52:45.094Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":1309,"preferredKeyIndex":19}}
+{"timestamp":"2026-05-12T12:52:50.376Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":17201}}
+{"timestamp":"2026-05-12T12:52:50.378Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":17215,"preferredKeyIndex":2}}
+{"timestamp":"2026-05-12T12:52:58.873Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":21,"keysInUse":[34,37,36,32,39,33,1,21,23,22,0,4],"markdownLength":1166}}
+{"timestamp":"2026-05-12T12:52:58.875Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:52:58.876Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:52:58.876Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:52:58.877Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:52:59.749Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":873}}
+{"timestamp":"2026-05-12T12:52:59.751Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":878,"preferredKeyIndex":21}}
+{"timestamp":"2026-05-12T12:53:10.631Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":0,"keysInUse":[34,37,36,32,39,33,1,23,22,0,4],"markdownLength":726}}
+{"timestamp":"2026-05-12T12:53:10.640Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:53:10.641Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:53:10.641Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:53:10.642Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:53:11.232Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":36,"keysInUse":[34,37,36,32,39,33,1,23,22,0,4],"markdownLength":224}}
+{"timestamp":"2026-05-12T12:53:11.235Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:53:11.235Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:53:11.235Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:53:11.236Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:53:12.682Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":2041}}
+{"timestamp":"2026-05-12T12:53:12.684Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":2053,"preferredKeyIndex":0}}
+{"timestamp":"2026-05-12T12:53:13.282Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":2047}}
+{"timestamp":"2026-05-12T12:53:13.284Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":2052,"preferredKeyIndex":36}}
+{"timestamp":"2026-05-12T12:53:15.562Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":1,"keysInUse":[34,37,32,39,33,1,23,22,4],"markdownLength":121}}
+{"timestamp":"2026-05-12T12:53:15.564Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:53:15.565Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:53:15.565Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:53:15.565Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:53:16.626Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":32,"keysInUse":[34,37,32,39,33,1,23,22,4],"markdownLength":1904}}
+{"timestamp":"2026-05-12T12:53:16.628Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:53:16.629Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:53:16.629Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:53:16.629Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:53:17.591Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":2026}}
+{"timestamp":"2026-05-12T12:53:17.593Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":2031,"preferredKeyIndex":1}}
+{"timestamp":"2026-05-12T12:53:18.385Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":1756}}
+{"timestamp":"2026-05-12T12:53:18.386Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":1760,"preferredKeyIndex":32}}
+{"timestamp":"2026-05-12T12:53:18.909Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":50357}}
+{"timestamp":"2026-05-12T12:53:18.910Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":50362,"preferredKeyIndex":33}}
+{"timestamp":"2026-05-12T12:53:19.955Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":23,"keysInUse":[34,37,39,23,22,4],"markdownLength":273}}
+{"timestamp":"2026-05-12T12:53:19.956Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:53:19.957Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:53:19.958Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:53:19.958Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:53:25.970Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":22,"keysInUse":[34,37,39,23,22,4],"markdownLength":208}}
+{"timestamp":"2026-05-12T12:53:25.973Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:53:25.974Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:53:25.975Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:53:25.975Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:53:28.145Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":2170}}
+{"timestamp":"2026-05-12T12:53:28.147Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":2177,"preferredKeyIndex":22}}
+{"timestamp":"2026-05-12T12:53:34.887Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":37,"keysInUse":[34,37,39,23,4],"markdownLength":261}}
+{"timestamp":"2026-05-12T12:53:34.888Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:53:34.889Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:53:34.889Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:53:34.889Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:54:14.381Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":9,"keysInUse":[34,37,39,23,4,9],"markdownLength":3203}}
+{"timestamp":"2026-05-12T12:54:14.384Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:54:14.384Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:54:14.385Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:54:14.385Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:54:22.317Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":47428}}
+{"timestamp":"2026-05-12T12:54:22.319Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":47432,"preferredKeyIndex":37}}
+{"timestamp":"2026-05-12T12:54:23.731Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":118886}}
+{"timestamp":"2026-05-12T12:54:23.733Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":118891,"preferredKeyIndex":39}}
+{"timestamp":"2026-05-12T12:54:24.980Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":10595}}
+{"timestamp":"2026-05-12T12:54:24.982Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":10601,"preferredKeyIndex":9}}
+{"timestamp":"2026-05-12T12:54:33.428Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":73470}}
+{"timestamp":"2026-05-12T12:54:33.430Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":73475,"preferredKeyIndex":23}}
+{"timestamp":"2026-05-12T12:54:38.215Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":34,"keysInUse":[34,4],"markdownLength":264}}
+{"timestamp":"2026-05-12T12:54:38.216Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:54:38.217Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:54:38.217Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:54:38.217Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:54:40.550Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":2333}}
+{"timestamp":"2026-05-12T12:54:40.551Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":2336,"preferredKeyIndex":34}}
+{"timestamp":"2026-05-12T12:55:00.912Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":4,"keysInUse":[4],"markdownLength":19}}
+{"timestamp":"2026-05-12T12:55:00.915Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:55:00.916Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:55:00.916Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:55:00.916Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:55:02.394Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":1478}}
+{"timestamp":"2026-05-12T12:55:02.396Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":1484,"preferredKeyIndex":4}}
+{"timestamp":"2026-05-12T12:55:57.664Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":11,"keysInUse":[11],"markdownLength":8075}}
+{"timestamp":"2026-05-12T12:55:57.666Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:55:57.667Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:55:57.667Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:55:57.667Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:56:03.526Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":5859}}
+{"timestamp":"2026-05-12T12:56:03.528Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":5864,"preferredKeyIndex":11}}
+{"timestamp":"2026-05-12T12:56:10.653Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":9,"keysInUse":[9],"markdownLength":15815}}
+{"timestamp":"2026-05-12T12:56:10.653Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:56:10.654Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:56:10.655Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:56:10.655Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:56:13.395Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":2740}}
+{"timestamp":"2026-05-12T12:56:13.396Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":2743,"preferredKeyIndex":9}}
+{"timestamp":"2026-05-12T12:56:25.972Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":7,"keysInUse":[7],"markdownLength":7986}}
+{"timestamp":"2026-05-12T12:56:25.974Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:56:25.975Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:56:25.975Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:56:25.975Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:56:27.404Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":1429}}
+{"timestamp":"2026-05-12T12:56:27.406Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":1434,"preferredKeyIndex":7}}
+{"timestamp":"2026-05-12T12:57:43.301Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":8,"keysInUse":[8],"markdownLength":8077}}
+{"timestamp":"2026-05-12T12:57:43.303Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:57:43.304Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:57:43.304Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:57:43.304Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:57:56.853Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":13549}}
+{"timestamp":"2026-05-12T12:57:56.855Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":13554,"preferredKeyIndex":8}}
+{"timestamp":"2026-05-12T12:58:29.532Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":8,"keysInUse":[8],"markdownLength":2433}}
+{"timestamp":"2026-05-12T12:58:29.534Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:58:29.535Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:58:29.535Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:58:29.535Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:58:34.627Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":5092}}
+{"timestamp":"2026-05-12T12:58:34.628Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":5096,"preferredKeyIndex":8}}
+{"timestamp":"2026-05-12T12:59:26.980Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":8,"keysInUse":[8],"markdownLength":14599}}
+{"timestamp":"2026-05-12T12:59:26.982Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T12:59:26.983Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T12:59:26.983Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T12:59:26.983Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T12:59:53.287Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":26304}}
+{"timestamp":"2026-05-12T12:59:53.288Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":26308,"preferredKeyIndex":8}}
+{"timestamp":"2026-05-12T13:04:24.671Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":5,"keysInUse":[5],"markdownLength":2353}}
+{"timestamp":"2026-05-12T13:04:24.673Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T13:04:24.674Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T13:04:24.675Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T13:04:24.675Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T13:04:31.204Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":6529}}
+{"timestamp":"2026-05-12T13:04:31.208Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":6537,"preferredKeyIndex":5}}
+{"timestamp":"2026-05-12T13:04:58.709Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":5,"keysInUse":[5],"markdownLength":2576}}
+{"timestamp":"2026-05-12T13:04:58.711Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
+{"timestamp":"2026-05-12T13:04:58.712Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
+{"timestamp":"2026-05-12T13:04:58.713Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
+{"timestamp":"2026-05-12T13:04:58.713Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
+{"timestamp":"2026-05-12T13:05:02.932Z","level":"DEBUG","message":"OpenAI client response","data":{"keyIdx":1,"responseTimeMs":4219}}
+{"timestamp":"2026-05-12T13:05:02.934Z","level":"INFO","message":"Extraction successful via proxy","data":{"totalTimeMs":4225,"preferredKeyIndex":5}}

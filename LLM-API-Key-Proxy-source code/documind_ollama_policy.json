@@ -5,106 +5,106 @@
   "weeklySampleCount": 2,
   "keys": {
     "1": {
-      "session": 13,
-      "weekly": 334,
-      "sessionActivityAt": 1776348347872,
-      "weeklyActivityAt": 1776348347872
+      "session": 0,
+      "weekly": 0,
+      "sessionActivityAt": 1779376427469,
+      "weeklyActivityAt": 1779305566359
     },
     "4": {
-      "session": 1,
-      "weekly": 202,
-      "sessionActivityAt": 1776347914488,
-      "weeklyActivityAt": 1776347914488
+      "session": 0,
+      "weekly": 0,
+      "sessionActivityAt": 1779376427469,
+      "weeklyActivityAt": 1779305566359
     },
     "3": {
-      "session": 4,
-      "weekly": 259,
-      "sessionActivityAt": 1776348489944,
-      "weeklyActivityAt": 1776348489944
+      "session": 0,
+      "weekly": 0,
+      "sessionActivityAt": 1779376427469,
+      "weeklyActivityAt": 1779305566359
     },
     "0": {
-      "session": 16,
-      "weekly": 285,
-      "sessionActivityAt": 1776347917055,
-      "weeklyActivityAt": 1776347917055
+      "session": 0,
+      "weekly": 0,
+      "sessionActivityAt": 1779376427469,
+      "weeklyActivityAt": 1779305566359
     },
     "6": {
-      "session": 4,
-      "weekly": 352,
-      "sessionActivityAt": 1776347910251,
-      "weeklyActivityAt": 1776347910251
+      "session": 0,
+      "weekly": 0,
+      "sessionActivityAt": 1779376427469,
+      "weeklyActivityAt": 1779305566359
     },
     "5": {
-      "session": 9,
-      "weekly": 269,
-      "sessionActivityAt": 1776348339369,
-      "weeklyActivityAt": 1776348339369
+      "session": 0,
+      "weekly": 0,
+      "sessionActivityAt": 1779376427469,
+      "weeklyActivityAt": 1779305566359
     },
     "14": {
       "session": 0,
-      "weekly": 212,
-      "sessionActivityAt": 1776343411504,
-      "weeklyActivityAt": 1776282734855
+      "weekly": 0,
+      "sessionActivityAt": 1779376427469,
+      "weeklyActivityAt": 1779305566359
     },
     "13": {
-      "session": 14,
-      "weekly": 199,
-      "sessionActivityAt": 1776344378086,
-      "weeklyActivityAt": 1776344378086
+      "session": 0,
+      "weekly": 0,
+      "sessionActivityAt": 1779376427469,
+      "weeklyActivityAt": 1779305566359
     },
     "12": {
-      "session": 8,
-      "weekly": 286,
-      "sessionActivityAt": 1776344352798,
-      "weeklyActivityAt": 1776344352798
+      "session": 0,
+      "weekly": 0,
+      "sessionActivityAt": 1779376427469,
+      "weeklyActivityAt": 1779305566359
     },
     "15": {
-      "session": 8,
-      "weekly": 292,
-      "sessionActivityAt": 1776344413828,
-      "weeklyActivityAt": 1776344413828
+      "session": 0,
+      "weekly": 0,
+      "sessionActivityAt": 1779376427469,
+      "weeklyActivityAt": 1779305566359
     },
     "10": {
-      "session": 10,
-      "weekly": 253,
-      "sessionActivityAt": 1776344467022,
-      "weeklyActivityAt": 1776344467022
+      "session": 0,
+      "weekly": 0,
+      "sessionActivityAt": 1779376427469,
+      "weeklyActivityAt": 1779305566359
     },
     "9": {
-      "session": 18,
-      "weekly": 353,
-      "sessionActivityAt": 1776348346726,
-      "weeklyActivityAt": 1776348346726
+      "session": 0,
+      "weekly": 0,
+      "sessionActivityAt": 1779376427469,
+      "weeklyActivityAt": 1779305566359
     },
     "7": {
-      "session": 10,
-      "weekly": 246,
-      "sessionActivityAt": 1776348380047,
-      "weeklyActivityAt": 1776348380047
+      "session": 0,
+      "weekly": 0,
+      "sessionActivityAt": 1779376427469,
+      "weeklyActivityAt": 1779305566359
     },
     "8": {
-      "session": 5,
-      "weekly": 262,
-      "sessionActivityAt": 1776348695388,
-      "weeklyActivityAt": 1776348695388
+      "session": 0,
+      "weekly": 0,
+      "sessionActivityAt": 1779376427469,
+      "weeklyActivityAt": 1779305566359
     },
     "11": {
-      "session": 16,
-      "weekly": 282,
-      "sessionActivityAt": 1776348188043,
-      "weeklyActivityAt": 1776348188043
+      "session": 0,
+      "weekly": 0,
+      "sessionActivityAt": 1779376427469,
+      "weeklyActivityAt": 1779305566359
     },
     "2": {
-      "session": 15,
-      "weekly": 288,
-      "sessionActivityAt": 1776348376866,
-      "weeklyActivityAt": 1776348376866
+      "session": 0,
+      "weekly": 0,
+      "sessionActivityAt": 1779376427469,
+      "weeklyActivityAt": 1779305566359
     },
     "16": {
-      "session": 13,
-      "weekly": 314,
-      "sessionActivityAt": 1776348695132,
-      "weeklyActivityAt": 1776348695132
+      "session": 0,
+      "weekly": 0,
+      "sessionActivityAt": 1779376427469,
+      "weeklyActivityAt": 1779305566359
     }
   },
   "trackedKeys": {

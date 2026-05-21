@@ -29,10 +29,29 @@ if (!process.env.DOCUMIND_DATA_DIR) {
 dotenv.config({ path: path.join(ROOT_DIR, '.env') });
 
 /** Max Ollama failover keys / per-key proxy rows / quota-tracking slots (Key 1 = index 0). */
-const OLLAMA_KEY_SLOT_COUNT = 32;
+const OLLAMA_KEY_SLOT_COUNT = 40;
+
+/** Helper to retry renames and avoid Windows EBUSY from antivirus locks */
+async function safeRenameAsync(oldPath, newPath, retries = 5) {
+  for (let attempt = 0; attempt < retries; attempt++) {
+    try {
+      await fs.rename(oldPath, newPath);
+      return;
+    } catch (err) {
+      if ((err.code === 'EBUSY' || err.code === 'EPERM' || err.code === 'EACCES') && attempt < retries - 1) {
+        await new Promise(r => setTimeout(r, 100 * (attempt + 1)));
+      } else {
+        throw err;
+      }
+    }
+  }
+}
 
 /** In-flight batch extract sessions — client POSTs /api/extract-batch/stop to set stopRequested. */
 const activeBatchExtractSessions = new Map();
+
+/** Worker skip requests — client POSTs /api/extract-batch/skip-worker to skip current file. */
+const workerSkipRequests = new Map(); // sessionId -> Set of workerIndices
 
 /** Documind BASE_URL points at LLM-API-Key-Proxy (port 8000). */
 function isDocumindUsingLlmKeyProxy() {
@@ -694,7 +713,7 @@ app.post('/api/extract', upload.single('file'), async (req, res) => {
     if (req.file) {
       const ext = path.extname(req.file.originalname);
       const newPath = req.file.path + ext;
-      fs.renameSync(req.file.path, newPath);
+      await safeRenameAsync(req.file.path, newPath);
       filePath = newPath;
       uploadedPath = newPath;
     }
@@ -751,7 +770,7 @@ app.post('/api/extract/export-submittal', upload.single('workbook'), async (req,
     }
     const ext = path.extname(req.file.originalname || '') || '.xlsx';
     const newPath = req.file.path + ext;
-    fs.renameSync(req.file.path, newPath);
+    await safeRenameAsync(req.file.path, newPath);
     uploadedPath = newPath;
     const buf = await fs.readFile(newPath);
     const { mergeExtractCsvIntoSubmittalWorkbook } = await import('./extractCsvSubmittalMerge.js');
@@ -773,6 +792,70 @@ app.post('/api/extract/export-submittal', upload.single('workbook'), async (req,
 });
 
 // -- Extract batch: stop early (keep stream open until partial `done` is sent) -
+
+// -- Relationships ----------------------------------------------------------
+app.post('/api/relationships/analyze', upload.single('workbook'), async (req, res) => {
+  let uploadedPath = null;
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Upload the Vendor Submittal spreadsheet as field "workbook"' });
+    }
+    const ext = path.extname(req.file.originalname || '') || '.xlsx';
+    const newPath = req.file.path + ext;
+    await safeRenameAsync(req.file.path, newPath);
+    uploadedPath = newPath;
+    
+    const buf = await fs.readFile(newPath);
+    const { analyzeRelationships } = await import('./relationships.js');
+    const result = await analyzeRelationships(buf);
+    
+    res.json(result);
+  } catch (err) {
+    console.error('[relationships/analyze]', err);
+    res.status(500).json({ error: err.message || 'Analysis failed' });
+  } finally {
+    if (uploadedPath) {
+      fs.remove(uploadedPath).catch(() => {});
+    }
+  }
+});
+
+app.post('/api/relationships/export', upload.single('workbook'), async (req, res) => {
+  let uploadedPath = null;
+  try {
+    const relationshipsStr = req.body?.relationships;
+    if (!relationshipsStr) {
+      return res.status(400).json({ error: 'Missing relationships body field' });
+    }
+    if (!req.file) {
+      return res.status(400).json({ error: 'Upload the Vendor Submittal spreadsheet as field "workbook"' });
+    }
+    const relationshipsJSON = JSON.parse(relationshipsStr);
+    const ext = path.extname(req.file.originalname || '') || '.xlsx';
+    const newPath = req.file.path + ext;
+    await safeRenameAsync(req.file.path, newPath);
+    uploadedPath = newPath;
+    
+    const buf = await fs.readFile(newPath);
+    const { exportRelationshipsToExcel } = await import('./relationships.js');
+    const out = await exportRelationshipsToExcel(buf, relationshipsJSON);
+    
+    const base = path.basename(req.file.originalname || 'submittal.xlsx');
+    const stem = (base.replace(/\.(xlsx|xlsm|xls)$/i, '') || 'submittal').replace(/[^\w.\-]+/g, '_').slice(0, 100) || 'submittal';
+    const filename = `${stem}-Relationships.xlsx`;
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.send(Buffer.from(out));
+  } catch (err) {
+    console.error('[relationships/export]', err);
+    res.status(500).json({ error: err.message || 'Export failed' });
+  } finally {
+    if (uploadedPath) {
+      fs.remove(uploadedPath).catch(() => {});
+    }
+  }
+});
+
 app.post('/api/extract-batch/stop', (req, res) => {
   const id = req.body?.sessionId;
   if (!id || typeof id !== 'string') {
@@ -783,6 +866,25 @@ app.post('/api/extract-batch/stop', (req, res) => {
     return res.status(404).json({ error: 'Unknown or finished batch session' });
   }
   ctrl.stopRequested = true;
+  res.json({ ok: true });
+});
+
+// -- Extract batch: skip current file for a specific worker -
+app.post('/api/extract-batch/skip-worker', (req, res) => {
+  const { sessionId, workerIndex } = req.body;
+  if (!sessionId || workerIndex === undefined) {
+    return res.status(400).json({ error: 'sessionId and workerIndex required' });
+  }
+  const ctrl = activeBatchExtractSessions.get(sessionId);
+  if (!ctrl) {
+    return res.status(404).json({ error: 'Unknown or finished batch session' });
+  }
+  
+  if (!workerSkipRequests.has(sessionId)) {
+    workerSkipRequests.set(sessionId, new Set());
+  }
+  workerSkipRequests.get(sessionId).add(workerIndex);
+  
   res.json({ ok: true });
 });
 
@@ -917,7 +1019,7 @@ app.post('/api/extract-batch', uploadBatch, async (req, res) => {
       const f = files[i];
       const ext = path.extname(f.originalname);
       const newPath = f.path + ext;
-      fs.renameSync(f.path, newPath);
+      await safeRenameAsync(f.path, newPath);
       uploadedPaths.push(newPath);
     }
 
@@ -1020,6 +1122,22 @@ app.post('/api/extract-batch', uploadBatch, async (req, res) => {
             console.log(`[${logTs()}] worker${slotIndex} EXIT (stop requested)`);
             break;
           }
+          
+          // Check if skip was requested for this worker
+          const skipSet = workerSkipRequests.get(batchSessionId);
+          if (skipSet && skipSet.has(slotIndex)) {
+            skipSet.delete(slotIndex);
+            console.log(`[${logTs()}] worker${slotIndex} SKIP requested - moving to next file`);
+            // CRITICAL: Release the key if it was in use from previous iteration
+            if (keysInUse.has(myKeyIdx)) {
+              keysInUse.delete(myKeyIdx);
+              console.log(`[${logTs()}] worker${slotIndex} RELEASED Key${myKeyIdx + 1} (was locked from previous file)`);
+            }
+            workerCurrent[slotIndex] = null;
+            emitBatchState();
+            continue;
+          }
+          
           let item = myQueue.shift() || overflowQueue.shift();
           if (!item) {
             console.log(`[${logTs()}] worker${slotIndex} EXIT (no more items)`);
@@ -1038,12 +1156,30 @@ app.post('/api/extract-batch', uploadBatch, async (req, res) => {
             // Phase 1: Convert file to markdown (PDF/DWG processing) 
             // For DWGs, we wait for a Key FIRST to avoid "background processing" collisions.
             if (isDWG) {
+              let skipRequested = false;
               while (keysInUse.has(keyToUse)) {
                 console.log(`[${logTs()}] worker${slotIndex} WAITING for Key${keyToUse + 1} (before DWG conversion)`);
                 await new Promise(resolve => setTimeout(resolve, 100));
                 if (batchSessionCtrl.stopRequested) break;
+                // Check for skip during wait
+                const skipSet = workerSkipRequests.get(batchSessionId);
+                if (skipSet && skipSet.has(slotIndex)) {
+                  skipSet.delete(slotIndex);
+                  console.log(`[${logTs()}] worker${slotIndex} SKIP requested during DWG wait - moving to next file`);
+                  allData[item.index] = { filename: item.originalname, _error: 'Skipped by user' };
+                  workerCurrent[slotIndex] = null;
+                  emitBatchState();
+                  const completed = allData.filter((x) => x !== undefined).length;
+                  write({ type: 'progress', current: completed, total, percent: Math.round((completed / total) * 100), fileName: item.originalname });
+                  skipRequested = true;
+                  break;
+                }
               }
               if (batchSessionCtrl.stopRequested) break;
+              if (skipRequested) continue; // Skip to next item WITHOUT adding key
+              if (keysInUse.has(keyToUse)) {
+                console.error(`[${logTs()}] worker${slotIndex} ERROR: Key${keyToUse + 1} already in use! This should never happen.`);
+              }
               keysInUse.add(keyToUse);
             }
 
@@ -1065,13 +1201,45 @@ app.post('/api/extract-batch', uploadBatch, async (req, res) => {
           
           if (!isDWG) {
             // Phase 2: WAIT for the assigned key to become available (for non-DWGs)
+            let skipRequested = false;
             while (keysInUse.has(keyToUse)) {
               console.log(`[${logTs()}] worker${slotIndex} WAITING for Key${keyToUse + 1} (converted "${item.originalname}" ready for extraction)`);
               await new Promise(resolve => setTimeout(resolve, 100));
               if (batchSessionCtrl.stopRequested) break;
+              // Check for skip during wait
+              const skipSet = workerSkipRequests.get(batchSessionId);
+              if (skipSet && skipSet.has(slotIndex)) {
+                skipSet.delete(slotIndex);
+                console.log(`[${logTs()}] worker${slotIndex} SKIP requested during extraction wait - moving to next file`);
+                allData[item.index] = { filename: item.originalname, _error: 'Skipped by user' };
+                workerCurrent[slotIndex] = null;
+                emitBatchState();
+                const completed = allData.filter((x) => x !== undefined).length;
+                write({ type: 'progress', current: completed, total, percent: Math.round((completed / total) * 100), fileName: item.originalname });
+                skipRequested = true;
+                break;
+              }
             }
             if (batchSessionCtrl.stopRequested) break;
+            if (skipRequested) continue; // Skip to next item WITHOUT adding key
+            if (keysInUse.has(keyToUse)) {
+              console.error(`[${logTs()}] worker${slotIndex} ERROR: Key${keyToUse + 1} already in use! This should never happen.`);
+            }
             keysInUse.add(keyToUse);
+          }
+          
+          // Check for skip before extraction
+          const skipSetBeforeExtract = workerSkipRequests.get(batchSessionId);
+          if (skipSetBeforeExtract && skipSetBeforeExtract.has(slotIndex)) {
+            skipSetBeforeExtract.delete(slotIndex);
+            console.log(`[${logTs()}] worker${slotIndex} SKIP requested before extraction - moving to next file`);
+            keysInUse.delete(keyToUse);
+            allData[item.index] = { filename: item.originalname, _error: 'Skipped by user' };
+            workerCurrent[slotIndex] = null;
+            emitBatchState();
+            const completed = allData.filter((x) => x !== undefined).length;
+            write({ type: 'progress', current: completed, total, percent: Math.round((completed / total) * 100), fileName: item.originalname });
+            continue;
           }
           
           console.log(`[${logTs()}] worker${slotIndex} EXTRACTING "${item.originalname}" | using Key${keyToUse + 1} (idx ${keyToUse})`);
@@ -1476,6 +1644,7 @@ app.post('/api/extract-batch', uploadBatch, async (req, res) => {
     }
   } finally {
     if (batchSessionId) activeBatchExtractSessions.delete(batchSessionId);
+    if (batchSessionId) workerSkipRequests.delete(batchSessionId);
     for (const p of uploadedPaths) {
       fs.remove(p).catch(() => { });
     }

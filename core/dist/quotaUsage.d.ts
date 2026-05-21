@@ -1,8 +1,8 @@
 import type { LockType } from "./keyCache";
 /** True for direct Ollama Cloud only — false for local Ollama and LLM Key Proxy (proxy owns quota server-side). */
 export declare function shouldRecordOllamaCloudQuota(): boolean;
-/** Max Ollama API key slots (0-based indices 0..31). */
-export declare const OLLAMA_QUOTA_KEY_COUNT = 32;
+/** Max Ollama API key slots (0-based indices 0..39). */
+export declare const OLLAMA_QUOTA_KEY_COUNT = 40;
 /**
  * Ollama Cloud free tier (reference observation): ~106 completed document extractions in the
  * current session window lined up with ~100% session usage; the same ~106 docs in the weekly

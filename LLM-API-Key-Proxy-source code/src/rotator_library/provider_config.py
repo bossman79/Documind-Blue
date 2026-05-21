@@ -53,6 +53,23 @@ def normalize_ollama_cloud_model_name(model_name: str) -> str:
     _qwen_cloud_keep = frozenset({"qwen3.5:cloud", "qwen3.5:397b-cloud"})
     if low == "qwen3.5" or (low.startswith("qwen3.5:") and low not in _qwen_cloud_keep):
         return "qwen3.5:cloud"
+    # If it's a valid cloud variant, return the lowercase version
+    if low in _qwen_cloud_keep:
+        return low
+
+    _gpt_oss_cloud_keep = frozenset({"gpt-oss:120b-cloud", "gpt-oss:20b-cloud"})
+    if low == "gpt-oss" or low == "gpt-oss:120b" or (low.startswith("gpt-oss:") and low not in _gpt_oss_cloud_keep):
+        return "gpt-oss:120b-cloud"
+    # If it's a valid cloud variant, return the lowercase version
+    if low in _gpt_oss_cloud_keep:
+        return low
+
+    _kimi_cloud_keep = frozenset({"kimi-k2.6:cloud"})
+    if low == "kimi-k2.6" or (low.startswith("kimi-k2.6:") and low not in _kimi_cloud_keep):
+        return "kimi-k2.6:cloud"
+    # If it's a valid cloud variant, return the lowercase version
+    if low in _kimi_cloud_keep:
+        return low
 
     if ":" in model_name:
         return model_name

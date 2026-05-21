@@ -33,6 +33,7 @@ function is429(err) {
 
 function isRetryable(err) {
   if (is429(err)) return false;
+  if (err?.isValidationError) return true;
   const code = err?.code;
   if (code === "ECONNABORTED" || code === "ETIMEDOUT") return true;
   const status = err?.response?.status ?? err?.status;
@@ -148,6 +149,114 @@ export const ollamaExtractor = async ({ markdown, zodSchema, rawSchema, prompt, 
     ? zodToJsonSchema(zodSchema, { target: "openApi3" })
     : null;
 
+  /** Extract JSON from response that may include markdown, code blocks, or prose */
+  const extractJson = (str) => {
+    let s = typeof str === "string" ? str.trim() : String(str).trim();
+    // Strip common prefixes (e.g. "Thinking: ..." or "Here is the JSON:")
+    s = s.replace(/^(?:Thinking:|Here (?:is|'s) (?:the )?(?:extracted )?(?:data|json)[:\s]*)/i, "").trim();
+    const codeBlock = s.match(/```(?:json)?\s*\n?([\s\S]*?)\n?```/);
+    if (codeBlock) s = codeBlock[1].trim();
+    const firstBrace = s.indexOf("{");
+    if (firstBrace === -1) return s;
+    let depth = 0;
+    let end = -1;
+    for (let i = firstBrace; i < s.length; i++) {
+      if (s[i] === "{") depth++;
+      else if (s[i] === "}") {
+        depth--;
+        if (depth === 0) {
+          end = i;
+          break;
+        }
+      }
+    }
+    return end >= 0 ? s.slice(firstBrace, end + 1) : s;
+  };
+
+  const validateResponse = (raw) => {
+    const rawStr = typeof raw === "string" ? raw : String(raw);
+    let parsed;
+    try {
+      const jsonStr = extractJson(rawStr);
+      parsed = JSON.parse(jsonStr);
+    } catch {
+      const err = new Error(`Ollama returned invalid JSON: ${rawStr.slice(0, 200)}...`);
+      err.isValidationError = true;
+      throw err;
+    }
+
+    // Map alias keys to canonical schema names (e.g. "status" -> "issue_status")
+    if (rawSchema && !isFieldsSchema) {
+      parsed = normalizeAliasKeys(parsed, rawSchema);
+      if (typeof parsed === "object" && parsed !== null) {
+        for (const f of rawSchema) {
+          if (f.name && f.name in parsed) {
+            const val = parsed[f.name];
+            if (f.type === "string" && typeof val === "number") {
+              parsed[f.name] = String(val);
+            } else if (f.type === "enum" && typeof val === "number") {
+              parsed[f.name] = String(val);
+            }
+          }
+        }
+      }
+    }
+
+    // Find fields array (model may nest it or use different keys)
+    let rawFields =
+      parsed.fields ??
+      parsed.schema?.fields ??
+      parsed.data?.fields ??
+      parsed.result?.fields ??
+      (Array.isArray(parsed) ? parsed : null);
+    if (!rawFields && typeof parsed === "object") {
+      const arr = Object.values(parsed).find((v) => Array.isArray(v) && v.length > 0 && typeof v[0] === "object");
+      if (arr) rawFields = arr;
+    }
+    const validTypes = ["string", "number", "array", "object"];
+    const normalizeField = (f) => {
+      if (typeof f !== "object" || f === null) return null;
+      const name = f.name ?? f.field ?? f.key ?? (typeof f === "string" ? f : null);
+      if (!name) return null;
+      const type = (f.type ?? f.dataType ?? "string").toString().toLowerCase();
+      const validType = validTypes.includes(type) ? type : "string";
+      const out = { name: String(name), type: validType };
+      if (f.description != null) out.description = String(f.description);
+      if (f.children != null && Array.isArray(f.children)) {
+        out.children = f.children.map(normalizeField).filter(Boolean);
+      }
+      return out;
+    };
+    if (Array.isArray(rawFields)) {
+      const fields = rawFields.map(normalizeField).filter((f) => f && f.name && f.name !== "undefined");
+      const normalized = { fields };
+      const result = zodSchema.safeParse(normalized);
+      if (result.success) return result.data;
+    }
+
+    let result = zodSchema.safeParse(parsed);
+    if (result.success) {
+      const filled = fillMissingFields(result.data, rawSchema);
+      return filled;
+    }
+
+    // Template extraction: model may wrap payload in data/result/extraction/output
+    if (!isFieldsSchema && rawSchema) {
+      const candidates = [parsed.data, parsed.result, parsed.extraction, parsed.output].filter(Boolean);
+      for (const cand of candidates) {
+        const normalized = normalizeAliasKeys(cand, rawSchema);
+        result = zodSchema.safeParse(normalized);
+        if (result.success) {
+          return fillMissingFields(result.data, rawSchema);
+        }
+      }
+    }
+
+    const err = new Error(`Ollama response did not match schema: ${result.error.message}`);
+    err.isValidationError = true;
+    throw err;
+  };
+
   const documindProxyHdrs = () => {
     const h = {};
     if (preferredKeyIndex != null && preferredKeyIndex >= 0) {
@@ -159,7 +268,7 @@ export const ollamaExtractor = async ({ markdown, zodSchema, rawSchema, prompt, 
     return h;
   };
 
-  const tryWithKey = async (apiKey, keyIdx, documindExtra = {}) => {
+  const tryWithKey = async (apiKey, keyIdx, documindExtra = {}, attempt = 0) => {
     const requestStartTime = Date.now();
     logDebug('Trying API key', { keyIdx: keyIdx + 1, documindExtra });
     
@@ -191,7 +300,7 @@ export const ollamaExtractor = async ({ markdown, zodSchema, rawSchema, prompt, 
             ],
             stream: false,
             format: jsonSchema,
-            options: { temperature: 0 },
+            options: { temperature: attempt > 0 ? Math.min(0.8, attempt * 0.2) : 0 },
           }),
         });
         
@@ -262,7 +371,7 @@ export const ollamaExtractor = async ({ markdown, zodSchema, rawSchema, prompt, 
           model: requestModel,
           messages: [{ role: "system", content: prompt + jsonPromptSuffix }, { role: "user", content: userContent }],
           response_format: { type: "json_object" },
-          temperature: 0,
+          temperature: attempt > 0 ? Math.min(0.8, attempt * 0.2) : 0,
         });
         
         const responseTime = Date.now() - requestStartTime;
@@ -290,9 +399,14 @@ export const ollamaExtractor = async ({ markdown, zodSchema, rawSchema, prompt, 
 
     if (raw != null && typeof raw === "string") {
       const t = raw.trim();
-      return t.length > 0 ? t : null;
+      raw = t.length > 0 ? t : null;
     }
-    return raw;
+    if (!raw) {
+      const err = new Error("Ollama returned empty response");
+      err.isValidationError = true;
+      throw err;
+    }
+    return validateResponse(raw);
   };
 
   const errMsg = (e) => {
@@ -311,9 +425,13 @@ export const ollamaExtractor = async ({ markdown, zodSchema, rawSchema, prompt, 
     const docComplete = { "X-Documind-Document-Complete": "1" };
     logInfo('Using LLM proxy mode', { keyCount: keysToTry.length });
     
+    let attempt = 0;
     outerPx: while (true) {
+      if (attempt > 0) {
+        console.warn(`[Ollama extract] trying proxy key 1/${keysToTry.length} (retry ${attempt}/${MAX_RETRIES_PER_KEY})`);
+      }
       try {
-        raw = await tryWithKey(keysToTry[0], 0, docComplete);
+        raw = await tryWithKey(keysToTry[0], 0, docComplete, attempt);
         if (preferredKeyIndex != null && preferredKeyIndex >= 0) {
           ollamaKeyState.lastSuccessfulKeyIndex = preferredKeyIndex;
         }
@@ -334,6 +452,7 @@ export const ollamaExtractor = async ({ markdown, zodSchema, rawSchema, prompt, 
           status,
           is429: is429(err),
           retryCount: allRateLimitedRetries,
+          attempt,
         });
         
         if (is429(err)) {
@@ -354,8 +473,22 @@ export const ollamaExtractor = async ({ markdown, zodSchema, rawSchema, prompt, 
           console.error(`[Ollama extract] 429 via LLM proxy after retries: ${msg}`);
           throw err;
         }
-        logError('Non-retryable error via proxy', { error: msg, status });
-        throw err;
+        
+        if (!isRetryable(err)) {
+          logError('Non-retryable error via proxy', { error: msg, status });
+          throw err;
+        }
+        
+        if (attempt < MAX_RETRIES_PER_KEY) {
+          const backoffMs = BACKOFF_BASE_MS * Math.pow(2, attempt);
+          console.warn(`[Ollama extract] Proxy key ${status || "error"} — "${msg}" — retry ${attempt + 1}/${MAX_RETRIES_PER_KEY} in ${backoffMs}ms`);
+          await delay(backoffMs);
+          attempt++;
+          continue outerPx;
+        } else {
+          console.error(`[Ollama extract] Proxy key exhausted after ${MAX_RETRIES_PER_KEY} retries. Last error: ${msg}`);
+          throw err;
+        }
       }
     }
   } else outer: while (true) {
@@ -413,7 +546,7 @@ export const ollamaExtractor = async ({ markdown, zodSchema, rawSchema, prompt, 
         console.warn(`[Ollama extract] trying ${keyLabel}${attempt > 0 ? ` (retry ${attempt}/${MAX_RETRIES_PER_KEY})` : ""}`);
       }
       try {
-        raw = await tryWithKey(key, idx);
+        raw = await tryWithKey(key, idx, {}, attempt);
         ollamaKeyState.lastSuccessfulKeyIndex = idx;
         if (i > 0 || attempt > 0) {
           console.warn(`[Ollama extract] succeeded with ${keyLabel}`);
@@ -467,92 +600,5 @@ export const ollamaExtractor = async ({ markdown, zodSchema, rawSchema, prompt, 
 
   if (!raw) throw new Error(lastErr?.message || "Ollama returned empty response");
 
-  /** Extract JSON from response that may include markdown, code blocks, or prose */
-  const extractJson = (str) => {
-    let s = str.trim();
-    // Strip common prefixes (e.g. "Thinking: ..." or "Here is the JSON:")
-    s = s.replace(/^(?:Thinking:|Here (?:is|'s) (?:the )?(?:extracted )?(?:data|json)[:\s]*)/i, "").trim();
-    const codeBlock = s.match(/```(?:json)?\s*\n?([\s\S]*?)\n?```/);
-    if (codeBlock) s = codeBlock[1].trim();
-    const firstBrace = s.indexOf("{");
-    if (firstBrace === -1) return s;
-    let depth = 0;
-    let end = -1;
-    for (let i = firstBrace; i < s.length; i++) {
-      if (s[i] === "{") depth++;
-      else if (s[i] === "}") {
-        depth--;
-        if (depth === 0) {
-          end = i;
-          break;
-        }
-      }
-    }
-    return end >= 0 ? s.slice(firstBrace, end + 1) : s;
-  };
-
-  let parsed;
-  try {
-    const jsonStr = extractJson(raw);
-    parsed = JSON.parse(jsonStr);
-  } catch {
-    throw new Error(`Ollama returned invalid JSON: ${raw.slice(0, 200)}...`);
-  }
-
-  // Map alias keys to canonical schema names (e.g. "status" -> "issue_status")
-  if (rawSchema && !isFieldsSchema) {
-    parsed = normalizeAliasKeys(parsed, rawSchema);
-  }
-
-  // Find fields array (model may nest it or use different keys)
-  let rawFields =
-    parsed.fields ??
-    parsed.schema?.fields ??
-    parsed.data?.fields ??
-    parsed.result?.fields ??
-    (Array.isArray(parsed) ? parsed : null);
-  if (!rawFields && typeof parsed === "object") {
-    const arr = Object.values(parsed).find((v) => Array.isArray(v) && v.length > 0 && typeof v[0] === "object");
-    if (arr) rawFields = arr;
-  }
-  const validTypes = ["string", "number", "array", "object"];
-  const normalizeField = (f) => {
-    if (typeof f !== "object" || f === null) return null;
-    const name = f.name ?? f.field ?? f.key ?? (typeof f === "string" ? f : null);
-    if (!name) return null;
-    const type = (f.type ?? f.dataType ?? "string").toString().toLowerCase();
-    const validType = validTypes.includes(type) ? type : "string";
-    const out = { name: String(name), type: validType };
-    if (f.description != null) out.description = String(f.description);
-    if (f.children != null && Array.isArray(f.children)) {
-      out.children = f.children.map(normalizeField).filter(Boolean);
-    }
-    return out;
-  };
-  if (Array.isArray(rawFields)) {
-    const fields = rawFields.map(normalizeField).filter((f) => f && f.name && f.name !== "undefined");
-    const normalized = { fields };
-    const result = zodSchema.safeParse(normalized);
-    if (result.success) return result.data;
-  }
-
-  let result = zodSchema.safeParse(parsed);
-  if (result.success) {
-    const filled = fillMissingFields(result.data, rawSchema);
-    return filled;
-  }
-
-  // Template extraction: model may wrap payload in data/result/extraction/output
-  if (!isFieldsSchema && rawSchema) {
-    const candidates = [parsed.data, parsed.result, parsed.extraction, parsed.output].filter(Boolean);
-    for (const cand of candidates) {
-      const normalized = normalizeAliasKeys(cand, rawSchema);
-      result = zodSchema.safeParse(normalized);
-      if (result.success) {
-        return fillMissingFields(result.data, rawSchema);
-      }
-    }
-  }
-
-  throw new Error(`Ollama response did not match schema: ${result.error.message}`);
+  return raw;
 };

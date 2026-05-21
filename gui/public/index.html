@@ -52,6 +52,21 @@
     /* Page sections */
     .page { display: none; flex-direction: column; gap: 12px; flex: 1; min-height: 0; }
     .page.active { display: flex; }
+    .page.batch-in-background { display: none; }
+    #page-batch-progress.batch-in-background { 
+      display: flex;
+      position: fixed;
+      top: 44px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 999;
+      pointer-events: none;
+    }
+    #page-batch-progress.batch-in-background .page-content,
+    #page-batch-progress.batch-in-background .bottom-bar {
+      pointer-events: auto;
+    }
     .page-content { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
     #page-extract .page-content { overflow-y: hidden; }
     .card-fill { flex: 1; min-height: 0; display: flex; flex-direction: column; }
@@ -1034,6 +1049,39 @@
     }
     .worker-queue-block ul { margin: 0; padding: 0 0 0 14px; color: #64748b; }
     .worker-queue-block li { margin: 3px 0; }
+    
+    /* Skip remaining animation */
+    .worker-remaining-skip {
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-block;
+      position: relative;
+    }
+    .worker-remaining-skip:hover {
+      color: #ef4444;
+      font-weight: 600;
+    }
+    .worker-remaining-skip:hover::after {
+      content: 'Skip';
+      position: absolute;
+      left: 0;
+      top: 0;
+      animation: fadeInSkip 0.2s ease forwards;
+    }
+    .worker-remaining-skip:hover .worker-remaining-text {
+      opacity: 0;
+    }
+    @keyframes fadeInSkip {
+      from {
+        opacity: 0;
+        transform: translateY(-2px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
     .worker-stats-row {
       display: flex;
       flex-wrap: wrap;
@@ -1417,11 +1465,14 @@
               <option value="gemini-1.5-pro">gemini-1.5-pro (Google)</option>
               <option value="llama3.2-vision">llama3.2-vision (Ollama)</option>
               <option value="gemma4:31b-cloud">gemma4:31b-cloud (Ollama Cloud)</option>
+              <option value="gpt-oss:120b-cloud">gpt-oss:120b-cloud (Ollama Cloud)</option>
+              <option value="kimi-k2.6:cloud">kimi-k2.6:cloud (Ollama Cloud)</option>
               <option value="qwen2.5vl">qwen2.5vl (Ollama)</option>
               <option value="qwen2.5vl:3b">qwen2.5vl:3b (Ollama)</option>
               <option value="qwen2.5vl:7b">qwen2.5vl:7b (Ollama)</option>
               <option value="qwen2.5vl:32b">qwen2.5vl:32b (Ollama)</option>
               <option value="qwen2.5vl:72b">qwen2.5vl:72b (Ollama)</option>
+              <option value="qwen3-vl:235b-instruct-cloud">qwen3-vl:235b-instruct-cloud (Ollama Cloud)</option>
               <option value="qwen3.5">qwen3.5 (Ollama)</option>
               <option value="qwen3.5:0.8b">qwen3.5:0.8b (Ollama)</option>
               <option value="qwen3.5:2b">qwen3.5:2b (Ollama)</option>
@@ -1613,6 +1664,46 @@
                 <div class="slot-top"><span class="slot-label">Slot 32</span><input type="checkbox" id="async-slot-32-enabled" style="width:11px;height:11px"></div>
                 <select id="async-slot-32" style="font-size:11px;padding:4px 5px;width:100%" disabled></select>
                 <div class="usage-bars" data-slot="32"><div class="usage-row"><span class="usage-label">Session</span><div class="usage-bar"><div class="usage-fill" id="usage-32-session"></div></div><span class="usage-text" id="usage-32-session-text">—</span></div><div class="usage-row"><span class="usage-label">Weekly</span><div class="usage-bar"><div class="usage-fill" id="usage-32-weekly"></div></div><span class="usage-text" id="usage-32-weekly-text">—</span></div></div>
+              </div>
+              <div class="slot" id="slot-33">
+                <div class="slot-top"><span class="slot-label">Slot 33</span><input type="checkbox" id="async-slot-33-enabled" style="width:11px;height:11px"></div>
+                <select id="async-slot-33" style="font-size:11px;padding:4px 5px;width:100%" disabled></select>
+                <div class="usage-bars" data-slot="33"><div class="usage-row"><span class="usage-label">Session</span><div class="usage-bar"><div class="usage-fill" id="usage-33-session"></div></div><span class="usage-text" id="usage-33-session-text">—</span></div><div class="usage-row"><span class="usage-label">Weekly</span><div class="usage-bar"><div class="usage-fill" id="usage-33-weekly"></div></div><span class="usage-text" id="usage-33-weekly-text">—</span></div></div>
+              </div>
+              <div class="slot" id="slot-34">
+                <div class="slot-top"><span class="slot-label">Slot 34</span><input type="checkbox" id="async-slot-34-enabled" style="width:11px;height:11px"></div>
+                <select id="async-slot-34" style="font-size:11px;padding:4px 5px;width:100%" disabled></select>
+                <div class="usage-bars" data-slot="34"><div class="usage-row"><span class="usage-label">Session</span><div class="usage-bar"><div class="usage-fill" id="usage-34-session"></div></div><span class="usage-text" id="usage-34-session-text">—</span></div><div class="usage-row"><span class="usage-label">Weekly</span><div class="usage-bar"><div class="usage-fill" id="usage-34-weekly"></div></div><span class="usage-text" id="usage-34-weekly-text">—</span></div></div>
+              </div>
+              <div class="slot" id="slot-35">
+                <div class="slot-top"><span class="slot-label">Slot 35</span><input type="checkbox" id="async-slot-35-enabled" style="width:11px;height:11px"></div>
+                <select id="async-slot-35" style="font-size:11px;padding:4px 5px;width:100%" disabled></select>
+                <div class="usage-bars" data-slot="35"><div class="usage-row"><span class="usage-label">Session</span><div class="usage-bar"><div class="usage-fill" id="usage-35-session"></div></div><span class="usage-text" id="usage-35-session-text">—</span></div><div class="usage-row"><span class="usage-label">Weekly</span><div class="usage-bar"><div class="usage-fill" id="usage-35-weekly"></div></div><span class="usage-text" id="usage-35-weekly-text">—</span></div></div>
+              </div>
+              <div class="slot" id="slot-36">
+                <div class="slot-top"><span class="slot-label">Slot 36</span><input type="checkbox" id="async-slot-36-enabled" style="width:11px;height:11px"></div>
+                <select id="async-slot-36" style="font-size:11px;padding:4px 5px;width:100%" disabled></select>
+                <div class="usage-bars" data-slot="36"><div class="usage-row"><span class="usage-label">Session</span><div class="usage-bar"><div class="usage-fill" id="usage-36-session"></div></div><span class="usage-text" id="usage-36-session-text">—</span></div><div class="usage-row"><span class="usage-label">Weekly</span><div class="usage-bar"><div class="usage-fill" id="usage-36-weekly"></div></div><span class="usage-text" id="usage-36-weekly-text">—</span></div></div>
+              </div>
+              <div class="slot" id="slot-37">
+                <div class="slot-top"><span class="slot-label">Slot 37</span><input type="checkbox" id="async-slot-37-enabled" style="width:11px;height:11px"></div>
+                <select id="async-slot-37" style="font-size:11px;padding:4px 5px;width:100%" disabled></select>
+                <div class="usage-bars" data-slot="37"><div class="usage-row"><span class="usage-label">Session</span><div class="usage-bar"><div class="usage-fill" id="usage-37-session"></div></div><span class="usage-text" id="usage-37-session-text">—</span></div><div class="usage-row"><span class="usage-label">Weekly</span><div class="usage-bar"><div class="usage-fill" id="usage-37-weekly"></div></div><span class="usage-text" id="usage-37-weekly-text">—</span></div></div>
+              </div>
+              <div class="slot" id="slot-38">
+                <div class="slot-top"><span class="slot-label">Slot 38</span><input type="checkbox" id="async-slot-38-enabled" style="width:11px;height:11px"></div>
+                <select id="async-slot-38" style="font-size:11px;padding:4px 5px;width:100%" disabled></select>
+                <div class="usage-bars" data-slot="38"><div class="usage-row"><span class="usage-label">Session</span><div class="usage-bar"><div class="usage-fill" id="usage-38-session"></div></div><span class="usage-text" id="usage-38-session-text">—</span></div><div class="usage-row"><span class="usage-label">Weekly</span><div class="usage-bar"><div class="usage-fill" id="usage-38-weekly"></div></div><span class="usage-text" id="usage-38-weekly-text">—</span></div></div>
+              </div>
+              <div class="slot" id="slot-39">
+                <div class="slot-top"><span class="slot-label">Slot 39</span><input type="checkbox" id="async-slot-39-enabled" style="width:11px;height:11px"></div>
+                <select id="async-slot-39" style="font-size:11px;padding:4px 5px;width:100%" disabled></select>
+                <div class="usage-bars" data-slot="39"><div class="usage-row"><span class="usage-label">Session</span><div class="usage-bar"><div class="usage-fill" id="usage-39-session"></div></div><span class="usage-text" id="usage-39-session-text">—</span></div><div class="usage-row"><span class="usage-label">Weekly</span><div class="usage-bar"><div class="usage-fill" id="usage-39-weekly"></div></div><span class="usage-text" id="usage-39-weekly-text">—</span></div></div>
+              </div>
+              <div class="slot" id="slot-40">
+                <div class="slot-top"><span class="slot-label">Slot 40</span><input type="checkbox" id="async-slot-40-enabled" style="width:11px;height:11px"></div>
+                <select id="async-slot-40" style="font-size:11px;padding:4px 5px;width:100%" disabled></select>
+                <div class="usage-bars" data-slot="40"><div class="usage-row"><span class="usage-label">Session</span><div class="usage-bar"><div class="usage-fill" id="usage-40-session"></div></div><span class="usage-text" id="usage-40-session-text">—</span></div><div class="usage-row"><span class="usage-label">Weekly</span><div class="usage-bar"><div class="usage-fill" id="usage-40-weekly"></div></div><span class="usage-text" id="usage-40-weekly-text">—</span></div></div>
               </div>
             </div>
           </div>
@@ -1811,9 +1902,12 @@
                 <option value="gemini-1.5-pro">gemini-1.5-pro (Google)</option>
                 <option value="llama3.2-vision">llama3.2-vision (Ollama)</option>
                 <option value="gemma4:31b-cloud">gemma4:31b-cloud (Ollama Cloud)</option>
+                <option value="gpt-oss:120b-cloud">gpt-oss:120b-cloud (Ollama Cloud)</option>
+                <option value="kimi-k2.6:cloud">kimi-k2.6:cloud (Ollama Cloud)</option>
                 <option value="qwen2.5vl">qwen2.5vl (Ollama)</option>
                 <option value="qwen2.5vl:3b">qwen2.5vl:3b (Ollama)</option>
                 <option value="qwen2.5vl:7b">qwen2.5vl:7b (Ollama)</option>
+                <option value="qwen3-vl:235b-instruct-cloud">qwen3-vl:235b-instruct-cloud (Ollama Cloud)</option>
                 <option value="qwen3.5">qwen3.5 (Ollama)</option>
                 <option value="qwen3.5:0.8b">qwen3.5:0.8b (Ollama)</option>
                 <option value="qwen3.5:9b">qwen3.5:9b (Ollama)</option>
@@ -1941,11 +2035,19 @@
                 <label style="display:flex;align-items:center;gap:5px;cursor:pointer;margin:0"><input type="checkbox" id="quota-track-29" checked style="width:13px;height:13px;margin:0"> Key 30</label>
                 <label style="display:flex;align-items:center;gap:5px;cursor:pointer;margin:0"><input type="checkbox" id="quota-track-30" checked style="width:13px;height:13px;margin:0"> Key 31</label>
                 <label style="display:flex;align-items:center;gap:5px;cursor:pointer;margin:0"><input type="checkbox" id="quota-track-31" checked style="width:13px;height:13px;margin:0"> Key 32</label>
+                <label style="display:flex;align-items:center;gap:5px;cursor:pointer;margin:0"><input type="checkbox" id="quota-track-32" checked style="width:13px;height:13px;margin:0"> Key 33</label>
+                <label style="display:flex;align-items:center;gap:5px;cursor:pointer;margin:0"><input type="checkbox" id="quota-track-33" checked style="width:13px;height:13px;margin:0"> Key 34</label>
+                <label style="display:flex;align-items:center;gap:5px;cursor:pointer;margin:0"><input type="checkbox" id="quota-track-34" checked style="width:13px;height:13px;margin:0"> Key 35</label>
+                <label style="display:flex;align-items:center;gap:5px;cursor:pointer;margin:0"><input type="checkbox" id="quota-track-35" checked style="width:13px;height:13px;margin:0"> Key 36</label>
+                <label style="display:flex;align-items:center;gap:5px;cursor:pointer;margin:0"><input type="checkbox" id="quota-track-36" checked style="width:13px;height:13px;margin:0"> Key 37</label>
+                <label style="display:flex;align-items:center;gap:5px;cursor:pointer;margin:0"><input type="checkbox" id="quota-track-37" checked style="width:13px;height:13px;margin:0"> Key 38</label>
+                <label style="display:flex;align-items:center;gap:5px;cursor:pointer;margin:0"><input type="checkbox" id="quota-track-38" checked style="width:13px;height:13px;margin:0"> Key 39</label>
+                <label style="display:flex;align-items:center;gap:5px;cursor:pointer;margin:0"><input type="checkbox" id="quota-track-39" checked style="width:13px;height:13px;margin:0"> Key 40</label>
               </div>
               <button type="button" class="btn btn-secondary btn-sm" style="margin-top:10px" onclick="saveQuotaTracking()">Save quota tracking</button>
             </div>
             <div>
-              <div class="section-label">Multiple API Keys <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;color:#9ca3af">— 429 failover, up to 32</span></div>
+              <div class="section-label">Multiple API Keys <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;color:#9ca3af">— 429 failover, up to 40</span></div>
               <div id="ollama-keys-container" style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px 10px">
                 <input type="password" id="ollama-key-1" placeholder="Key 1" style="padding:8px 10px;font-size:12px">
                 <input type="password" id="ollama-key-2" placeholder="Key 2" style="padding:8px 10px;font-size:12px">
@@ -1979,6 +2081,14 @@
                 <input type="password" id="ollama-key-30" placeholder="Key 30" style="padding:8px 10px;font-size:12px">
                 <input type="password" id="ollama-key-31" placeholder="Key 31" style="padding:8px 10px;font-size:12px">
                 <input type="password" id="ollama-key-32" placeholder="Key 32" style="padding:8px 10px;font-size:12px">
+                <input type="password" id="ollama-key-33" placeholder="Key 33" style="padding:8px 10px;font-size:12px">
+                <input type="password" id="ollama-key-34" placeholder="Key 34" style="padding:8px 10px;font-size:12px">
+                <input type="password" id="ollama-key-35" placeholder="Key 35" style="padding:8px 10px;font-size:12px">
+                <input type="password" id="ollama-key-36" placeholder="Key 36" style="padding:8px 10px;font-size:12px">
+                <input type="password" id="ollama-key-37" placeholder="Key 37" style="padding:8px 10px;font-size:12px">
+                <input type="password" id="ollama-key-38" placeholder="Key 38" style="padding:8px 10px;font-size:12px">
+                <input type="password" id="ollama-key-39" placeholder="Key 39" style="padding:8px 10px;font-size:12px">
+                <input type="password" id="ollama-key-40" placeholder="Key 40" style="padding:8px 10px;font-size:12px">
               </div>
               <div class="field-hint" style="margin-top:5px">On 429 rate limit, the job continues with the next key. Overrides single API Key when set. With local LLM-API-Key-Proxy, put your <strong>real Ollama keys</strong> here; use the single API Key field above for <code>PROXY_API_KEY</code> only.</div>
               <p style="font-size:11px;color:#9ca3af;margin:10px 0 0;line-height:1.4">Optional per-key HTTPS proxies (Ollama Cloud) are on the <strong>Per-key proxy</strong> tab.</p>
@@ -2063,7 +2173,7 @@
       </div>
       <div class="card card-full">
         <p style="font-size:12px;color:var(--text2);margin:0 0 14px;line-height:1.45">
-          Rows match <strong>Key 1</strong>…<strong>Key 32</strong> on Settings. Use <code>http://host:port</code> or <code>http://user:pass@host:port</code>. Saved to <code>documind_ollama_proxies.json</code> in the project folder (credentials stored on disk).
+          Rows match <strong>Key 1</strong>…<strong>Key 40</strong> on Settings. Use <code>http://host:port</code> or <code>http://user:pass@host:port</code>. Saved to <code>documind_ollama_proxies.json</code> in the project folder (credentials stored on disk).
         </p>
         <div id="ollama-proxy-grid" style="display:grid;grid-template-columns:52px 1fr;gap:4px 8px;font-size:11px;align-items:center;max-width:720px">
           <span>Key 1</span><input type="text" id="ollama-proxy-0" placeholder="http://host:port" autocomplete="off" style="width:100%;padding:4px 6px;font-size:11px">
@@ -2098,6 +2208,14 @@
           <span>Key 30</span><input type="text" id="ollama-proxy-29" placeholder="http://host:port" autocomplete="off" style="width:100%;padding:4px 6px;font-size:11px">
           <span>Key 31</span><input type="text" id="ollama-proxy-30" placeholder="http://host:port" autocomplete="off" style="width:100%;padding:4px 6px;font-size:11px">
           <span>Key 32</span><input type="text" id="ollama-proxy-31" placeholder="http://host:port" autocomplete="off" style="width:100%;padding:4px 6px;font-size:11px">
+          <span>Key 33</span><input type="text" id="ollama-proxy-32" placeholder="http://host:port" autocomplete="off" style="width:100%;padding:4px 6px;font-size:11px">
+          <span>Key 34</span><input type="text" id="ollama-proxy-33" placeholder="http://host:port" autocomplete="off" style="width:100%;padding:4px 6px;font-size:11px">
+          <span>Key 35</span><input type="text" id="ollama-proxy-34" placeholder="http://host:port" autocomplete="off" style="width:100%;padding:4px 6px;font-size:11px">
+          <span>Key 36</span><input type="text" id="ollama-proxy-35" placeholder="http://host:port" autocomplete="off" style="width:100%;padding:4px 6px;font-size:11px">
+          <span>Key 37</span><input type="text" id="ollama-proxy-36" placeholder="http://host:port" autocomplete="off" style="width:100%;padding:4px 6px;font-size:11px">
+          <span>Key 38</span><input type="text" id="ollama-proxy-37" placeholder="http://host:port" autocomplete="off" style="width:100%;padding:4px 6px;font-size:11px">
+          <span>Key 39</span><input type="text" id="ollama-proxy-38" placeholder="http://host:port" autocomplete="off" style="width:100%;padding:4px 6px;font-size:11px">
+          <span>Key 40</span><input type="text" id="ollama-proxy-39" placeholder="http://host:port" autocomplete="off" style="width:100%;padding:4px 6px;font-size:11px">
         </div>
         <div style="margin-top:14px">
           <button type="button" class="btn btn-secondary btn-sm" onclick="clearKeyCache()">Clear 429 Rate Limit Cache</button>
@@ -2184,7 +2302,7 @@
 
 <script>
 /** Password fields + per-key proxy rows + quota toggles + async worker slot count (Key / Slot 1 … N). */
-const OLLAMA_KEY_SLOTS = 32;
+const OLLAMA_KEY_SLOTS = 40;
 /** Must match # of slot-* cards in Extract → Async mode (each worker picks Key 1…N). */
 const OLLAMA_ASYNC_WORKER_SLOTS = OLLAMA_KEY_SLOTS;
 
@@ -2193,8 +2311,21 @@ const OLLAMA_ASYNC_WORKER_SLOTS = OLLAMA_KEY_SLOTS;
 // ---------------------------------------------------------------------------
 document.querySelectorAll('.nav-item').forEach(item => {
   item.addEventListener('click', () => {
+    const batchProgressPage = document.getElementById('page-batch-progress');
+    const isBatchActive = batchProgressPage && batchProgressPage.classList.contains('active') && batchSessionId;
+    
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p => {
+      if (p === batchProgressPage && isBatchActive) {
+        // Keep batch progress visible in background
+        p.classList.remove('active');
+        p.classList.add('batch-in-background');
+      } else {
+        p.classList.remove('active');
+        p.classList.remove('batch-in-background');
+      }
+    });
+    
     item.classList.add('active');
     document.getElementById('page-' + item.dataset.page).classList.add('active');
     if (item.dataset.page === 'settings') {
@@ -2204,6 +2335,32 @@ document.querySelectorAll('.nav-item').forEach(item => {
     if (item.dataset.page === 'settings-proxy') loadOllamaProxyFields();
   });
 });
+
+// Skip worker current file
+async function skipWorkerCurrentFile(workerIndex) {
+  if (!batchSessionId) {
+    toast('No active batch session', 'error');
+    return;
+  }
+  
+  try {
+    const res = await fetch('/api/extract-batch/skip-worker', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionId: batchSessionId, workerIndex })
+    });
+    
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Failed to skip worker');
+    }
+    
+    toast(`Worker ${workerIndex + 1} will skip current file`, 'success');
+  } catch (err) {
+    console.error('Skip worker error:', err);
+    toast(err.message || 'Failed to skip worker', 'error');
+  }
+}
 
 // ---------------------------------------------------------------------------
 // Toast
@@ -2524,7 +2681,9 @@ function renderBatchWorkerCards(ev) {
         done +
         '</span> Done | <span class="worker-compact-queue-num">' +
         remaining +
-        '</span> Remaining</div>' +
+        '</span> <span class="worker-remaining-skip" data-worker-index="' +
+        w.workerIndex +
+        '" title="Click to skip current file"><span class="worker-remaining-text">Remaining</span></span></div>' +
         '<span class="worker-key-pill">' +
         escapeHtml(w.assignedKeyLabel || 'Key') +
         '</span>' +
@@ -2550,6 +2709,16 @@ function renderBatchWorkerCards(ev) {
       card.appendChild(top);
       card.appendChild(docb);
       grid.appendChild(card);
+      
+      // Add skip event listener for compact layout
+      const skipBtn = top.querySelector('.worker-remaining-skip');
+      if (skipBtn) {
+        skipBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          skipWorkerCurrentFile(w.workerIndex);
+        });
+      }
+      
       attachWorkerPulseIfActive(w.workerIndex, card);
       return;
     }
@@ -2584,7 +2753,17 @@ function renderBatchWorkerCards(ev) {
       'worker-queue-block' + (detailed ? ' worker-queue-block--detailed' : ' worker-queue-block--compact');
     const ql = document.createElement('div');
     ql.className = 'qlabel';
-    ql.textContent = 'Queue · ' + qAll.length + ' remaining';
+    const remainingSpan = document.createElement('span');
+    remainingSpan.className = 'worker-remaining-skip';
+    remainingSpan.dataset.workerIndex = String(w.workerIndex);
+    remainingSpan.innerHTML = '<span class="worker-remaining-text">remaining</span>';
+    remainingSpan.title = 'Click to skip current file';
+    remainingSpan.addEventListener('click', (e) => {
+      e.stopPropagation();
+      skipWorkerCurrentFile(w.workerIndex);
+    });
+    ql.innerHTML = 'Queue · ' + qAll.length + ' ';
+    ql.appendChild(remainingSpan);
     qblk.appendChild(ql);
     if (detailed) {
       const q = qAll.slice(0, 12);
@@ -2632,9 +2811,13 @@ function showBatchProgressPage(totalFiles, opts) {
     rp === 'settings' || rp === 'settings-proxy' ? rp : 'extract';
   const isPreview = !!opts.preview;
 
-  document.querySelectorAll('.page').forEach((p) => p.classList.remove('active'));
+  const batchProgressPage = document.getElementById('page-batch-progress');
+  document.querySelectorAll('.page').forEach((p) => {
+    p.classList.remove('active');
+    p.classList.remove('batch-in-background');
+  });
   document.querySelectorAll('.nav-item').forEach((n) => n.classList.remove('active'));
-  document.getElementById('page-batch-progress').classList.add('active');
+  batchProgressPage.classList.add('active');
   document.getElementById('batch-progress-subtitle').textContent = `Processing ${totalFiles} file(s)…`;
   batchWorkersDetailedView = false;
   lastBatchStateEvent = null;
@@ -2730,7 +2913,9 @@ function openBatchProgressDebugView(returnPage) {
 }
 
 function hideBatchProgressPage() {
-  document.getElementById('page-batch-progress').classList.remove('active');
+  const batchProgressPage = document.getElementById('page-batch-progress');
+  batchProgressPage.classList.remove('active');
+  batchProgressPage.classList.remove('batch-in-background');
   const ret = batchProgressReturnPage;
   batchProgressReturnPage = 'extract';
   batchSessionId = null;
