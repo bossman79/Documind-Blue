@@ -21,3 +21,10 @@ tools/_rel_linked_names/
 
 # Default GUI output folder
 linked_pdf_output/
+.env
+.env.*
+*.env
+credentials.json
+*.pem
+*.key
+.credentials

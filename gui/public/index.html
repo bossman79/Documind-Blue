@@ -1346,6 +1346,33 @@
       opacity: 0.5;
     }
 
+    /* ---- Relationships page ---- */
+    .rel-metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; flex-shrink: 0; }
+    @media (max-width: 768px) { .rel-metrics-grid { grid-template-columns: repeat(2, 1fr); } }
+    .rel-metric-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; }
+    .rel-metric-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text2); margin-bottom: 6px; }
+    .rel-metric-value { font-size: 22px; font-weight: 700; color: var(--text); letter-spacing: -0.03em; }
+    .rel-view-toggle { display: inline-flex; background: var(--surface-solid); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); overflow: hidden; }
+    .rel-view-btn { padding: 6px 18px; font-size: 12px; font-weight: 500; cursor: pointer; border: none; background: transparent; font-family: inherit; color: var(--text2); transition: all 0.15s ease; }
+    .rel-view-btn.active { background: var(--accent); color: #fff; }
+    .rel-view-btn:hover:not(.active) { color: var(--text); background: var(--accent-soft); }
+    .rel-groups-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 10px; }
+    .rel-group-card { background: var(--surface-solid); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--radius-sm); padding: 12px 14px; transition: box-shadow 0.2s ease; }
+    .rel-group-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.07); }
+    .rel-parent-badge { display: inline-flex; align-items: center; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); text-transform: uppercase; letter-spacing: 0.03em; }
+    .rel-child-badge { display: inline-flex; align-items: center; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 4px; background: #f1f5f9; color: #64748b; }
+    .rel-score-badge { display: inline-flex; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; min-width: 30px; justify-content: center; }
+    .rel-score-high { background: #d1fae5; color: #065f46; }
+    .rel-score-mid { background: #fef3c7; color: #92400e; }
+    .rel-score-low { background: #f1f5f9; color: #64748b; }
+    .rel-tag { display: inline-flex; font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); }
+    .rel-child-row { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: var(--radius-sm); background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%); font-size: 12px; }
+    .rel-table-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .rel-table-row:hover { background: var(--accent-soft) !important; }
+    .rel-selected-file { display: none; margin-top: 8px; padding: 8px 12px; background: var(--green-soft); border: 1px solid rgba(16,185,129,0.2); border-radius: var(--radius-sm); align-items: center; justify-content: space-between; }
+    .rel-file-clear { background: none; border: none; cursor: pointer; color: var(--green); font-size: 14px; padding: 2px 6px; font-family: inherit; }
+    .rel-file-clear:hover { color: var(--red); }
+
     /* Responsive */
     @media (max-width: 900px) {
       .settings-ollama-inner { grid-template-columns: 1fr !important; }
@@ -1374,6 +1401,7 @@
         <div class="nav-item" data-page="settings"><span class="icon">&#9881;</span>Settings</div>
         <div class="nav-item" data-page="settings-proxy"><span class="icon">&#128279;</span>Per-key proxy</div>
         <div class="nav-item" data-page="deps"><span class="icon">&#128268;</span>Dependencies</div>
+        <div class="nav-item" data-page="relationships"><span class="icon">&#128200;</span>Relationships</div>
       </nav>
       <span class="topbar-end">v1.1.2</span>
     </div>
@@ -2277,6 +2305,139 @@
           <div id="keys-status"></div>
         </div>
       </div>
+      </div>
+    </div>
+
+    <!-- ======== RELATIONSHIPS ======== -->
+    <div class="page" id="page-relationships">
+      <div class="page-content">
+        <!-- Page Header -->
+        <div class="page-header" style="justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;flex-shrink:0">
+          <div>
+            <div class="page-title">Relationships</div>
+            <div class="page-sub">Discover parent-child document groups, revisions, and linked records from submittal / drawing lists</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;flex-shrink:0">
+            <button class="btn btn-secondary btn-sm" onclick="relLoadDemo()">&#9654; Load Demo Data</button>
+            <button class="btn btn-secondary btn-sm" onclick="relReset()">&#8635; Reset</button>
+          </div>
+        </div>
+
+        <!-- Upload + Analyze Controls -->
+        <div class="row" style="flex-shrink:0">
+          <!-- Upload card -->
+          <div class="card">
+            <div class="card-label" style="display:flex;align-items:center;gap:6px">
+              &#128196; INPUT WORKBOOK
+            </div>
+            <div class="drop-zone" id="rel-dropzone" onclick="document.getElementById('rel-file-input').click()">
+              <span class="icon">&#128196;</span>
+              <div class="drop-main">Drop your Submittal Excel here</div>
+              <div class="drop-sub">or click to browse &middot; .xlsx, .xlsm</div>
+            </div>
+            <input type="file" id="rel-file-input" accept=".xlsx,.xlsm,.xls" hidden>
+            <div id="rel-selected-file" class="rel-selected-file">
+              <div style="display:flex;align-items:center;gap:8px;min-width:0">
+                <span style="color:var(--green);font-size:16px;flex-shrink:0">&#128196;</span>
+                <div style="min-width:0">
+                  <div id="rel-file-name" style="font-size:12px;font-weight:600;color:#065f46;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></div>
+                  <div id="rel-file-size" style="font-size:10px;color:#047857"></div>
+                </div>
+              </div>
+              <button class="rel-file-clear" onclick="relClearFile()">&#10005;</button>
+            </div>
+          </div>
+
+          <!-- Controls card -->
+          <div class="card" style="display:flex;flex-direction:column">
+            <div class="card-label" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+              <span>&#128279; ANALYZE RELATIONSHIPS</span>
+              <span style="font-size:10px;font-weight:700;padding:2px 9px;background:var(--accent-soft);color:var(--accent);border-radius:4px;font-family:'JetBrains Mono',monospace;letter-spacing:0.02em">MIN SCORE: 35</span>
+            </div>
+            <p style="font-size:12px;color:var(--text2);margin-bottom:10px;line-height:1.5">
+              Uses filename tokens, Jaccard similarity, vendor, discipline, asset ID, revision sequencing and more.
+            </p>
+            <div style="display:flex;gap:16px;font-size:12px;color:var(--text2);margin-bottom:14px">
+              <span style="color:var(--green)">&#10003;</span> <span>Union-Find clustering</span>
+              &nbsp;&nbsp;<span style="color:var(--green)">&#10003;</span> <span>Parent scoring</span>
+            </div>
+            <div style="flex:1;display:flex;align-items:flex-end">
+              <button id="rel-analyze-btn" class="btn btn-primary" disabled onclick="relAnalyze()" style="width:100%;justify-content:center;gap:8px">
+                <span id="rel-analyze-spinner" class="spinner" style="display:none;width:14px;height:14px;border-width:2px;border-color:rgba(255,255,255,0.35);border-top-color:#fff"></span>
+                <span id="rel-analyze-text">ANALYZE RELATIONSHIPS</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty state -->
+        <div id="rel-empty-state" class="card" style="text-align:center;padding:40px 20px">
+          <div style="font-size:42px;margin-bottom:12px;opacity:0.25">&#9741;</div>
+          <div style="font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text)">Ready to analyze relationships</div>
+          <p style="font-size:12px;color:var(--text2);max-width:500px;margin:0 auto 16px;line-height:1.55">
+            Upload a Vendor Submittal or drawing list Excel file. The system will automatically cluster related documents using intelligent matching (filename, vendor, discipline, asset ID, sequential revisions, etc.).
+          </p>
+          <div style="display:flex;justify-content:center;gap:20px;font-size:12px;color:var(--text2)">
+            <span>&#10003; Parent detection</span>
+            <span>&#10003; Revision chains</span>
+            <span>&#10003; Asset linking</span>
+          </div>
+        </div>
+
+        <!-- Results section (hidden until analysis runs) -->
+        <div id="rel-results" style="display:none;flex-direction:column;gap:10px">
+          <!-- Metrics row -->
+          <div class="rel-metrics-grid">
+            <div class="rel-metric-card"><div class="rel-metric-label">DOCUMENTS ANALYZED</div><div class="rel-metric-value" id="rel-m-total">—</div></div>
+            <div class="rel-metric-card"><div class="rel-metric-label">GROUPS FOUND</div><div class="rel-metric-value" id="rel-m-groups" style="color:var(--accent)">—</div></div>
+            <div class="rel-metric-card"><div class="rel-metric-label">LINKED PAIRS</div><div class="rel-metric-value" id="rel-m-pairs">—</div></div>
+            <div class="rel-metric-card"><div class="rel-metric-label">AVG REL. SCORE</div><div class="rel-metric-value" id="rel-m-score">—</div></div>
+          </div>
+
+          <!-- Controls: toggle + search + filter + export -->
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;flex-shrink:0">
+            <div class="rel-view-toggle">
+              <button class="rel-view-btn active" id="rel-btn-groups" onclick="relSwitchView('groups')">&#128200; Groups</button>
+              <button class="rel-view-btn" id="rel-btn-table" onclick="relSwitchView('table')">&#9783; Table</button>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;flex:1;justify-content:flex-end;flex-wrap:wrap">
+              <div style="position:relative;flex:1;min-width:180px;max-width:280px">
+                <input type="text" id="rel-search" placeholder="Search filename or title..." oninput="relFilter()" style="padding-left:26px;font-size:12px;width:100%">
+                <span style="position:absolute;left:8px;top:50%;transform:translateY(-50%);color:#9ca3af;font-size:11px;pointer-events:none">&#128269;</span>
+              </div>
+              <select id="rel-discipline-filter" onchange="relFilter()" style="font-size:12px;padding:8px 10px">
+                <option value="">All Disciplines</option>
+              </select>
+              <button class="btn btn-green btn-sm" onclick="relExport()">&#8595; Export Excel</button>
+            </div>
+          </div>
+
+          <!-- Groups view -->
+          <div id="rel-groups-view">
+            <div id="rel-groups-container" class="rel-groups-grid"></div>
+          </div>
+
+          <!-- Table view -->
+          <div id="rel-table-view" style="display:none" class="rel-table-card">
+            <div style="overflow:auto;max-height:560px">
+              <table style="width:100%;border-collapse:collapse;font-size:12px">
+                <thead>
+                  <tr style="background:#f1f5f9;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:2">
+                    <th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;color:var(--text2);white-space:nowrap">Group</th>
+                    <th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;color:var(--text2)">Filename</th>
+                    <th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;color:var(--text2)">Description / Title</th>
+                    <th style="padding:9px 10px;text-align:center;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;color:var(--text2);white-space:nowrap">Discipline</th>
+                    <th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;color:var(--text2)">Relationship</th>
+                    <th style="padding:9px 10px;text-align:center;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;color:var(--text2)">Score</th>
+                    <th style="padding:9px 10px;text-align:center;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;color:var(--text2)">Type</th>
+                  </tr>
+                </thead>
+                <tbody id="rel-table-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -4484,6 +4645,303 @@ async function selectSourceFolder() {
 }
 
 document.getElementById('extract-model')?.dispatchEvent(new Event('change'));
+
+// ---------------------------------------------------------------------------
+// Relationships page
+// ---------------------------------------------------------------------------
+(function() {
+  let relCurrentFile = null;
+  let relCurrentResults = null;
+  let relCurrentView = 'groups';
+  let relFilteredGroups = [];
+
+  const DEMO_DATA = {
+    totalDocs: 12, totalPairs: 14,
+    groups: [
+      { id: 1, size: 4, parent: {
+        filename: 'EATON-MCC-1234-ASSEMBLY.pdf', description: 'Motor Control Center Assembly Drawing',
+        vendor: 'EATON', discipline: 'ELECTRICAL', docType: 'DRAWING', isParent: true,
+        children: [
+          { filename: 'EATON-MCC-1234-BOM.xlsx', description: 'MCC Bill of Materials', discipline: 'ELECTRICAL', docType: 'BOM', relationshipLabel: 'Same file prefix (EATON-MCC-1234) | Same vendor: EATON', relationshipScore: 78 },
+          { filename: 'EATON-MCC-1234-ASSEMBLY-REVA.pdf', description: 'Motor Control Center Assembly Drawing Rev A', discipline: 'ELECTRICAL', docType: 'DRAWING', relationshipLabel: 'Same file prefix | Sequential revisions (→A)', relationshipScore: 65 },
+          { filename: 'EATON-MCC-1234-SCHEDULE.xlsx', description: 'MCC Equipment Schedule', discipline: 'ELECTRICAL', docType: 'SCHEDULE', relationshipLabel: 'Same vendor: EATON | Overlapping description keywords', relationshipScore: 44 }
+        ]
+      }},
+      { id: 2, size: 3, parent: {
+        filename: 'ATLAS-P101-GA-DWG.pdf', description: 'Pump P-101 General Arrangement',
+        vendor: 'ATLAS COPCO', discipline: 'MECHANICAL', docType: 'DRAWING', isParent: true,
+        children: [
+          { filename: 'ATLAS-P101-DETAIL.pdf', description: 'Pump P-101 Detail Drawing', discipline: 'MECHANICAL', docType: 'DRAWING', relationshipLabel: 'Same file prefix (ATLAS-P101) | Same vendor: ATLAS COPCO', relationshipScore: 82 },
+          { filename: 'ATLAS-P101-DATASHEET.xlsx', description: 'Pump P-101 Data Sheet', discipline: 'MECHANICAL', docType: 'DATASHEET', relationshipLabel: 'Same file prefix | Identical asset/ID: P101', relationshipScore: 70 }
+        ]
+      }},
+      { id: 3, size: 2, parent: {
+        filename: 'ROCKWELL-PLC-AB1234-LAYOUT.pdf', description: 'PLC System Layout Drawing',
+        vendor: 'ROCKWELL AUTOMATION', discipline: 'INSTRUMENTATION', docType: 'DRAWING', isParent: true,
+        children: [
+          { filename: 'ROCKWELL-PLC-AB1234-IO.xlsx', description: 'PLC I/O List', discipline: 'INSTRUMENTATION', docType: 'LIST', relationshipLabel: 'Same vendor: ROCKWELL AUTOMATION | Overlapping filename tokens', relationshipScore: 55 }
+        ]
+      }}
+    ]
+  };
+
+  function relScoreClass(score) {
+    if (score >= 70) return 'rel-score-high';
+    if (score >= 50) return 'rel-score-mid';
+    return 'rel-score-low';
+  }
+
+  function relHandleFileSelect(file) {
+    if (!file) return;
+    relCurrentFile = file;
+    document.getElementById('rel-file-name').textContent = file.name;
+    document.getElementById('rel-file-size').textContent = (file.size / 1024).toFixed(1) + ' KB';
+    document.getElementById('rel-selected-file').style.display = 'flex';
+    document.getElementById('rel-dropzone').style.display = 'none';
+    document.getElementById('rel-analyze-btn').disabled = false;
+  }
+
+  window.relClearFile = function() {
+    relCurrentFile = null;
+    document.getElementById('rel-file-input').value = '';
+    document.getElementById('rel-selected-file').style.display = 'none';
+    document.getElementById('rel-dropzone').style.display = '';
+    document.getElementById('rel-analyze-btn').disabled = true;
+  };
+
+  window.relAnalyze = async function() {
+    if (!relCurrentFile) return;
+    const btn = document.getElementById('rel-analyze-btn');
+    const spinner = document.getElementById('rel-analyze-spinner');
+    const txt = document.getElementById('rel-analyze-text');
+    btn.disabled = true;
+    spinner.style.display = 'inline-block';
+    txt.textContent = 'Analyzing...';
+    try {
+      const fd = new FormData();
+      fd.append('workbook', relCurrentFile);
+      const res = await fetch('/api/relationships/analyze', { method: 'POST', body: fd });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: res.statusText }));
+        throw new Error(err.error || 'Analysis failed');
+      }
+      relCurrentResults = await res.json();
+      relShowResults(relCurrentResults);
+    } catch (err) {
+      toast('Analysis failed: ' + err.message, 'error');
+      console.error(err);
+    } finally {
+      btn.disabled = false;
+      spinner.style.display = 'none';
+      txt.textContent = 'ANALYZE RELATIONSHIPS';
+    }
+  };
+
+  function relShowResults(data) {
+    document.getElementById('rel-empty-state').style.display = 'none';
+    const resultsEl = document.getElementById('rel-results');
+    resultsEl.style.display = 'flex';
+    // Metrics
+    const groups = data.groups || [];
+    document.getElementById('rel-m-total').textContent = data.totalDocs || 0;
+    document.getElementById('rel-m-groups').textContent = groups.length;
+    document.getElementById('rel-m-pairs').textContent = data.totalPairs || 0;
+    // Avg score
+    let totalScore = 0, scoreCount = 0;
+    groups.forEach(g => g.parent.children.forEach(c => { if (c.relationshipScore) { totalScore += c.relationshipScore; scoreCount++; } }));
+    document.getElementById('rel-m-score').textContent = scoreCount > 0 ? Math.round(totalScore / scoreCount) : '—';
+    // Discipline filter
+    relPopulateDisciplineFilter(groups);
+    relFilteredGroups = groups;
+    relRenderGroupsView(relFilteredGroups);
+    relRenderTableView(relFilteredGroups);
+  }
+
+  function relPopulateDisciplineFilter(groups) {
+    const discs = new Set();
+    groups.forEach(g => {
+      if (g.parent.discipline) discs.add(g.parent.discipline);
+      g.parent.children.forEach(c => { if (c.discipline) discs.add(c.discipline); });
+    });
+    const sel = document.getElementById('rel-discipline-filter');
+    sel.innerHTML = '<option value="">All Disciplines</option>';
+    Array.from(discs).sort().forEach(d => {
+      const o = document.createElement('option');
+      o.value = d; o.textContent = d;
+      sel.appendChild(o);
+    });
+  }
+
+  function relRenderGroupsView(groups) {
+    const container = document.getElementById('rel-groups-container');
+    if (!groups.length) {
+      container.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--text2);font-size:13px">No groups match the current filter.</div>';
+      return;
+    }
+    container.innerHTML = groups.map(g => {
+      const p = g.parent;
+      const childRows = p.children.map(c => `
+        <div class="rel-child-row" style="margin-top:5px">
+          <span style="color:var(--text2);flex-shrink:0;font-size:11px">&#8627;</span>
+          <span style="flex:1;min-width:0;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text)" title="${c.filename}">${c.filename}</span>
+          ${c.discipline ? `<span class="rel-tag" style="flex-shrink:0">${c.discipline}</span>` : ''}
+          ${c.relationshipScore ? `<span class="rel-score-badge ${relScoreClass(c.relationshipScore)}" style="flex-shrink:0">${Math.round(c.relationshipScore)}</span>` : ''}
+          <span class="rel-child-badge" style="flex-shrink:0">child</span>
+        </div>
+      `).join('');
+      return `
+        <div class="rel-group-card">
+          <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:8px">
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+                <span style="font-size:10px;font-weight:700;color:var(--text2);font-family:'JetBrains Mono',monospace">G${g.id}</span>
+                <span style="font-size:10px;color:var(--text2)">&bull; ${g.size} docs</span>
+                <span class="rel-parent-badge" style="margin-left:auto">parent</span>
+              </div>
+              <div style="font-size:13px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${p.filename}">${p.filename}</div>
+              ${p.description ? `<div style="font-size:11px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:2px">${p.description}</div>` : ''}
+            </div>
+          </div>
+          <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px">
+            ${p.discipline ? `<span class="rel-tag">${p.discipline}</span>` : ''}
+            ${p.docType ? `<span class="rel-tag" style="background:var(--orange-soft);color:var(--orange)">${p.docType}</span>` : ''}
+            ${p.vendor ? `<span class="rel-tag" style="background:var(--green-soft);color:var(--green)">${p.vendor}</span>` : ''}
+          </div>
+          ${p.children.length ? `<div style="border-top:1px solid var(--border);padding-top:6px">${childRows}</div>` : ''}
+        </div>
+      `;
+    }).join('');
+  }
+
+  function relRenderTableView(groups) {
+    const tbody = document.getElementById('rel-table-body');
+    if (!groups.length) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--text2)">No groups match the current filter.</td></tr>';
+      return;
+    }
+    let rows = '';
+    groups.forEach(g => {
+      const p = g.parent;
+      const parentBg = 'background:rgba(59,130,246,0.04)';
+      rows += `<tr class="rel-table-row" style="${parentBg}">
+        <td style="padding:8px 14px;font-size:11px;font-weight:700;color:var(--accent);font-family:'JetBrains Mono',monospace;white-space:nowrap">G${g.id}</td>
+        <td style="padding:8px 14px;font-weight:500;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${p.filename}">${p.filename}</td>
+        <td style="padding:8px 14px;color:var(--text2);max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.description || '—'}</td>
+        <td style="padding:8px 10px;text-align:center">${p.discipline ? `<span class="rel-tag">${p.discipline}</span>` : '<span style="color:#9ca3af">—</span>'}</td>
+        <td style="padding:8px 14px;color:var(--text2);font-size:11px">Parent Document</td>
+        <td style="padding:8px 10px;text-align:center"><span style="color:#9ca3af">—</span></td>
+        <td style="padding:8px 10px;text-align:center"><span class="rel-parent-badge">parent</span></td>
+      </tr>`;
+      p.children.forEach(c => {
+        rows += `<tr class="rel-table-row">
+          <td style="padding:8px 14px;font-size:11px;color:var(--text2);font-family:'JetBrains Mono',monospace;white-space:nowrap">G${g.id}</td>
+          <td style="padding:8px 14px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${c.filename}">${c.filename}</td>
+          <td style="padding:8px 14px;color:var(--text2);max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.description || '—'}</td>
+          <td style="padding:8px 10px;text-align:center">${c.discipline ? `<span class="rel-tag">${c.discipline}</span>` : '<span style="color:#9ca3af">—</span>'}</td>
+          <td style="padding:8px 14px;color:var(--text2);font-size:11px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${c.relationshipLabel || ''}">${c.relationshipLabel ? c.relationshipLabel.split('|')[0].trim() : '—'}</td>
+          <td style="padding:8px 10px;text-align:center">${c.relationshipScore ? `<span class="rel-score-badge ${relScoreClass(c.relationshipScore)}">${Math.round(c.relationshipScore)}</span>` : '<span style="color:#9ca3af">—</span>'}</td>
+          <td style="padding:8px 10px;text-align:center"><span class="rel-child-badge">child</span></td>
+        </tr>`;
+      });
+    });
+    tbody.innerHTML = rows;
+  }
+
+  window.relSwitchView = function(view) {
+    relCurrentView = view;
+    document.getElementById('rel-groups-view').style.display = view === 'groups' ? 'block' : 'none';
+    document.getElementById('rel-table-view').style.display = view === 'table' ? 'block' : 'none';
+    document.getElementById('rel-btn-groups').className = 'rel-view-btn' + (view === 'groups' ? ' active' : '');
+    document.getElementById('rel-btn-table').className = 'rel-view-btn' + (view === 'table' ? ' active' : '');
+  };
+
+  window.relFilter = function() {
+    if (!relCurrentResults) return;
+    const q = (document.getElementById('rel-search').value || '').toLowerCase();
+    const disc = (document.getElementById('rel-discipline-filter').value || '').toUpperCase();
+    relFilteredGroups = (relCurrentResults.groups || []).filter(g => {
+      const matchDocs = [g.parent, ...g.parent.children];
+      const disciplineMatch = !disc || matchDocs.some(d => (d.discipline || '').toUpperCase() === disc);
+      const searchMatch = !q || matchDocs.some(d =>
+        (d.filename || '').toLowerCase().includes(q) ||
+        (d.description || '').toLowerCase().includes(q)
+      );
+      return disciplineMatch && searchMatch;
+    });
+    relRenderGroupsView(relFilteredGroups);
+    relRenderTableView(relFilteredGroups);
+  };
+
+  window.relExport = async function() {
+    if (!relCurrentFile || !relCurrentResults) {
+      toast('Run analysis first then export', 'error'); return;
+    }
+    try {
+      const fd = new FormData();
+      fd.append('workbook', relCurrentFile);
+      fd.append('relationships', JSON.stringify(relCurrentResults));
+      const res = await fetch('/api/relationships/export', { method: 'POST', body: fd });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: res.statusText }));
+        throw new Error(err.error || 'Export failed');
+      }
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const cd = res.headers.get('content-disposition') || '';
+      const m = cd.match(/filename="([^"]+)"/);
+      a.download = m ? m[1] : 'relationships.xlsx';
+      a.href = url; a.click();
+      URL.revokeObjectURL(url);
+      toast('Export complete!');
+    } catch (err) {
+      toast('Export failed: ' + err.message, 'error');
+    }
+  };
+
+  window.relLoadDemo = function() {
+    relCurrentFile = null;
+    document.getElementById('rel-file-input').value = '';
+    document.getElementById('rel-selected-file').style.display = 'none';
+    document.getElementById('rel-dropzone').style.display = '';
+    document.getElementById('rel-analyze-btn').disabled = true;
+    relCurrentResults = DEMO_DATA;
+    relShowResults(DEMO_DATA);
+    toast('Demo data loaded');
+  };
+
+  window.relReset = function() {
+    relCurrentFile = null;
+    relCurrentResults = null;
+    relFilteredGroups = [];
+    document.getElementById('rel-file-input').value = '';
+    document.getElementById('rel-selected-file').style.display = 'none';
+    document.getElementById('rel-dropzone').style.display = '';
+    document.getElementById('rel-analyze-btn').disabled = true;
+    document.getElementById('rel-empty-state').style.display = '';
+    document.getElementById('rel-results').style.display = 'none';
+    document.getElementById('rel-search').value = '';
+    document.getElementById('rel-discipline-filter').innerHTML = '<option value="">All Disciplines</option>';
+    relSwitchView('groups');
+  };
+
+  // File input / drag-drop wiring
+  document.addEventListener('DOMContentLoaded', function() {
+    const fileInput = document.getElementById('rel-file-input');
+    const dropzone = document.getElementById('rel-dropzone');
+    if (!fileInput || !dropzone) return;
+    fileInput.addEventListener('change', e => { if (e.target.files[0]) relHandleFileSelect(e.target.files[0]); });
+    dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('drag-over'); });
+    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag-over'));
+    dropzone.addEventListener('drop', e => {
+      e.preventDefault();
+      dropzone.classList.remove('drag-over');
+      const f = e.dataTransfer?.files[0];
+      if (f && /\.(xlsx|xlsm|xls)$/i.test(f.name)) relHandleFileSelect(f);
+      else if (f) toast('Please drop an Excel file (.xlsx, .xlsm)', 'error');
+    });
+  });
+})();
 </script>
 </body>
 </html>
