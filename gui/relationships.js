@@ -23,7 +23,14 @@ const W_CATEGORY = 4;
 const W_DATE_YEAR = 3;
 const W_REVISION_SER = 8;
 
+// Minimum score for a pair to even be considered (lowest tier — "borderline / review only")
 const MIN_SCORE = 35;
+// Strong-match threshold: pairs at or above this score participate in clustering (groups view)
+const STRONG_SCORE = 75;
+// Score that overrides the "min reasons" rule (a single, exceptionally strong signal is enough)
+const OVERRIDE_SCORE = 95;
+// Minimum number of independent matching reasons required for a strong link (unless OVERRIDE_SCORE is met)
+const MIN_REASONS_FOR_STRONG = 2;
 
 const NOISE_WORDS = new Set([
   "THE", "AND", "FOR", "OF", "IN", "AT", "TO", "BY",
@@ -226,7 +233,7 @@ function computePairScore(d1, d2) {
   return score;
 }
 
-function relationshipLabel(d1, d2, score) {
+function relationshipReasons(d1, d2, score) {
   const reasons = [];
 
   const pfx1 = d1.prefix;
@@ -263,17 +270,21 @@ function relationshipLabel(d1, d2, score) {
   }
 
   if (d1.deptCode && d1.deptCode === d2.deptCode) reasons.push(`Same dept code: ${d1.deptCode}`);
-  
+
   if (revisionsSequential(d1.revision, d2.revision)) {
     reasons.push(`Sequential revisions (${d1.revision}→${d2.revision})`);
   }
 
   if (d1.year && d1.year === d2.year) reasons.push(`Same revision year: ${d1.year}`);
 
+  return reasons;
+}
+
+function relationshipLabel(d1, d2, score) {
+  const reasons = relationshipReasons(d1, d2, score);
   if (reasons.length === 0) {
     return `Multiple weak shared signals (score: ${Math.round(score)})`;
   }
-
   return reasons.join(" | ");
 }
 
@@ -383,76 +394,67 @@ export async function analyzeRelationships(buffer) {
   });
 
   const nDocs = docs.length;
-  if (nDocs < 2) return { groups: [] };
+  if (nDocs < 2) return { groups: [], borderlineGroups: [], totalDocs: nDocs, totalPairs: 0 };
 
   const pairs = [];
-  
+
   for (let i = 0; i < nDocs; i++) {
     if (!docs[i].filename) continue;
     for (let j = i + 1; j < nDocs; j++) {
       if (!docs[j].filename) continue;
       const score = computePairScore(docs[i], docs[j]);
       if (score >= MIN_SCORE) {
+        const reasons = relationshipReasons(docs[i], docs[j], score);
         pairs.push({
-          i, j, score,
-          label: relationshipLabel(docs[i], docs[j], score)
+          i, j, score, reasons,
+          label: reasons.length ? reasons.join(" | ") : `Multiple weak shared signals (score: ${Math.round(score)})`
         });
       }
     }
   }
 
-  // Union-Find for scores >= 60
-  const parent = Array.from({length: nDocs}, (_, i) => i);
-  const rank = Array(nDocs).fill(0);
+  // A pair is "strong" only if score >= STRONG_SCORE AND it has enough independent evidence,
+  // OR it scores so high (OVERRIDE_SCORE) that a single reason is enough.
+  const isStrongPair = (p) =>
+    (p.score >= STRONG_SCORE && p.reasons.length >= MIN_REASONS_FOR_STRONG) ||
+    p.score >= OVERRIDE_SCORE;
 
+  // ---- Strong clustering (only confident pairs participate) ----
+  const parent = Array.from({ length: nDocs }, (_, i) => i);
+  const rank = Array(nDocs).fill(0);
   for (const p of pairs) {
-    if (p.score >= 60) {
-      union(parent, rank, p.i, p.j);
-    }
+    if (isStrongPair(p)) union(parent, rank, p.i, p.j);
   }
 
+  const inStrongCluster = new Set();
   const clusterMap = new Map();
   let clusterIdx = 0;
   for (let i = 0; i < nDocs; i++) {
-    if (docs[i].filename) {
-      const root = findRoot(parent, i);
-      if (!clusterMap.has(root)) {
-        clusterMap.set(root, clusterIdx++);
-      }
-    }
+    if (!docs[i].filename) continue;
+    // Only count docs that actually participated in a strong pair
+    const hasStrongLink = pairs.some(p => isStrongPair(p) && (p.i === i || p.j === i));
+    if (!hasStrongLink) continue;
+    const root = findRoot(parent, i);
+    if (!clusterMap.has(root)) clusterMap.set(root, clusterIdx++);
+    inStrongCluster.add(i);
   }
 
-  const clusters = Array.from({length: clusterIdx}, () => []);
-  for (let i = 0; i < nDocs; i++) {
-    if (docs[i].filename) {
-      const root = findRoot(parent, i);
-      const cIdx = clusterMap.get(root);
-      clusters[cIdx].push(docs[i]);
-    }
+  const clusters = Array.from({ length: clusterIdx }, () => []);
+  for (const i of inStrongCluster) {
+    const root = findRoot(parent, i);
+    clusters[clusterMap.get(root)].push(docs[i]);
   }
 
-  // Format into response
-  const groups = [];
-  // Sort clusters by size descending
-  clusters.sort((a, b) => b.length - a.length);
-
-  let shownClusters = 0;
-  for (let i = 0; i < clusters.length; i++) {
-    const clusterDocs = clusters[i];
-    if (clusterDocs.length < 2) continue; // Only groups of 2+
-    
-    shownClusters++;
-    
-    // Find parent
+  // Helper: build a group payload from a doc cluster using the given pair pool
+  const buildGroup = (clusterDocs, pairPool) => {
     let bestParent = null;
-    let bestScore = -99999;
+    let bestScore = -Infinity;
     for (const d of clusterDocs) {
       if (d.parentScore > bestScore) {
         bestScore = d.parentScore;
         bestParent = d;
       }
     }
-
     const parentNode = {
       index: bestParent.index,
       filename: bestParent.filename,
@@ -466,52 +468,120 @@ export async function analyzeRelationships(buffer) {
       children: []
     };
 
-    // Find relations for children
+    let scoreSum = 0;
+    let minScore = Infinity;
+    let evidenceCount = 0;
+
     for (const d of clusterDocs) {
-      if (d.index !== bestParent.index) {
-        // Find the direct pair linking child to parent (or highest score in group if unlinked directly)
-        let linkLabel = "";
-        let linkScore = 0;
-        const pair = pairs.find(p => (p.i === d.index && p.j === bestParent.index) || (p.j === d.index && p.i === bestParent.index));
-        if (pair) {
-          linkLabel = pair.label;
-          linkScore = pair.score;
-        } else {
-          // Find any pair in cluster for label
-          const anyPair = pairs.find(p => (p.i === d.index || p.j === d.index) && p.score >= 60);
-          if (anyPair) {
-            linkLabel = anyPair.label;
-            linkScore = anyPair.score;
-          }
-        }
-        
-        parentNode.children.push({
-          index: d.index,
-          filename: d.filename,
-          description: d.raw.description || "",
-          vendor: d.vendor,
-          plant: d.raw.plant || "",
-          project: d.raw.project || "",
-          docType: d.raw.documentType || "",
-          discipline: d.raw.discipline || "",
-          isParent: false,
-          relationshipLabel: linkLabel,
-          relationshipScore: linkScore
-        });
+      if (d.index === bestParent.index) continue;
+
+      // Prefer the direct pair to the parent; otherwise the best pair touching this doc
+      let bestPair = pairPool.find(p =>
+        (p.i === d.index && p.j === bestParent.index) ||
+        (p.j === d.index && p.i === bestParent.index)
+      );
+      if (!bestPair) {
+        const candidates = pairPool.filter(p => p.i === d.index || p.j === d.index);
+        candidates.sort((a, b) => b.score - a.score);
+        bestPair = candidates[0];
       }
+      const linkLabel = bestPair ? bestPair.label : "";
+      const linkScore = bestPair ? bestPair.score : 0;
+      const linkReasons = bestPair ? bestPair.reasons.slice() : [];
+
+      parentNode.children.push({
+        index: d.index,
+        filename: d.filename,
+        description: d.raw.description || "",
+        vendor: d.vendor,
+        plant: d.raw.plant || "",
+        project: d.raw.project || "",
+        docType: d.raw.documentType || "",
+        discipline: d.raw.discipline || "",
+        isParent: false,
+        relationshipLabel: linkLabel,
+        relationshipScore: linkScore,
+        reasons: linkReasons
+      });
+
+      scoreSum += linkScore;
+      if (linkScore < minScore) minScore = linkScore;
+      evidenceCount += linkReasons.length;
     }
-    
-    // Sort children by relationship score desc
+
+    // Sort children by their link score (best first)
     parentNode.children.sort((a, b) => b.relationshipScore - a.relationshipScore);
 
-    groups.push({
-      id: shownClusters,
-      size: clusterDocs.length,
-      parent: parentNode
-    });
-  }
+    const childCount = parentNode.children.length || 1;
+    const avgScore = scoreSum / childCount;
+    if (!Number.isFinite(minScore)) minScore = 0;
 
-  return { groups, totalDocs: nDocs, totalPairs: pairs.length };
+    let confidence = "likely";
+    if (avgScore >= 95) confidence = "almost-certain";
+    else if (avgScore >= 80) confidence = "certain";
+
+    return {
+      size: clusterDocs.length,
+      parent: parentNode,
+      avgScore: Math.round(avgScore),
+      minScore: Math.round(minScore),
+      evidenceCount,
+      confidence
+    };
+  };
+
+  // Sort strong clusters by quality (highest avg score, then size)
+  const strongGroupsRaw = [];
+  for (const c of clusters) {
+    if (c.length < 2) continue;
+    strongGroupsRaw.push(buildGroup(c, pairs.filter(isStrongPair)));
+  }
+  strongGroupsRaw.sort((a, b) => b.avgScore - a.avgScore || b.size - a.size);
+  const groups = strongGroupsRaw.map((g, i) => ({ id: i + 1, ...g }));
+
+  // ---- Borderline clustering (pairs that didn't make the strong cut) ----
+  // Anything 35..STRONG_SCORE-1, OR scoring >= STRONG_SCORE but lacking evidence.
+  // Excludes docs already placed in a strong group.
+  const borderlinePairs = pairs.filter(p => !isStrongPair(p));
+  const bParent = Array.from({ length: nDocs }, (_, i) => i);
+  const bRank = Array(nDocs).fill(0);
+  for (const p of borderlinePairs) {
+    if (inStrongCluster.has(p.i) || inStrongCluster.has(p.j)) continue;
+    union(bParent, bRank, p.i, p.j);
+  }
+  const bClusterMap = new Map();
+  let bIdx = 0;
+  const docsInBorderlinePair = new Set();
+  for (const p of borderlinePairs) {
+    if (inStrongCluster.has(p.i) || inStrongCluster.has(p.j)) continue;
+    docsInBorderlinePair.add(p.i);
+    docsInBorderlinePair.add(p.j);
+  }
+  for (const i of docsInBorderlinePair) {
+    const root = findRoot(bParent, i);
+    if (!bClusterMap.has(root)) bClusterMap.set(root, bIdx++);
+  }
+  const bClusters = Array.from({ length: bIdx }, () => []);
+  for (const i of docsInBorderlinePair) {
+    const root = findRoot(bParent, i);
+    bClusters[bClusterMap.get(root)].push(docs[i]);
+  }
+  const borderlineRaw = [];
+  for (const c of bClusters) {
+    if (c.length < 2) continue;
+    borderlineRaw.push(buildGroup(c, borderlinePairs));
+  }
+  borderlineRaw.sort((a, b) => b.avgScore - a.avgScore || b.size - a.size);
+  const borderlineGroups = borderlineRaw.map((g, i) => ({ id: i + 1, ...g }));
+
+  return {
+    groups,
+    borderlineGroups,
+    totalDocs: nDocs,
+    totalPairs: pairs.length,
+    strongPairs: pairs.filter(isStrongPair).length,
+    thresholds: { MIN_SCORE, STRONG_SCORE, MIN_REASONS_FOR_STRONG }
+  };
 }
 
 /**
