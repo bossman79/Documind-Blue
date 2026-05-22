@@ -1,6 +1,0 @@
-{"timestamp":"2026-04-16T14:01:45.854Z","level":"INFO","message":"Crash logger initialized","data":{"logFile":"C:\\Users\\vgiordano\\Downloads\\documind-1.1.2\\logs\\batch-2026-04-16T14-01-45-854Z.log"}}
-{"timestamp":"2026-04-16T14:02:10.857Z","level":"INFO","message":"Ollama extraction started","data":{"model":"gemma4:31b-cloud","preferredKeyIndex":8,"keysInUse":[8],"markdownLength":1552}}
-{"timestamp":"2026-04-16T14:02:10.861Z","level":"DEBUG","message":"Ollama config","data":{"baseURL":"http://127.0.0.1:8000/v1","llmProxy":true,"requestModel":"ollama_cloud/gemma4:31b-cloud","keyCount":1}}
-{"timestamp":"2026-04-16T14:02:10.863Z","level":"INFO","message":"Using LLM proxy mode","data":{"keyCount":1}}
-{"timestamp":"2026-04-16T14:02:10.863Z","level":"DEBUG","message":"Trying API key","data":{"keyIdx":1,"documindExtra":{"X-Documind-Document-Complete":"1"}}}
-{"timestamp":"2026-04-16T14:02:10.864Z","level":"DEBUG","message":"Falling back to OpenAI client","data":{"keyIdx":1,"v1Url":"http://127.0.0.1:8000/v1"}}
