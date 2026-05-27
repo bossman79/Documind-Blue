@@ -1352,6 +1352,7 @@
     .rel-metric-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; }
     .rel-metric-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text2); margin-bottom: 6px; }
     .rel-metric-value { font-size: 22px; font-weight: 700; color: var(--text); letter-spacing: -0.03em; }
+
     .rel-view-toggle { display: inline-flex; background: var(--surface-solid); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); overflow: hidden; }
     .rel-view-btn { padding: 6px 18px; font-size: 12px; font-weight: 500; cursor: pointer; border: none; background: transparent; font-family: inherit; color: var(--text2); transition: all 0.15s ease; position: relative; }
     .rel-view-btn.active { background: var(--accent); color: #fff; }
@@ -1363,20 +1364,39 @@
     }
     .rel-view-btn.active .rel-view-count { background: rgba(255,255,255,0.25); }
 
-    /* Bigger, fuller group cards */
-    .rel-groups-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
-      gap: 14px;
+    .rel-col-picker { display: inline-flex; background: var(--surface-solid); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); overflow: hidden; }
+    .rel-col-picker .rel-col-btn {
+      padding: 6px 10px; font-size: 11px; font-weight: 600;
+      border: none; background: transparent; font-family: inherit; cursor: pointer;
+      color: var(--text2); transition: background 0.15s ease;
+      min-width: 30px;
     }
+    .rel-col-picker .rel-col-btn:hover { background: var(--accent-soft); color: var(--accent); }
+    .rel-col-picker .rel-col-btn.active { background: var(--accent); color: #fff; }
+
+    /* Grid sizes — controlled by .rel-cols-X classes set on the container */
+    .rel-groups-grid { display: grid; gap: 14px; }
+    .rel-cols-auto { grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); }
+    .rel-cols-1 { grid-template-columns: 1fr; }
+    .rel-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .rel-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .rel-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    @media (max-width: 900px) {
+      .rel-cols-3, .rel-cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 600px) {
+      .rel-cols-2, .rel-cols-3, .rel-cols-4, .rel-cols-auto { grid-template-columns: 1fr; }
+    }
+
     .rel-group-card {
       background: var(--surface-solid);
       border: 1px solid var(--border);
       border-left: 4px solid var(--accent);
       border-radius: var(--radius);
-      padding: 16px 18px;
+      padding: 14px 16px;
       transition: box-shadow 0.2s ease, transform 0.15s ease;
-      display: flex; flex-direction: column; gap: 12px;
+      display: flex; flex-direction: column; gap: 10px;
+      min-width: 0;       /* allow shrink in grid */
     }
     .rel-group-card:hover { box-shadow: 0 6px 22px rgba(15,23,42,0.08); transform: translateY(-1px); }
     .rel-group-card.confidence-almost-certain { border-left-color: #059669; }
@@ -1385,8 +1405,9 @@
     .rel-group-card.confidence-borderline { border-left-color: #94a3b8; background: linear-gradient(180deg, #fafbfc 0%, #f4f6fa 100%); }
 
     .rel-card-header {
-      display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;
-      padding-bottom: 10px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;
+      padding-bottom: 8px; border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
     }
     .rel-card-rank {
       font-size: 11px; font-weight: 700; color: var(--text2);
@@ -1409,8 +1430,8 @@
     .conf-borderline { background: #f1f5f9; color: #64748b; }
     .conf-borderline .dot { background: #94a3b8; }
 
-    .rel-parent-block { display: flex; flex-direction: column; gap: 6px; }
-    .rel-parent-meta { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text2); }
+    .rel-parent-block { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+    .rel-parent-meta { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text2); flex-wrap: wrap; }
     .rel-parent-badge {
       display: inline-flex; align-items: center; gap: 4px;
       font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px;
@@ -1421,9 +1442,10 @@
       padding: 2px 8px; border-radius: 4px; background: #f1f5f9; color: #64748b;
     }
     .rel-parent-filename {
-      font-size: 14px; font-weight: 700; color: var(--text); word-break: break-all; line-height: 1.35;
+      font-size: 13.5px; font-weight: 700; color: var(--text);
+      word-break: break-word; overflow-wrap: anywhere; line-height: 1.35;
     }
-    .rel-parent-desc { font-size: 12px; color: var(--text2); line-height: 1.4; }
+    .rel-parent-desc { font-size: 12px; color: var(--text2); line-height: 1.4; word-break: break-word; }
     .rel-tag-row { display: flex; gap: 5px; flex-wrap: wrap; }
     .rel-tag {
       display: inline-flex; font-size: 10px; font-weight: 500;
@@ -1434,28 +1456,30 @@
     .rel-tag-doctype { background: var(--orange-soft); color: var(--orange); }
     .rel-tag-plant { background: #ede9fe; color: #6d28d9; }
 
-    .rel-children-list { display: flex; flex-direction: column; gap: 10px; }
+    .rel-children-list { display: flex; flex-direction: column; gap: 8px; }
     .rel-child-card {
       background: linear-gradient(180deg, #fafbfc 0%, #f4f6fa 100%);
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
-      padding: 10px 12px;
-      display: flex; flex-direction: column; gap: 8px;
+      padding: 9px 11px;
+      display: flex; flex-direction: column; gap: 6px;
+      min-width: 0;
     }
     .rel-child-head {
       display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;
     }
     .rel-child-name {
       flex: 1; min-width: 0;
-      font-size: 12.5px; font-weight: 600; color: var(--text); word-break: break-all; line-height: 1.35;
+      font-size: 12.5px; font-weight: 600; color: var(--text);
+      word-break: break-word; overflow-wrap: anywhere; line-height: 1.35;
     }
-    .rel-child-desc { font-size: 11px; color: var(--text2); line-height: 1.4; }
+    .rel-child-desc { font-size: 11px; color: var(--text2); line-height: 1.4; word-break: break-word; }
     .rel-score-badge {
       display: inline-flex; align-items: center; gap: 4px;
       font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 5px;
       min-width: 36px; justify-content: center;
       font-family: 'JetBrains Mono', monospace;
-      flex-shrink: 0;
+      flex-shrink: 0; align-self: flex-start;
     }
     .rel-score-high { background: rgba(5,150,105,0.14); color: #065f46; }
     .rel-score-mid { background: var(--accent-soft); color: var(--accent); }
@@ -1465,7 +1489,6 @@
     .rel-reasons-label {
       font-size: 9.5px; font-weight: 700; color: #94a3b8;
       text-transform: uppercase; letter-spacing: 0.06em;
-      margin-bottom: 2px;
     }
     .rel-reasons-list { display: flex; flex-wrap: wrap; gap: 4px; }
     .rel-reason-chip {
@@ -1474,11 +1497,61 @@
       padding: 3px 8px; border-radius: 4px;
       background: #fff; border: 1px solid var(--border-strong); color: var(--text);
       line-height: 1.3;
+      white-space: normal;  /* allow long reason text to break */
+      word-break: break-word;
+      max-width: 100%;
     }
     .rel-reason-chip-empty { color: var(--text2); font-style: italic; background: transparent; border-style: dashed; }
 
+    /* Resizable table */
     .rel-table-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-    .rel-table-row:hover { background: var(--accent-soft) !important; }
+    .rel-table-scroll { overflow: auto; max-height: 70vh; }
+    .rel-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      table-layout: fixed;   /* required for stable column resize */
+    }
+    .rel-table thead th {
+      position: sticky; top: 0; z-index: 2;
+      background: #f1f5f9;
+      padding: 9px 14px;
+      text-align: left;
+      font-size: 10px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.04em;
+      color: var(--text2);
+      border-bottom: 1px solid var(--border);
+      user-select: none;
+      position: sticky;
+    }
+    .rel-table th .rel-th-resize {
+      position: absolute; top: 0; right: 0;
+      width: 6px; height: 100%;
+      cursor: col-resize;
+      user-select: none;
+      background: transparent;
+    }
+    .rel-table th .rel-th-resize:hover,
+    .rel-table th .rel-th-resize.dragging {
+      background: rgba(59,130,246,0.35);
+    }
+    .rel-table th { position: relative; }
+    .rel-table td {
+      padding: 8px 14px;
+      vertical-align: top;
+      border-bottom: 1px solid var(--border);
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      white-space: normal;       /* WRAP — never truncate */
+      line-height: 1.4;
+    }
+    .rel-table-row:hover td { background: var(--accent-soft); }
+    .rel-table .rel-cell-mono { font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+    .rel-table .rel-cell-center { text-align: center; }
+    .rel-table .rel-reasons-cell {
+      display: flex; flex-wrap: wrap; gap: 4px;
+    }
+
     .rel-selected-file { display: none; margin-top: 8px; padding: 8px 12px; background: var(--green-soft); border: 1px solid rgba(16,185,129,0.2); border-radius: var(--radius-sm); align-items: center; justify-content: space-between; }
     .rel-file-clear { background: none; border: none; cursor: pointer; color: var(--green); font-size: 14px; padding: 2px 6px; font-family: inherit; }
     .rel-file-clear:hover { color: var(--red); }
@@ -2512,12 +2585,21 @@
             <div class="rel-metric-card"><div class="rel-metric-label">AVG REL. SCORE</div><div class="rel-metric-value" id="rel-m-score">—</div></div>
           </div>
 
-          <!-- Controls: toggle + search + filter + export -->
+          <!-- Controls: toggle + column picker + search + filter + export -->
           <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;flex-shrink:0">
-            <div class="rel-view-toggle">
-              <button class="rel-view-btn active" id="rel-btn-groups" onclick="relSwitchView('groups')">&#128200; Strong Groups <span class="rel-view-count" id="rel-count-groups">0</span></button>
-              <button class="rel-view-btn" id="rel-btn-borderline" onclick="relSwitchView('borderline')">&#9888; Borderline <span class="rel-view-count" id="rel-count-borderline">0</span></button>
-              <button class="rel-view-btn" id="rel-btn-table" onclick="relSwitchView('table')">&#9783; Table</button>
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+              <div class="rel-view-toggle">
+                <button class="rel-view-btn active" id="rel-btn-groups" onclick="relSwitchView('groups')">&#128200; Strong Groups <span class="rel-view-count" id="rel-count-groups">0</span></button>
+                <button class="rel-view-btn" id="rel-btn-borderline" onclick="relSwitchView('borderline')">&#9888; Borderline <span class="rel-view-count" id="rel-count-borderline">0</span></button>
+                <button class="rel-view-btn" id="rel-btn-table" onclick="relSwitchView('table')">&#9783; Table</button>
+              </div>
+              <div class="rel-col-picker" id="rel-col-picker" title="Cards per row">
+                <button type="button" class="rel-col-btn" data-cols="1" onclick="relSetCols('1')">1</button>
+                <button type="button" class="rel-col-btn" data-cols="2" onclick="relSetCols('2')">2</button>
+                <button type="button" class="rel-col-btn" data-cols="3" onclick="relSetCols('3')">3</button>
+                <button type="button" class="rel-col-btn" data-cols="4" onclick="relSetCols('4')">4</button>
+                <button type="button" class="rel-col-btn active" data-cols="auto" onclick="relSetCols('auto')">Auto</button>
+              </div>
             </div>
             <div style="display:flex;gap:8px;align-items:center;flex:1;justify-content:flex-end;flex-wrap:wrap">
               <div style="position:relative;flex:1;min-width:180px;max-width:280px">
@@ -2533,7 +2615,7 @@
 
           <!-- Groups view -->
           <div id="rel-groups-view">
-            <div id="rel-groups-container" class="rel-groups-grid"></div>
+            <div id="rel-groups-container" class="rel-groups-grid rel-cols-auto"></div>
           </div>
 
           <!-- Borderline view -->
@@ -2541,28 +2623,38 @@
             <div class="rel-borderline-note">
               <strong>Borderline matches</strong> &mdash; weaker candidates that didn't meet the strong-match bar (score &ge; 75 with 2+ independent reasons, or score &ge; 95). These are <em>not</em> included in the Strong Groups view or in the Excel export. Review them here and adjust your sheet if any are valid links you want promoted.
             </div>
-            <div id="rel-borderline-container" class="rel-groups-grid"></div>
+            <div id="rel-borderline-container" class="rel-groups-grid rel-cols-auto"></div>
           </div>
 
           <!-- Table view -->
           <div id="rel-table-view" style="display:none" class="rel-table-card">
-            <div style="overflow:auto;max-height:560px">
-              <table style="width:100%;border-collapse:collapse;font-size:12px">
+            <div class="rel-table-scroll">
+              <table class="rel-table" id="rel-table" aria-label="Relationships table">
+                <colgroup>
+                  <col style="width:70px">
+                  <col style="width:220px">
+                  <col style="width:260px">
+                  <col style="width:120px">
+                  <col style="width:340px">
+                  <col style="width:80px">
+                  <col style="width:90px">
+                </colgroup>
                 <thead>
-                  <tr style="background:#f1f5f9;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:2">
-                    <th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;color:var(--text2);white-space:nowrap">Group</th>
-                    <th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;color:var(--text2)">Filename</th>
-                    <th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;color:var(--text2)">Description / Title</th>
-                    <th style="padding:9px 10px;text-align:center;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;color:var(--text2);white-space:nowrap">Discipline</th>
-                    <th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;color:var(--text2)">Relationship</th>
-                    <th style="padding:9px 10px;text-align:center;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;color:var(--text2)">Score</th>
-                    <th style="padding:9px 10px;text-align:center;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;color:var(--text2)">Type</th>
+                  <tr>
+                    <th>Group<span class="rel-th-resize" data-col="0"></span></th>
+                    <th>Filename<span class="rel-th-resize" data-col="1"></span></th>
+                    <th>Description / Title<span class="rel-th-resize" data-col="2"></span></th>
+                    <th class="rel-cell-center">Discipline<span class="rel-th-resize" data-col="3"></span></th>
+                    <th>Reasons<span class="rel-th-resize" data-col="4"></span></th>
+                    <th class="rel-cell-center">Score<span class="rel-th-resize" data-col="5"></span></th>
+                    <th class="rel-cell-center">Type</th>
                   </tr>
                 </thead>
                 <tbody id="rel-table-body"></tbody>
               </table>
             </div>
           </div>
+
         </div>
 
       </div>
@@ -4877,6 +4969,7 @@ document.getElementById('extract-model')?.dispatchEvent(new Event('change'));
         throw new Error(err.error || 'Analysis failed');
       }
       relCurrentResults = await res.json();
+      console.log('[Relationships] analysis result:', relCurrentResults);
       relShowResults(relCurrentResults);
     } catch (err) {
       toast('Analysis failed: ' + err.message, 'error');
@@ -5017,37 +5110,54 @@ document.getElementById('extract-model')?.dispatchEvent(new Event('change'));
   function relRenderTableView(groups) {
     const tbody = document.getElementById('rel-table-body');
     if (!groups.length) {
-      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--text2)">No groups match the current filter.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="7" class="rel-cell-center" style="padding:24px;color:var(--text2)">No groups match the current filter.</td></tr>';
       return;
     }
     let rows = '';
     groups.forEach(g => {
       const p = g.parent;
-      const parentBg = 'background:rgba(59,130,246,0.04)';
-      rows += `<tr class="rel-table-row" style="${parentBg}">
-        <td style="padding:8px 14px;font-size:11px;font-weight:700;color:var(--accent);font-family:'JetBrains Mono',monospace;white-space:nowrap">G${g.id}</td>
-        <td style="padding:8px 14px;font-weight:500;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${escAttr(p.filename)}">${p.filename}</td>
-        <td style="padding:8px 14px;color:var(--text2);max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.description || '—'}</td>
-        <td style="padding:8px 10px;text-align:center">${p.discipline ? `<span class="rel-tag">${p.discipline}</span>` : '<span style="color:#9ca3af">—</span>'}</td>
-        <td style="padding:8px 14px;color:var(--text2);font-size:11px">Parent Document</td>
-        <td style="padding:8px 10px;text-align:center"><span style="color:#9ca3af">—</span></td>
-        <td style="padding:8px 10px;text-align:center"><span class="rel-parent-badge">parent</span></td>
+      rows += `<tr class="rel-table-row" style="background:rgba(59,130,246,0.04)">
+        <td class="rel-cell-mono" style="font-weight:700;color:var(--accent)">G${g.id}</td>
+        <td style="font-weight:500">${p.filename}</td>
+        <td style="color:var(--text2)">${p.description || '—'}</td>
+        <td class="rel-cell-center">${p.discipline ? `<span class="rel-tag">${p.discipline}</span>` : '<span style="color:#9ca3af">—</span>'}</td>
+        <td style="color:var(--text2);font-size:11px">Parent Document</td>
+        <td class="rel-cell-center"><span style="color:#9ca3af">—</span></td>
+        <td class="rel-cell-center"><span class="rel-parent-badge">parent</span></td>
       </tr>`;
       p.children.forEach(c => {
-        const firstReason = (c.reasons && c.reasons[0]) || c.relationshipLabel || '—';
+        const reasonChips = (c.reasons && c.reasons.length)
+          ? `<div class="rel-reasons-cell">${c.reasons.map(r => `<span class="rel-reason-chip">${r}</span>`).join('')}</div>`
+          : '<span style="color:#9ca3af">—</span>';
         rows += `<tr class="rel-table-row">
-          <td style="padding:8px 14px;font-size:11px;color:var(--text2);font-family:'JetBrains Mono',monospace;white-space:nowrap">G${g.id}</td>
-          <td style="padding:8px 14px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${escAttr(c.filename)}">${c.filename}</td>
-          <td style="padding:8px 14px;color:var(--text2);max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.description || '—'}</td>
-          <td style="padding:8px 10px;text-align:center">${c.discipline ? `<span class="rel-tag">${c.discipline}</span>` : '<span style="color:#9ca3af">—</span>'}</td>
-          <td style="padding:8px 14px;color:var(--text2);font-size:11px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${escAttr((c.reasons || []).join(' | '))}">${firstReason}</td>
-          <td style="padding:8px 10px;text-align:center">${c.relationshipScore ? `<span class="rel-score-badge ${relScoreClass(c.relationshipScore)}">${Math.round(c.relationshipScore)}</span>` : '<span style="color:#9ca3af">—</span>'}</td>
-          <td style="padding:8px 10px;text-align:center"><span class="rel-child-badge">child</span></td>
+          <td class="rel-cell-mono" style="color:var(--text2)">G${g.id}</td>
+          <td>${c.filename}</td>
+          <td style="color:var(--text2)">${c.description || '—'}</td>
+          <td class="rel-cell-center">${c.discipline ? `<span class="rel-tag">${c.discipline}</span>` : '<span style="color:#9ca3af">—</span>'}</td>
+          <td>${reasonChips}</td>
+          <td class="rel-cell-center">${c.relationshipScore ? `<span class="rel-score-badge ${relScoreClass(c.relationshipScore)}">${Math.round(c.relationshipScore)}</span>` : '<span style="color:#9ca3af">—</span>'}</td>
+          <td class="rel-cell-center"><span class="rel-child-badge">child</span></td>
         </tr>`;
       });
     });
     tbody.innerHTML = rows;
+    relWireColumnResize();
   }
+  function applyColClass(containerId, cols) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    el.classList.remove('rel-cols-1','rel-cols-2','rel-cols-3','rel-cols-4','rel-cols-auto');
+    el.classList.add('rel-cols-' + (cols || 'auto'));
+  }
+  let relCurrentCols = 'auto';
+  window.relSetCols = function(cols) {
+    relCurrentCols = cols;
+    applyColClass('rel-groups-container', cols);
+    applyColClass('rel-borderline-container', cols);
+    document.querySelectorAll('#rel-col-picker .rel-col-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.cols === cols);
+    });
+  };
 
   window.relSwitchView = function(view) {
     relCurrentView = view;
@@ -5057,7 +5167,52 @@ document.getElementById('extract-model')?.dispatchEvent(new Event('change'));
     document.getElementById('rel-btn-groups').className = 'rel-view-btn' + (view === 'groups' ? ' active' : '');
     document.getElementById('rel-btn-borderline').className = 'rel-view-btn' + (view === 'borderline' ? ' active' : '');
     document.getElementById('rel-btn-table').className = 'rel-view-btn' + (view === 'table' ? ' active' : '');
+
+    // Re-render the active view's data so stale DOM never sticks around
+    if (!relCurrentResults) return;
+    if (view === 'groups') {
+      relRenderGroupsView(relFilteredGroups, document.getElementById('rel-groups-container'), false);
+    } else if (view === 'borderline') {
+      relRenderGroupsView(relFilteredBorderline, document.getElementById('rel-borderline-container'), true);
+    } else if (view === 'table') {
+      relRenderTableView(relFilteredGroups);
+    }
   };
+
+  // ----- Excel-like column resize for table -----
+  function relWireColumnResize() {
+    const table = document.getElementById('rel-table');
+    if (!table) return;
+    const colgroup = table.querySelector('colgroup');
+    if (!colgroup) return;
+    const cols = colgroup.querySelectorAll('col');
+    const handles = table.querySelectorAll('.rel-th-resize');
+    handles.forEach(h => {
+      if (h.dataset.wired === '1') return;
+      h.dataset.wired = '1';
+      h.addEventListener('mousedown', (ev) => {
+        ev.preventDefault();
+        const colIdx = parseInt(h.dataset.col, 10);
+        const col = cols[colIdx];
+        if (!col) return;
+        h.classList.add('dragging');
+        const startX = ev.clientX;
+        const startW = col.getBoundingClientRect().width;
+        const onMove = (mv) => {
+          const dx = mv.clientX - startX;
+          const newW = Math.max(60, startW + dx);
+          col.style.width = newW + 'px';
+        };
+        const onUp = () => {
+          h.classList.remove('dragging');
+          window.removeEventListener('mousemove', onMove);
+          window.removeEventListener('mouseup', onUp);
+        };
+        window.addEventListener('mousemove', onMove);
+        window.addEventListener('mouseup', onUp);
+      });
+    });
+  }
 
   function filterGroupList(allGroups, q, disc) {
     return (allGroups || []).filter(g => {
@@ -5139,6 +5294,7 @@ document.getElementById('extract-model')?.dispatchEvent(new Event('change'));
 
   // File input / drag-drop wiring
   document.addEventListener('DOMContentLoaded', function() {
+    relWireColumnResize();   // static table headers → wire resize handles once
     const fileInput = document.getElementById('rel-file-input');
     const dropzone = document.getElementById('rel-dropzone');
     if (!fileInput || !dropzone) return;

@@ -445,13 +445,17 @@ export async function analyzeRelationships(buffer) {
     clusters[clusterMap.get(root)].push(docs[i]);
   }
 
-  // Helper: build a group payload from a doc cluster using the given pair pool
-  const buildGroup = (clusterDocs, pairPool) => {
+  // Helper: build a group payload from a doc cluster using the given pair pool.
+  // For every child we prefer the direct pair to the parent; if there is none,
+  // we take the BEST scoring pair touching the child anywhere in the cluster.
+  // We *do not* relax the score floor — the pool was already filtered to the
+  // tier of interest (strong or borderline).
+  const buildGroup = (clusterDocs, pairPool, minPairScore) => {
     let bestParent = null;
-    let bestScore = -Infinity;
+    let bestPScore = -Infinity;
     for (const d of clusterDocs) {
-      if (d.parentScore > bestScore) {
-        bestScore = d.parentScore;
+      if (d.parentScore > bestPScore) {
+        bestPScore = d.parentScore;
         bestParent = d;
       }
     }
@@ -468,26 +472,49 @@ export async function analyzeRelationships(buffer) {
       children: []
     };
 
+    const clusterIdxSet = new Set(clusterDocs.map(x => x.index));
+
     let scoreSum = 0;
-    let minScore = Infinity;
+    let minLinkScore = Infinity;
     let evidenceCount = 0;
 
     for (const d of clusterDocs) {
       if (d.index === bestParent.index) continue;
 
-      // Prefer the direct pair to the parent; otherwise the best pair touching this doc
-      let bestPair = pairPool.find(p =>
+      // Direct pair to parent (preferred)
+      let directPair = pairPool.find(p =>
         (p.i === d.index && p.j === bestParent.index) ||
         (p.j === d.index && p.i === bestParent.index)
       );
-      if (!bestPair) {
-        const candidates = pairPool.filter(p => p.i === d.index || p.j === d.index);
-        candidates.sort((a, b) => b.score - a.score);
-        bestPair = candidates[0];
+
+      // All pairs from this child to ANY OTHER doc in the cluster, best first
+      const transitive = pairPool
+        .filter(p => {
+          const involvesD = p.i === d.index || p.j === d.index;
+          if (!involvesD) return false;
+          const other = p.i === d.index ? p.j : p.i;
+          return clusterIdxSet.has(other);
+        })
+        .sort((a, b) => b.score - a.score);
+
+      const bestPair = directPair || transitive[0];
+      if (!bestPair) continue; // should be impossible but stay defensive
+      if (typeof minPairScore === "number" && bestPair.score < minPairScore) continue;
+
+      // Build the reason list shown in the UI. Start with the chosen pair's
+      // reasons. If we had to fall back to a transitive pair, prepend a hint
+      // so the user understands the link is indirect.
+      let linkReasons = (bestPair.reasons || []).slice();
+      if (!directPair && transitive.length) {
+        const otherIdx = bestPair.i === d.index ? bestPair.j : bestPair.i;
+        const otherDoc = clusterDocs.find(x => x.index === otherIdx);
+        if (otherDoc) {
+          linkReasons = [
+            `Linked via "${otherDoc.filename}" (transitive)`,
+            ...linkReasons
+          ];
+        }
       }
-      const linkLabel = bestPair ? bestPair.label : "";
-      const linkScore = bestPair ? bestPair.score : 0;
-      const linkReasons = bestPair ? bestPair.reasons.slice() : [];
 
       parentNode.children.push({
         index: d.index,
@@ -499,13 +526,13 @@ export async function analyzeRelationships(buffer) {
         docType: d.raw.documentType || "",
         discipline: d.raw.discipline || "",
         isParent: false,
-        relationshipLabel: linkLabel,
-        relationshipScore: linkScore,
+        relationshipLabel: linkReasons.join(" | "),
+        relationshipScore: bestPair.score,
         reasons: linkReasons
       });
 
-      scoreSum += linkScore;
-      if (linkScore < minScore) minScore = linkScore;
+      scoreSum += bestPair.score;
+      if (bestPair.score < minLinkScore) minLinkScore = bestPair.score;
       evidenceCount += linkReasons.length;
     }
 
@@ -514,17 +541,17 @@ export async function analyzeRelationships(buffer) {
 
     const childCount = parentNode.children.length || 1;
     const avgScore = scoreSum / childCount;
-    if (!Number.isFinite(minScore)) minScore = 0;
+    if (!Number.isFinite(minLinkScore)) minLinkScore = 0;
 
     let confidence = "likely";
     if (avgScore >= 95) confidence = "almost-certain";
     else if (avgScore >= 80) confidence = "certain";
 
     return {
-      size: clusterDocs.length,
+      size: parentNode.children.length + 1, // parent + actual valid children
       parent: parentNode,
       avgScore: Math.round(avgScore),
-      minScore: Math.round(minScore),
+      minScore: Math.round(minLinkScore),
       evidenceCount,
       confidence
     };
@@ -532,9 +559,12 @@ export async function analyzeRelationships(buffer) {
 
   // Sort strong clusters by quality (highest avg score, then size)
   const strongGroupsRaw = [];
+  const strongPool = pairs.filter(isStrongPair);
   for (const c of clusters) {
     if (c.length < 2) continue;
-    strongGroupsRaw.push(buildGroup(c, pairs.filter(isStrongPair)));
+    const g = buildGroup(c, strongPool, STRONG_SCORE);
+    if (g.parent.children.length === 0) continue; // skip if no children survived the floor
+    strongGroupsRaw.push(g);
   }
   strongGroupsRaw.sort((a, b) => b.avgScore - a.avgScore || b.size - a.size);
   const groups = strongGroupsRaw.map((g, i) => ({ id: i + 1, ...g }));
@@ -569,7 +599,9 @@ export async function analyzeRelationships(buffer) {
   const borderlineRaw = [];
   for (const c of bClusters) {
     if (c.length < 2) continue;
-    borderlineRaw.push(buildGroup(c, borderlinePairs));
+    const g = buildGroup(c, borderlinePairs, MIN_SCORE);
+    if (g.parent.children.length === 0) continue;
+    borderlineRaw.push(g);
   }
   borderlineRaw.sort((a, b) => b.avgScore - a.avgScore || b.size - a.size);
   const borderlineGroups = borderlineRaw.map((g, i) => ({ id: i + 1, ...g }));
