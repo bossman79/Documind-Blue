@@ -98,14 +98,57 @@ const CANONICAL_ALIASES = {
   // Do not use 'document type' / 'doc type' here — they belong on documentType only (template column "Document Type").
   category: ['category', 'record category', 'doc category'],
   assetId: [
+    // Asset variants
     'asset/id number',
     'asset / id number',
     'asset id',
     'asset number',
+    'asset no',
     'asset #',
+    'asset',
+    // Part variants
+    'part number',
+    'part no',
+    'part #',
+    'part id',
+    // Component variants
+    'component id',
+    'component number',
+    'component no',
+    'component #',
+    // Equipment variants
     'equipment id',
     'equipment tag',
+    'equipment number',
+    'equipment no',
+    'equipment #',
+    'equip no',
+    'equip number',
+    'equip id',
+    // Tag variants
     'tag',
+    'tag number',
+    'tag no',
+    'tag #',
+    'tag id',
+    // Reference / identifier
+    'reference number',
+    'reference no',
+    'reference #',
+    'ref number',
+    'ref no',
+    'ref #',
+    'identifier',
+    'id',
+    'id number',
+    // SAP / ERP
+    'material number',
+    'material no',
+    'matnr',
+    // Model
+    'model number',
+    'model no',
+    'model #',
   ],
   project: ['project', 'project number', 'project no', 'project name', 'job number', 'job no'],
   plant: ['plant', 'site', 'facility', 'location code'],

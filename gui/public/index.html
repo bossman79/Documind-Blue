@@ -1556,6 +1556,26 @@
     .rel-file-clear { background: none; border: none; cursor: pointer; color: var(--green); font-size: 14px; padding: 2px 6px; font-family: inherit; }
     .rel-file-clear:hover { color: var(--red); }
 
+    /* Revision pill — base style + conflict variant */
+    .rel-rev-pill {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 10px; font-weight: 600;
+      padding: 2px 8px; border-radius: 4px;
+      background: #e0e7ff; color: #3730a3;
+    }
+    .rel-rev-pill.rev-from-filename {
+      background: #fef3c7; color: #92400e;
+    }
+    .rel-rev-pill.rev-conflict {
+      background: #fee2e2; color: #991b1b;
+      border: 1px solid rgba(220,38,38,0.4);
+      cursor: help;
+    }
+    .rel-rev-pill .rev-src {
+      font-size: 8.5px; font-weight: 700; opacity: 0.75;
+      letter-spacing: 0.05em; text-transform: uppercase;
+    }
+
     .rel-borderline-note {
       padding: 10px 14px; margin-bottom: 10px;
       background: linear-gradient(135deg, rgba(254,243,199,0.55) 0%, rgba(255,251,235,0.4) 100%);
@@ -5045,6 +5065,34 @@ document.getElementById('extract-model')?.dispatchEvent(new Event('change'));
     return arr.map(r => `<span class="rel-reason-chip">${r}</span>`).join('');
   }
 
+  /** Render a revision pill with conflict / source indication. */
+  function renderRevPill(doc) {
+    if (!doc) return '';
+    const col = doc.colRevision || '';
+    const fn  = doc.fileRevision || '';
+    const src = doc.revisionSource || 'none';
+
+    if (doc.revisionConflict && col && fn) {
+      return `<span class="rel-rev-pill rev-conflict"
+        title="Spreadsheet column says &quot;${escAttr(col)}&quot; but filename says &quot;${escAttr(fn)}&quot;. Update one of them to resolve.">
+        rev ${col} <span class="rev-src">vs</span> ${fn}
+      </span>`;
+    }
+    if (src === 'column' && col) {
+      return `<span class="rel-rev-pill" title="Revision from spreadsheet column">rev ${col}</span>`;
+    }
+    if (src === 'filename' && fn) {
+      return `<span class="rel-rev-pill rev-from-filename"
+        title="Revision column was blank — value extracted from filename">
+        rev ${fn} <span class="rev-src">(file)</span>
+      </span>`;
+    }
+    if (doc.revision) {
+      return `<span class="rel-rev-pill">rev ${doc.revision}</span>`;
+    }
+    return '';
+  }
+
   function relRenderGroupsView(groups, container, isBorderline) {
     if (!container) return;
     if (!groups.length) {
@@ -5067,7 +5115,7 @@ document.getElementById('extract-model')?.dispatchEvent(new Event('change'));
               ${c.description ? `<div class="rel-child-desc">${c.description}</div>` : ''}
               <div class="rel-tag-row" style="margin-top:2px">
                 <span class="rel-child-badge">child</span>
-                ${c.revision ? `<span class="rel-tag" style="background:#e0e7ff;color:#3730a3">rev ${c.revision}</span>` : ''}
+                ${renderRevPill(c)}
                 ${c.discipline ? `<span class="rel-tag">${c.discipline}</span>` : ''}
                 ${c.docType ? `<span class="rel-tag rel-tag-doctype">${c.docType}</span>` : ''}
                 ${c.vendor ? `<span class="rel-tag rel-tag-vendor">${c.vendor}</span>` : ''}
@@ -5096,7 +5144,7 @@ document.getElementById('extract-model')?.dispatchEvent(new Event('change'));
           <div class="rel-parent-block">
             <div class="rel-parent-meta">
               <span class="rel-parent-badge">parent</span>
-              ${p.revision ? `<span class="rel-tag" style="background:#e0e7ff;color:#3730a3">rev ${p.revision}</span>` : ''}
+              ${renderRevPill(p)}
               <span>min ${g.minScore || '—'} &middot; ${g.evidenceCount || 0} signals</span>
             </div>
             <div class="rel-parent-filename" title="${escAttr(p.filename)}">${p.filename}</div>

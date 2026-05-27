@@ -218,6 +218,50 @@ function sharedAssetId(a, b) {
   return best;
 }
 
+/**
+ * Extract a revision token from the END of a filename. Handles common
+ * conventions: -REV4, _REV.B, .REVA, -R3, REVISION 02.
+ *
+ * Intentionally conservative — we ONLY match when an explicit "REV" prefix
+ * or "R" + digit is present, never a bare trailing letter like "-A" which
+ * is ambiguous (could be a part designator).
+ *
+ * Returns the upper-cased revision token (e.g. "4", "A", "B", "02"), or "".
+ */
+function extractFilenameRevision(filename) {
+  if (!filename) return "";
+  let s = String(filename).toUpperCase();
+  const dot = s.lastIndexOf(".");
+  if (dot > 0) s = s.slice(0, dot);
+  s = s.trim();
+
+  // Try strongest pattern first (explicit "REV"), then "R<digit>"
+  let m = s.match(/[\s_\-\.\(]+REV(?:ISION)?\.?\s*([A-Z0-9]{1,4})$/i);
+  if (m) return m[1].toUpperCase();
+
+  m = s.match(/[\s_\-\.\(]+R(\d{1,3})$/i);
+  if (m) return m[1].toUpperCase();
+
+  return "";
+}
+
+/**
+ * Returns true if two revision tokens represent the same revision after
+ * normalisation. Handles "4" vs "04", "A" vs "a", "rev 4" vs "4".
+ */
+function revisionsEqual(a, b) {
+  if (a == null || b == null) return false;
+  const norm = (v) => String(v)
+    .trim().toUpperCase()
+    .replace(/^R\.?\s*E\.?\s*V\.?\s*I?\s*S?\s*I?\s*O?\s*N?\s*/i, "")
+    .replace(/^0+(?=\d)/, "")
+    .trim();
+  const na = norm(a);
+  const nb = norm(b);
+  if (!na || !nb) return false;
+  return na === nb;
+}
+
 function computePairScore(d1, d2) {
   let score = 0;
 
@@ -666,7 +710,22 @@ export async function analyzeRelationships(buffer) {
       deptCode: r.departmentCode || "",
       deptName: (r.departmentName || "").toUpperCase().trim(),
       category: (r.category || "").toUpperCase().trim(),
-      revision: r.revision || "",
+      // ---- Revision tracking ----
+      // colRevision: what the user typed in the spreadsheet's revision column
+      // fileRevision: what the filename actually says (e.g. ...-REV4.pdf → "4")
+      // revision: the value we use (column wins when present; filename used as
+      //           fallback). revisionConflict tells the UI to surface both.
+      colRevision: r.revision || "",
+      fileRevision: extractFilenameRevision(filename),
+      revision: (r.revision && String(r.revision).trim())
+        ? r.revision
+        : extractFilenameRevision(filename),
+      revisionConflict: (r.revision && extractFilenameRevision(filename))
+        ? !revisionsEqual(r.revision, extractFilenameRevision(filename))
+        : false,
+      revisionSource: (r.revision && String(r.revision).trim())
+        ? "column"
+        : (extractFilenameRevision(filename) ? "filename" : "none"),
       year: extractYear(r.revisionDate),
       parentScore: getDocParentScore({
         filename: filename,
@@ -748,6 +807,10 @@ export async function analyzeRelationships(buffer) {
       docType: bestParent.raw.documentType || "",
       discipline: bestParent.raw.discipline || "",
       revision: bestParent.revision || "",
+      colRevision: bestParent.colRevision || "",
+      fileRevision: bestParent.fileRevision || "",
+      revisionConflict: !!bestParent.revisionConflict,
+      revisionSource: bestParent.revisionSource || "none",
       isParent: true,
       parentReasons: choice.reasons,
       children: []
@@ -807,6 +870,10 @@ export async function analyzeRelationships(buffer) {
         docType: d.raw.documentType || "",
         discipline: d.raw.discipline || "",
         revision: d.revision || "",
+        colRevision: d.colRevision || "",
+        fileRevision: d.fileRevision || "",
+        revisionConflict: !!d.revisionConflict,
+        revisionSource: d.revisionSource || "none",
         isParent: false,
         relationshipLabel: linkReasons.join(" | "),
         relationshipScore: bestPair.score,
