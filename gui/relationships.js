@@ -16,7 +16,9 @@ const W_PLANT = 10;
 const W_PROJECT = 10;
 const W_DISCIPLINE = 8;
 const W_DOCTYPE = 8;
-const W_ASSET = 12;
+const W_ASSET = 22;                 // explicit asset/part-ID column match (was 12)
+const W_ASSET_EXACT_BONUS = 13;     // identical asset adds this on top of W_ASSET
+const W_ASSET_FNAME = 14;           // asset/part-ID extracted from filename/description
 const W_DEPT_CODE = 6;
 const W_DEPT_NAME = 5;
 const W_CATEGORY = 4;
@@ -167,6 +169,55 @@ function extractYear(d) {
   return "";
 }
 
+/**
+ * Extract plausible asset/part-ID patterns from a free-text string (filename
+ * or description). Catches things like P-101, MCC-1234, AB1234C, T-7050A, 12345AB.
+ * Returns a Set of normalized IDs (separators stripped, upper-cased).
+ *
+ * We are deliberately conservative — we require either:
+ *   - letter prefix + digits  (e.g. P101, MCC1234, AB7050A)
+ *   - or a numeric ID of length >= 4 followed by letters (e.g. 1234A, 7050AB)
+ * Pure 3-digit numbers (like "001") are too noisy to count as IDs.
+ */
+function extractAssetIds(text) {
+  if (!text) return new Set();
+  const upper = String(text).toUpperCase();
+  const ids = new Set();
+
+  // Strip extension for filenames so it doesn't get picked up
+  let body = upper;
+  const dot = body.lastIndexOf(".");
+  if (dot > 0 && body.length - dot <= 5) body = body.slice(0, dot);
+
+  // letter(s) + optional separator + digits + optional trailing alphanumerics
+  const reAlphaNum = /[A-Z]{1,5}[-_]?\d{2,}[A-Z0-9]{0,4}/g;
+  let m;
+  while ((m = reAlphaNum.exec(body)) !== null) {
+    const norm = m[0].replace(/[-_]/g, "");
+    if (norm.length >= 3 && norm.length <= 20) ids.add(norm);
+  }
+
+  // Pure numeric only if 4+ digits AND the surrounding text isn't a year-like
+  const reNum = /(?<![A-Z0-9])(\d{4,7})(?![A-Z0-9])/g;
+  while ((m = reNum.exec(body)) !== null) {
+    const n = parseInt(m[1], 10);
+    if (n >= 1950 && n <= 2099 && m[1].length === 4) continue; // looks like a year
+    ids.add(m[1]);
+  }
+
+  return ids;
+}
+
+/** Best (longest) shared asset/part-ID between two doc sets, or null. */
+function sharedAssetId(a, b) {
+  if (!a || !b || !a.size || !b.size) return null;
+  let best = null;
+  for (const x of a) {
+    if (b.has(x) && (!best || x.length > best.length)) best = x;
+  }
+  return best;
+}
+
 function computePairScore(d1, d2) {
   let score = 0;
 
@@ -206,12 +257,34 @@ function computePairScore(d1, d2) {
   // 8. DOCUMENT TYPE
   if (d1.dtype && d1.dtype === d2.dtype) score += W_DOCTYPE;
 
-  // 9. ASSET / ID NUMBER
+  // 9. ASSET / ID NUMBER  (explicit asset-column match)
+  let assetColumnMatched = false;
   if (d1.asset.length > 2 && d2.asset.length > 2) {
     if (d1.asset === d2.asset) {
-      score += W_ASSET + 6;
+      score += W_ASSET + W_ASSET_EXACT_BONUS;
+      // High-specificity bonus: long alphanumeric IDs are unlikely to collide
+      if (d1.asset.length >= 5 && /[A-Z]/.test(d1.asset) && /\d/.test(d1.asset)) score += 5;
+      assetColumnMatched = true;
     } else {
-      score += jaccardSim(d1.assetTokens, d2.assetTokens) * W_ASSET;
+      const j = jaccardSim(d1.assetTokens, d2.assetTokens);
+      score += j * W_ASSET;
+      if (j >= 0.5) assetColumnMatched = true;
+    }
+  }
+
+  // 9b. Asset/part-ID extracted from filename or description (fallback / supplement).
+  // Only counts if the explicit column did NOT already establish the match.
+  if (!assetColumnMatched) {
+    const all1 = new Set([...(d1.fnAssetIds || []), ...(d1.titleAssetIds || [])]);
+    const all2 = new Set([...(d2.fnAssetIds || []), ...(d2.titleAssetIds || [])]);
+    const sharedId = sharedAssetId(all1, all2);
+    if (sharedId) {
+      // Specificity ladder by length (more characters → less likely to be coincidental)
+      let w = W_ASSET_FNAME * 0.55;          // 3-4 chars: weak
+      if (sharedId.length >= 5) w = W_ASSET_FNAME * 0.85;
+      if (sharedId.length >= 6) w = W_ASSET_FNAME;
+      if (sharedId.length >= 8) w = W_ASSET_FNAME + 4;
+      score += w;
     }
   }
 
@@ -261,11 +334,23 @@ function relationshipReasons(d1, d2, score) {
   if (d1.discipline && d1.discipline === d2.discipline) reasons.push(`Same discipline: ${d1.discipline}`);
   if (d1.dtype && d1.dtype === d2.dtype) reasons.push(`Same doc type: ${d1.dtype}`);
 
+  let assetReasonPushed = false;
   if (d1.asset.length > 2 && d2.asset.length > 2) {
     if (d1.asset === d2.asset) {
-      reasons.push(`Identical asset/ID: ${d1.assetRaw}`);
+      reasons.push(`Matching asset/part ID: ${d1.assetRaw}`);
+      assetReasonPushed = true;
     } else if (jaccardSim(d1.assetTokens, d2.assetTokens) >= 0.4) {
       reasons.push("Overlapping asset/ID numbers");
+      assetReasonPushed = true;
+    }
+  }
+  // Filename / description asset ID fallback
+  if (!assetReasonPushed) {
+    const all1 = new Set([...(d1.fnAssetIds || []), ...(d1.titleAssetIds || [])]);
+    const all2 = new Set([...(d2.fnAssetIds || []), ...(d2.titleAssetIds || [])]);
+    const sharedId = sharedAssetId(all1, all2);
+    if (sharedId && sharedId.length >= 4) {
+      reasons.push(`Shared asset/part ID: ${sharedId}`);
     }
   }
 
@@ -576,6 +661,8 @@ export async function analyzeRelationships(buffer) {
       assetRaw: r.assetId || "",
       asset: (r.assetId || "").toUpperCase().trim(),
       assetTokens: tokenise(r.assetId, true),
+      fnAssetIds: extractAssetIds(filename),
+      titleAssetIds: extractAssetIds(titleRaw),
       deptCode: r.departmentCode || "",
       deptName: (r.departmentName || "").toUpperCase().trim(),
       category: (r.category || "").toUpperCase().trim(),
