@@ -288,6 +288,10 @@ function relationshipLabel(d1, d2, score) {
   return reasons.join(" | ");
 }
 
+/**
+ * Intrinsic, context-free parent score. Used as a small bias only — the
+ * authoritative selection happens per-cluster in `chooseClusterParent`.
+ */
 function getDocParentScore(d) {
   let score = 0;
 
@@ -296,28 +300,181 @@ function getDocParentScore(d) {
   const pos = fn.lastIndexOf(".");
   if (pos > 0) ext = fn.slice(pos + 1);
 
-  if (ext === "PDF") score += 50;
-  if (ext === "DWG") score += 30;
-  if (["DOC", "DOCX", "XLS", "XLSX"].includes(ext)) score += 10;
+  // Light extension bias — drawings tend to be parents, spreadsheets tend to
+  // be children — but nowhere near strong enough to override structural signals.
+  if (ext === "DWG") score += 6;
+  if (ext === "PDF") score += 4;
+  if (["XLSX", "XLSM", "XLS", "CSV"].includes(ext)) score -= 4;
+  if (["DOC", "DOCX"].includes(ext)) score -= 2;
 
-  const title = d.title;
-  const parentWords = ["ASSEMBLY", "ASSY", "GENERAL", "LAYOUT", "MAIN", "OVERVIEW", "SYSTEM", "PLAN"];
-  const childWords = ["DETAIL", "PART", "COMPONENT", "SECTION", "LIST", "BOM", "BILL OF MATERIAL", "SCHEDULE"];
+  const title = d.title || "";
+  const PARENT_WORDS = [
+    "ASSEMBLY", "ASSY", "GENERAL ARRANGEMENT", "GA ", "LAYOUT",
+    "OVERVIEW", "SYSTEM", "MAIN", "INDEX"
+  ];
+  const CHILD_WORDS = [
+    "DETAIL", "PART", "COMPONENT", "SECTION", "LIST", "BOM",
+    "BILL OF MATERIAL", "SCHEDULE", "I/O", "I O LIST", "IO LIST",
+    "DATASHEET", "DATA SHEET", "SPEC", "SPECIFICATION"
+  ];
+  for (const w of PARENT_WORDS) if (title.includes(w)) score += 8;
+  for (const w of CHILD_WORDS)  if (title.includes(w)) score -= 8;
 
-  for (const w of parentWords) {
-    if (title.includes(w)) score += 25;
-  }
-  for (const w of childWords) {
-    if (title.includes(w)) score -= 25;
-  }
-
-  const dt = d.dtype;
-  if (dt.includes("DRAWING") || dt.includes("PLAN")) score += 15;
-  if (dt.includes("BOM") || dt.includes("LIST")) score -= 15;
-
-  score -= (fn.length * 0.1);
+  const dt = d.dtype || "";
+  if (dt.includes("DRAWING") || dt.includes("PLAN") || dt.includes("ASSEMBLY")) score += 6;
+  if (dt.includes("BOM") || dt.includes("LIST") || dt.includes("SCHEDULE") ||
+      dt.includes("DATASHEET")) score -= 6;
 
   return score;
+}
+
+/**
+ * Tokens that, when present at the end of a filename stem, strongly suggest
+ * the file is a child of a base parent. Matched as standalone segments.
+ */
+const CHILD_SUFFIX_TOKENS = new Set([
+  "DETAIL", "DETAILS", "BOM", "IO", "PART", "PARTS", "COMPONENT", "COMPONENTS",
+  "SECTION", "SECTIONS", "LIST", "SCHEDULE", "DATASHEET", "SPEC", "SPECS",
+  "SPECIFICATION", "BILLOFMATERIAL", "BILLOFMATERIALS"
+]);
+
+/** Strip extension + trailing revision tokens + trailing child-suffix tokens. */
+function coreStem(filename) {
+  if (!filename) return "";
+  let s = String(filename).toUpperCase().trim();
+  const dot = s.lastIndexOf(".");
+  if (dot > 0) s = s.slice(0, dot);
+
+  // Strip trailing revision patterns like  -REVA, _REV01, -R3, REV.B
+  const revTail = /[\s_\-\.]+(?:REV\.?\s*[A-Z0-9]+|R\d+|REV)$/i;
+  let prev;
+  do { prev = s; s = s.replace(revTail, ""); } while (s !== prev);
+
+  // Strip trailing child-suffix tokens (one or more, e.g. "-BOM-LIST")
+  const splitRe = /[\s_\-\.]+/;
+  let parts = s.split(splitRe);
+  while (parts.length > 1) {
+    const tail = parts[parts.length - 1];
+    if (CHILD_SUFFIX_TOKENS.has(tail) || /^REV[A-Z0-9]*$/.test(tail) || /^R\d+$/.test(tail)) {
+      parts.pop();
+    } else {
+      break;
+    }
+  }
+  return parts.join("-");
+}
+
+/** Numerical-ish comparable revision value: lower = earlier / more "origin". */
+function revisionOrdinal(rev) {
+  if (rev == null || rev === "") return 0; // blank == origin
+  const s = String(rev).trim().toUpperCase().replace(/^R\.?\s*E\.?\s*V\.?\s*/i, "").trim();
+  if (s === "") return 0;
+  if (/^\d+$/.test(s)) return parseInt(s, 10);
+  if (/^[A-Z]$/.test(s)) return s.charCodeAt(0) - 64; // A=1, B=2, ...
+  // Anything else — push to the back so it's never picked as "origin"
+  return 9999;
+}
+
+/** Does `child` look like an extension of `parent` (e.g. ABC-100 → ABC-100-BOM)? */
+function isStemExtension(parentStem, childFilename) {
+  if (!parentStem || parentStem.length < 4) return false;
+  const c = String(childFilename || "").toUpperCase();
+  if (!c.startsWith(parentStem)) return false;
+  // Require a separator (or extension dot) right after the parent stem
+  const next = c.charAt(parentStem.length);
+  return next === "-" || next === "_" || next === " " || next === "." || next === "";
+}
+
+/**
+ * Pick the best parent for a cluster using structural evidence. Returns
+ * { doc, reasons[] } so the UI can explain the choice.
+ */
+function chooseClusterParent(clusterDocs, pairPool) {
+  // Count strong-pair degree per doc (the "hub" of the cluster is often the parent)
+  const degree = new Map();
+  for (const p of pairPool) {
+    if (!clusterDocs.some(d => d.index === p.i)) continue;
+    if (!clusterDocs.some(d => d.index === p.j)) continue;
+    degree.set(p.i, (degree.get(p.i) || 0) + 1);
+    degree.set(p.j, (degree.get(p.j) || 0) + 1);
+  }
+
+  // Filename length stats for "shortest filename" bonus
+  const lens = clusterDocs.map(d => (d.filename || "").length);
+  const minLen = Math.min(...lens);
+
+  // Revision ordinals — lowest = "origin"
+  const revOrds = clusterDocs.map(d => revisionOrdinal(d.revision));
+  const minRev  = Math.min(...revOrds);
+
+  let best = null;
+  for (const d of clusterDocs) {
+    const reasons = [];
+    let s = d.parentScore; // intrinsic base
+
+    // Filename stem containment — by far the strongest signal.
+    // Count how many OTHER docs in the cluster look like extensions of THIS doc.
+    const stem = coreStem(d.filename);
+    let containedCount = 0;
+    if (stem.length >= 4) {
+      for (const other of clusterDocs) {
+        if (other.index === d.index) continue;
+        if (isStemExtension(stem, other.filename)) containedCount++;
+      }
+    }
+    if (containedCount > 0) {
+      s += 25 * containedCount;
+      reasons.push(`${containedCount} other doc${containedCount === 1 ? "" : "s"} extend filename "${stem}"`);
+    }
+
+    // Penalize if THIS doc looks like a child of any other doc in the cluster
+    let extendsCount = 0;
+    for (const other of clusterDocs) {
+      if (other.index === d.index) continue;
+      const otherStem = coreStem(other.filename);
+      if (otherStem.length >= 4 && isStemExtension(otherStem, d.filename)) extendsCount++;
+    }
+    if (extendsCount > 0) {
+      s -= 30 * extendsCount;
+      // Don't claim "parent reason" for negative signals
+    }
+
+    // Lowest revision in cluster — origin bias
+    const myRev = revisionOrdinal(d.revision);
+    if (myRev === minRev && minRev !== Math.max(...revOrds)) {
+      s += 12;
+      const label = d.revision == null || d.revision === "" ? "(blank)" : String(d.revision);
+      reasons.push(`Earliest revision in group ${label}`);
+    }
+
+    // Shortest filename in cluster — parents tend to be base names
+    if ((d.filename || "").length === minLen) {
+      s += 8;
+      reasons.push("Shortest filename in group");
+    }
+
+    // Has child-suffix tokens itself → not a parent
+    const myParts = String(d.filename || "").toUpperCase().split(/[\s_\-\.]+/);
+    if (myParts.some(t => CHILD_SUFFIX_TOKENS.has(t))) {
+      s -= 18;
+    }
+
+    // Hub bias: more connections inside the cluster
+    const deg = degree.get(d.index) || 0;
+    if (deg >= 2) {
+      s += 4 * deg;
+      reasons.push(`Linked to ${deg} other doc${deg === 1 ? "" : "s"} in group`);
+    }
+
+    if (!best || s > best.score) best = { doc: d, score: s, reasons };
+  }
+
+  if (!best) best = { doc: clusterDocs[0], score: 0, reasons: [] };
+  // If we ended up with no positive reasons, drop a generic fallback line
+  if (best.reasons.length === 0) {
+    best.reasons.push("Highest intrinsic parent score (no structural signals)");
+  }
+  return best;
 }
 
 function findRoot(parent, x) {
@@ -451,14 +608,10 @@ export async function analyzeRelationships(buffer) {
   // We *do not* relax the score floor — the pool was already filtered to the
   // tier of interest (strong or borderline).
   const buildGroup = (clusterDocs, pairPool, minPairScore) => {
-    let bestParent = null;
-    let bestPScore = -Infinity;
-    for (const d of clusterDocs) {
-      if (d.parentScore > bestPScore) {
-        bestPScore = d.parentScore;
-        bestParent = d;
-      }
-    }
+    // Pick parent using cluster context (filename containment, revision, …)
+    const choice = chooseClusterParent(clusterDocs, pairPool);
+    const bestParent = choice.doc;
+
     const parentNode = {
       index: bestParent.index,
       filename: bestParent.filename,
@@ -468,7 +621,9 @@ export async function analyzeRelationships(buffer) {
       project: bestParent.raw.project || "",
       docType: bestParent.raw.documentType || "",
       discipline: bestParent.raw.discipline || "",
+      revision: bestParent.revision || "",
       isParent: true,
+      parentReasons: choice.reasons,
       children: []
     };
 
@@ -525,6 +680,7 @@ export async function analyzeRelationships(buffer) {
         project: d.raw.project || "",
         docType: d.raw.documentType || "",
         discipline: d.raw.discipline || "",
+        revision: d.revision || "",
         isParent: false,
         relationshipLabel: linkReasons.join(" | "),
         relationshipScore: bestPair.score,

@@ -4879,26 +4879,30 @@ document.getElementById('extract-model')?.dispatchEvent(new Event('change'));
     totalDocs: 14, totalPairs: 18,
     groups: [
       { id: 1, size: 4, avgScore: 92, minScore: 88, evidenceCount: 11, confidence: 'almost-certain', parent: {
-        filename: 'EATON-MCC-1234-ASSEMBLY.pdf', description: 'Motor Control Center Assembly Drawing',
+        filename: 'EATON-MCC-1234.pdf', description: 'Motor Control Center Assembly Drawing',
         vendor: 'EATON', discipline: 'ELECTRICAL', docType: 'DRAWING', plant: 'UNIT 1', project: 'PROJ-DEMO',
+        revision: '0',
         isParent: true,
+        parentReasons: ['3 other docs extend filename "EATON-MCC-1234"','Earliest revision in group 0','Shortest filename in group','Linked to 3 other docs in group'],
         children: [
-          { filename: 'EATON-MCC-1234-BOM.xlsx', description: 'MCC Bill of Materials', discipline: 'ELECTRICAL', docType: 'BOM', vendor: 'EATON', relationshipScore: 96,
+          { filename: 'EATON-MCC-1234-BOM.xlsx', description: 'MCC Bill of Materials', discipline: 'ELECTRICAL', docType: 'BOM', vendor: 'EATON', revision: '0', relationshipScore: 96,
             reasons: ['Same file prefix (EATON-MCC-1234)','Similar filename tokens','Same vendor: EATON','Same discipline: ELECTRICAL','Identical asset/ID: MCC-1234'] },
-          { filename: 'EATON-MCC-1234-ASSEMBLY-REVA.pdf', description: 'Motor Control Center Assembly Drawing Rev A', discipline: 'ELECTRICAL', docType: 'DRAWING', vendor: 'EATON', relationshipScore: 92,
+          { filename: 'EATON-MCC-1234-REVA.pdf', description: 'Motor Control Center Assembly Drawing Rev A', discipline: 'ELECTRICAL', docType: 'DRAWING', vendor: 'EATON', revision: 'A', relationshipScore: 92,
             reasons: ['Same file prefix (EATON-MCC-1234)','Nearly identical description','Same vendor: EATON','Sequential revisions (→A)'] },
-          { filename: 'EATON-MCC-1234-SCHEDULE.xlsx', description: 'MCC Equipment Schedule', discipline: 'ELECTRICAL', docType: 'SCHEDULE', vendor: 'EATON', relationshipScore: 88,
+          { filename: 'EATON-MCC-1234-SCHEDULE.xlsx', description: 'MCC Equipment Schedule', discipline: 'ELECTRICAL', docType: 'SCHEDULE', vendor: 'EATON', revision: '0', relationshipScore: 88,
             reasons: ['Same vendor: EATON','Same discipline: ELECTRICAL','Overlapping description keywords'] }
         ]
       }},
       { id: 2, size: 3, avgScore: 84, minScore: 78, evidenceCount: 7, confidence: 'certain', parent: {
         filename: 'ATLAS-P101-GA-DWG.pdf', description: 'Pump P-101 General Arrangement',
         vendor: 'ATLAS COPCO', discipline: 'MECHANICAL', docType: 'DRAWING', plant: 'UNIT 1', project: 'PROJ-DEMO',
+        revision: '0',
         isParent: true,
+        parentReasons: ['"GA" (General Arrangement) keyword','Earliest revision in group 0','Linked to 2 other docs in group'],
         children: [
-          { filename: 'ATLAS-P101-DETAIL.pdf', description: 'Pump P-101 Detail Drawing', discipline: 'MECHANICAL', docType: 'DRAWING', vendor: 'ATLAS COPCO', relationshipScore: 90,
+          { filename: 'ATLAS-P101-DETAIL.pdf', description: 'Pump P-101 Detail Drawing', discipline: 'MECHANICAL', docType: 'DRAWING', vendor: 'ATLAS COPCO', revision: '0', relationshipScore: 90,
             reasons: ['Same file prefix (ATLAS-P101)','Same vendor: ATLAS COPCO','Identical asset/ID: P101'] },
-          { filename: 'ATLAS-P101-DATASHEET.xlsx', description: 'Pump P-101 Data Sheet', discipline: 'MECHANICAL', docType: 'DATASHEET', vendor: 'ATLAS COPCO', relationshipScore: 78,
+          { filename: 'ATLAS-P101-DATASHEET.xlsx', description: 'Pump P-101 Data Sheet', discipline: 'MECHANICAL', docType: 'DATASHEET', vendor: 'ATLAS COPCO', revision: '0', relationshipScore: 78,
             reasons: ['Same vendor: ATLAS COPCO','Identical asset/ID: P101'] }
         ]
       }}
@@ -4907,9 +4911,11 @@ document.getElementById('extract-model')?.dispatchEvent(new Event('change'));
       { id: 1, size: 2, avgScore: 52, minScore: 52, evidenceCount: 2, confidence: 'likely', parent: {
         filename: 'ROCKWELL-PLC-AB1234-LAYOUT.pdf', description: 'PLC System Layout Drawing',
         vendor: 'ROCKWELL AUTOMATION', discipline: 'INSTRUMENTATION', docType: 'DRAWING', plant: '', project: '',
+        revision: '0',
         isParent: true,
+        parentReasons: ['"LAYOUT" keyword','Shortest filename in group'],
         children: [
-          { filename: 'ROCKWELL-PLC-AB1234-IO.xlsx', description: 'PLC I/O List', discipline: 'INSTRUMENTATION', docType: 'LIST', vendor: 'ROCKWELL AUTOMATION', relationshipScore: 52,
+          { filename: 'ROCKWELL-PLC-AB1234-IO.xlsx', description: 'PLC I/O List', discipline: 'INSTRUMENTATION', docType: 'LIST', vendor: 'ROCKWELL AUTOMATION', revision: '0', relationshipScore: 52,
             reasons: ['Same vendor: ROCKWELL AUTOMATION','Same discipline: INSTRUMENTATION'] }
         ]
       }}
@@ -5061,6 +5067,7 @@ document.getElementById('extract-model')?.dispatchEvent(new Event('change'));
               ${c.description ? `<div class="rel-child-desc">${c.description}</div>` : ''}
               <div class="rel-tag-row" style="margin-top:2px">
                 <span class="rel-child-badge">child</span>
+                ${c.revision ? `<span class="rel-tag" style="background:#e0e7ff;color:#3730a3">rev ${c.revision}</span>` : ''}
                 ${c.discipline ? `<span class="rel-tag">${c.discipline}</span>` : ''}
                 ${c.docType ? `<span class="rel-tag rel-tag-doctype">${c.docType}</span>` : ''}
                 ${c.vendor ? `<span class="rel-tag rel-tag-vendor">${c.vendor}</span>` : ''}
@@ -5089,6 +5096,7 @@ document.getElementById('extract-model')?.dispatchEvent(new Event('change'));
           <div class="rel-parent-block">
             <div class="rel-parent-meta">
               <span class="rel-parent-badge">parent</span>
+              ${p.revision ? `<span class="rel-tag" style="background:#e0e7ff;color:#3730a3">rev ${p.revision}</span>` : ''}
               <span>min ${g.minScore || '—'} &middot; ${g.evidenceCount || 0} signals</span>
             </div>
             <div class="rel-parent-filename" title="${escAttr(p.filename)}">${p.filename}</div>
@@ -5099,6 +5107,11 @@ document.getElementById('extract-model')?.dispatchEvent(new Event('change'));
               ${p.vendor ? `<span class="rel-tag rel-tag-vendor">${p.vendor}</span>` : ''}
               ${p.plant ? `<span class="rel-tag rel-tag-plant">${p.plant}</span>` : ''}
             </div>
+            ${(p.parentReasons && p.parentReasons.length) ? `
+              <div style="margin-top:4px">
+                <div class="rel-reasons-label">Why parent</div>
+                <div class="rel-reasons-list">${p.parentReasons.map(r => `<span class="rel-reason-chip">${r}</span>`).join('')}</div>
+              </div>` : ''}
           </div>
 
           <div class="rel-children-list">${childCards}</div>
