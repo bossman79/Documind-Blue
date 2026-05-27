@@ -309,7 +309,7 @@ function getDocParentScore(d) {
 
   const title = d.title || "";
   const PARENT_WORDS = [
-    "ASSEMBLY", "ASSY", "GENERAL ARRANGEMENT", "GA ", "LAYOUT",
+    "ASSEMBLY", "ASSY", "LAYOUT",
     "OVERVIEW", "SYSTEM", "MAIN", "INDEX"
   ];
   const CHILD_WORDS = [
@@ -408,9 +408,23 @@ function chooseClusterParent(clusterDocs, pairPool) {
   const minRev  = Math.min(...revOrds);
 
   let best = null;
+  // Is there a GA in this cluster at all? If so, non-GA docs get demoted —
+  // a GA is the canonical parent.
+  const clusterHasGA = clusterDocs.some(isGeneralArrangement);
+
   for (const d of clusterDocs) {
     const reasons = [];
     let s = d.parentScore; // intrinsic base
+
+    // ---- General Arrangement detection (industry-strongest parent signal) ----
+    const isGA = isGeneralArrangement(d);
+    if (isGA) {
+      s += 40;
+      reasons.push("General Arrangement (GA) drawing");
+    } else if (clusterHasGA) {
+      // There's a GA in the cluster but this isn't it — penalize so the GA wins
+      s -= 25;
+    }
 
     // Filename stem containment — by far the strongest signal.
     // Count how many OTHER docs in the cluster look like extensions of THIS doc.
@@ -475,6 +489,31 @@ function chooseClusterParent(clusterDocs, pairPool) {
     best.reasons.push("Highest intrinsic parent score (no structural signals)");
   }
   return best;
+}
+
+/**
+ * Detect "General Arrangement" / "GA" markers in title, filename, or doc type.
+ * GA drawings are by industry convention the canonical parent document, so we
+ * give them a substantial bonus during cluster parent selection.
+ */
+function isGeneralArrangement(d) {
+  const title = (d.title || "").toUpperCase();
+  const fn    = (d.filename || "").toUpperCase();
+  const dt    = (d.dtype || "").toUpperCase();
+  const haystack = `${title} ${fn} ${dt}`;
+
+  // Spelled-out phrases (looser match — substring)
+  if (/GENERAL\s*ARRANGEMENT/.test(haystack)) return true;
+  if (/\bGEN[\s\.]*ARR\b/.test(haystack)) return true;
+
+  // Standalone "GA" token (avoid matching inside words like "GAUGE", "MEGAWATT")
+  // Look for GA as its own token in filename or title.
+  const tokenRe = /(?:^|[\s_\-\.\(\)\[\]\/])GA(?:[\s_\-\.\(\)\[\]\/]|$)/;
+  if (tokenRe.test(fn))    return true;
+  if (tokenRe.test(title)) return true;
+  if (/\bGA\b/.test(dt))   return true;
+
+  return false;
 }
 
 function findRoot(parent, x) {
